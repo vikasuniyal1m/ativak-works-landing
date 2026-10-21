@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ativak Works | Flutter Apps, Meta Ads, SEO & Cloud Migration Studio</title>
+    <meta name="description" content="Ativak Works builds Flutter mobile apps, custom web platforms, Meta & Google Ads campaigns, SEO/AI indexing, and zero-downtime cloud migrations.">
+    <link rel="canonical" href="https://your-domain.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Ativak Works | Flutter Apps, Meta Ads, SEO & Cloud Migration Studio">
+    <meta property="og:description" content="Flutter app development, Meta & Google Ads, SEO/AI indexing, and zero-downtime cloud migrations.">
+    <meta property="og:url" content="https://your-domain.com/">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="data:,">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Ativak Works",
+      "url": "https://your-domain.com",
+      "description": "Flutter app development, Meta & Google Ads, SEO and AI search indexing, custom web applications, and zero-downtime cloud migrations.",
+      "areaServed": "IN"
+    }
+    </script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Playfair Display for Luxury Serif Accents & Inter for UI -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        kotlis: {
+                            gold: '#c5a47e',
+                            goldHover: '#b08b5c',
+                            bg: '#fbfbfb',
+                            card: '#ffffff',
+                            dark: '#111111',
+                            subtle: '#666666',
+                            border: '#e5e5e5'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fbfbfb;
+            color: #111111;
+            font-family: 'Inter', sans-serif;
+        }
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        .kotlis-shadow {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+        }
+        .kotlis-hover-shadow:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        .nav-active {
+            color: #c5a47e;
+            border-bottom: 2px solid #c5a47e;
+        }
+    </style>
+</head>
+<body class="selection:bg-kotlis-gold selection:text-white font-sans antialiased overflow-x-hidden min-h-screen flex flex-col justify-between">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-kotlis-border shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <button onclick="switchPage('home')" class="flex items-center space-x-3 group text-left">
+                <div class="w-10 h-10 rounded-none bg-kotlis-dark flex items-center justify-center text-kotlis-gold font-serif font-bold text-xl group-hover:bg-kotlis-gold group-hover:text-white transition duration-300">
+                    A
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-bold tracking-widest text-kotlis-dark uppercase font-serif">Ativak<span class="text-kotlis-gold">.works</span></span>
+                    <span class="text-[10px] tracking-widest uppercase text-kotlis-subtle">Mobile, Web & Growth Studio</span>
+                </div>
+            </button>
+            
+            <!-- Navigation Links for Pages -->
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-widest text-kotlis-dark">
+                <button onclick="switchPage('home')" id="nav-home" class="py-2 hover:text-kotlis-gold transition nav-link nav-active">Home</button>
+                <button onclick="switchPage('services')" id="nav-services" class="py-2 hover:text-kotlis-gold transition nav-link">Services</button>
+                <button onclick="switchPage('portfolio')" id="nav-portfolio" class="py-2 hover:text-kotlis-gold transition nav-link">Case Studies & Projects (44)</button>
+                <button onclick="switchPage('migration')" id="nav-migration" class="py-2 hover:text-kotlis-gold transition nav-link">Migration & Strategy</button>
+                <button onclick="switchPage('pricing')" id="nav-pricing" class="py-2 hover:text-kotlis-gold transition nav-link">Pricing & Calculator</button>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <button onclick="switchPage('contact')" class="hidden sm:inline-flex items-center justify-center px-6 py-3 border border-kotlis-dark text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:bg-kotlis-dark hover:text-white transition duration-300">
+                    Request Free Audit
+                </button>
+                <button id="mobileMenuBtn" class="md:hidden text-kotlis-dark text-2xl p-2 focus:outline-none">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-kotlis-border px-6 py-6 space-y-4 shadow-lg">
+            <button onclick="switchPage('home'); toggleMobileMenu();" class="block w-full text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold">Home</button>
+            <button onclick="switchPage('services'); toggleMobileMenu();" class="block w-full text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold">Services Detail</button>
+            <button onclick="switchPage('portfolio'); toggleMobileMenu();" class="block w-full text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold">Case Studies & Apps</button>
+            <button onclick="switchPage('migration'); toggleMobileMenu();" class="block w-full text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold">Migration & Protocol</button>
+            <button onclick="switchPage('pricing'); toggleMobileMenu();" class="block w-full text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold">Pricing Tiers</button>
+            <button onclick="switchPage('contact'); toggleMobileMenu();" class="block w-full text-center py-3 bg-kotlis-dark text-white text-xs font-bold uppercase tracking-widest">Request Audit</button>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- ================= PAGE 1: HOME ================= -->
+        <div id="page-home" class="page-content">
+            <section class="relative pt-16 pb-20 lg:pt-24 lg:pb-32 bg-[#f9f9f9] border-b border-kotlis-border">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                        <div class="lg:col-span-7 space-y-6">
+                            <div class="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-widest text-kotlis-gold">
+                                <span class="w-8 h-[1px] bg-kotlis-gold"></span>
+                                <span>Ativak Works Official Studio Showcase</span>
+                            </div>
+                            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-kotlis-dark serif-title leading-tight">
+                                Crafting <span class="italic font-normal text-kotlis-gold">Flutter Apps,</span> Scalable Web, Meta Ads & SEO engines.
+                            </h1>
+                            <p class="text-kotlis-subtle text-base sm:text-lg leading-relaxed max-w-2xl">
+                                Ativak Works (<span class="font-semibold text-kotlis-dark">ativak-works.vercel.app</span>). We engineer cross-platform iOS & Android mobile apps, custom web applications, zero-downtime cloud migrations, and high-ROAS performance campaigns.
+                            </p>
+                            <div class="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                                <button onclick="switchPage('contact')" class="px-8 py-4 bg-kotlis-dark text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition duration-300 text-center">
+                                    Get Custom Estimate
+                                </button>
+                                <button onclick="switchPage('portfolio')" class="px-8 py-4 border border-kotlis-border bg-white text-kotlis-dark text-xs font-bold uppercase tracking-widest hover:border-kotlis-dark transition duration-300 text-center">
+                                    Explore Case Studies
+                                </button>
+                            </div>
+                            <div class="pt-8 border-t border-kotlis-border grid grid-cols-3 gap-6">
+                                <div>
+                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark">100%</div>
+                                    <div class="text-[11px] uppercase tracking-wider text-kotlis-subtle mt-1">Zero Downtime Migration</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark">5.2x</div>
+                                    <div class="text-[11px] uppercase tracking-wider text-kotlis-subtle mt-1">Avg Paid Ads ROAS</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark">#1</div>
+                                    <div class="text-[11px] uppercase tracking-wider text-kotlis-subtle mt-1">Google & AI Indexing</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hero Visual Grid -->
+                        <div class="lg:col-span-5 grid grid-cols-2 gap-4 relative">
+                            <div class="space-y-4">
+                                <div class="relative overflow-hidden group shadow-md border border-kotlis-border bg-white p-2">
+                                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Ativak Analytics" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
+                                    <div class="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 text-[10px] uppercase font-bold tracking-wider text-kotlis-dark border border-kotlis-border">
+                                        Analytics & Conversions
+                                    </div>
+                                </div>
+                                <div class="relative overflow-hidden group shadow-md border border-kotlis-border bg-white p-2">
+                                    <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80" alt="Flutter Mobile Apps" class="w-full h-44 object-cover group-hover:scale-105 transition duration-500">
+                                    <div class="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 text-[10px] uppercase font-bold tracking-wider text-kotlis-dark border border-kotlis-border">
+                                        Flutter iOS & Android
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4 pt-8">
+                                <div class="relative overflow-hidden group shadow-md border border-kotlis-border bg-white p-2">
+                                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" alt="Ativak Developers" class="w-full h-44 object-cover group-hover:scale-105 transition duration-500">
+                                    <div class="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 text-[10px] uppercase font-bold tracking-wider text-kotlis-dark border border-kotlis-border">
+                                        Ativak Engineers
+                                    </div>
+                                </div>
+                                <div class="relative overflow-hidden group shadow-md border border-kotlis-border bg-white p-2">
+                                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" alt="Meta Ads Optimization" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
+                                    <div class="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 text-[10px] uppercase font-bold tracking-wider text-kotlis-dark border border-kotlis-border">
+                                        Meta & Google Campaigns
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Teasers on Home Page -->
+            <section class="py-20 bg-white border-b border-kotlis-border">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Core Capabilities</span>
+                    <h2 class="text-3xl font-bold font-serif text-kotlis-dark">Everything Needed to Scale Modern Digital Products</h2>
+                    <p class="text-kotlis-subtle text-sm max-w-2xl mx-auto">From native cross-platform mobile experiences to multi-channel advertising engines and cloud server migrations.</p>
+                    <div class="pt-6">
+                        <button onclick="switchPage('services')" class="px-8 py-3 bg-kotlis-dark text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">View Detailed Services Inner Page <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About / Mission Strip -->
+            <section class="py-16 bg-[#f9f9f9] border-b border-kotlis-border">
+                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Who We Are</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold font-serif text-kotlis-dark">Help founders ship reliable products faster — then connect them to measurable demand.</h2>
+                    <p class="text-kotlis-subtle text-sm max-w-2xl mx-auto">A remote-first product & growth studio: clear communication, clean architecture, honest scope, and shipping over slide decks.</p>
+                </div>
+            </section>
+
+            <!-- Team Strip -->
+            <section class="py-16 bg-white border-b border-kotlis-border">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-10">
+                    <div class="space-y-3">
+                        <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">The Team</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold font-serif text-kotlis-dark">The People Behind the Build</h2>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left max-w-2xl mx-auto">
+                        <div class="border border-kotlis-border p-4">
+                            <img src="images/team/vikas.jpeg" alt="Vikas Uniyal" class="w-full h-72 object-contain bg-kotlis-bg p-2 mb-3" loading="lazy">
+                            <h3 class="font-serif font-bold text-sm text-kotlis-dark">Vikas Uniyal</h3>
+                            <p class="text-[10px] uppercase tracking-wider text-kotlis-gold font-bold mt-1">Founder · Full Stack</p>
+                            <p class="text-[11px] text-kotlis-subtle mt-2">App Development, Game Development, Website Development & Design, and CRM. Also handles Meta Ads, lead generation, AI automations & business solution promotion.</p>
+                        </div>
+                        <div class="border border-kotlis-border p-4">
+                            <img src="images/team/rohitkotnala.jfif" alt="Rohit Kotnala" class="w-full h-72 object-contain bg-kotlis-bg p-2 mb-3" loading="lazy">
+                            <h3 class="font-serif font-bold text-sm text-kotlis-dark">Rohit Kotnala</h3>
+                            <p class="text-[10px] uppercase tracking-wider text-kotlis-gold font-bold mt-1">Business Solutions · Client Handling</p>
+                            <p class="text-[11px] text-kotlis-subtle mt-2">Finds leads, brings in business, and handles client solutions end-to-end. Also handles Meta Ads, lead generation, and AI automations.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Blog Teaser Strip -->
+            <section class="py-16 bg-[#f9f9f9]">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-10">
+                    <div class="space-y-3">
+                        <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">From the Blog</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold font-serif text-kotlis-dark">Latest Insights</h2>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
+                        <div class="bg-white border border-kotlis-border p-5">
+                            <h3 class="font-serif font-bold text-sm text-kotlis-dark">Flutter vs Native for Startups: When Cross-Platform Wins</h3>
+                            <p class="text-xs text-kotlis-subtle mt-2">Guidance on choosing between Flutter and native development for startup projects.</p>
+                        </div>
+                        <div class="bg-white border border-kotlis-border p-5">
+                            <h3 class="font-serif font-bold text-sm text-kotlis-dark">Website Migration Checklist (SEO-Safe Cutover)</h3>
+                            <p class="text-xs text-kotlis-subtle mt-2">Redirects, analytics, and the steps that keep rankings intact during a migration.</p>
+                        </div>
+                        <div class="bg-white border border-kotlis-border p-5">
+                            <h3 class="font-serif font-bold text-sm text-kotlis-dark">Google Ads Setup Checklist for App & SaaS Launches</h3>
+                            <p class="text-xs text-kotlis-subtle mt-2">Campaign fundamentals for app and SaaS marketing in the first 30 days.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= PAGE 2: SERVICES INNER PAGE ================= -->
+        <div id="page-services" class="page-content hidden">
+            <section class="py-16 bg-white border-b border-kotlis-border">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                        <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Inner Service Specifications</span>
+                        <h2 class="text-3xl sm:text-5xl font-extrabold text-kotlis-dark serif-title">Engineering & Growth Solutions</h2>
+                        <p class="text-kotlis-subtle text-sm sm:text-base">In-depth overview of our technology stack, deliverables, and implementation process.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Service 1 -->
+                        <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                            <div>
+                                <div class="w-12 h-12 bg-kotlis-dark text-kotlis-gold flex items-center justify-center text-xl font-bold mb-6">
+                                    <i class="fa-brands fa-flutter"></i>
+                                </div>
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Cross-Platform Mobile</span>
+                                <h3 class="text-2xl font-serif font-bold text-kotlis-dark mt-2 mb-4">Flutter iOS & Android Apps</h3>
+                                <p class="text-kotlis-subtle text-xs leading-relaxed mb-6">
+                                    Single codebase, dual native OS deployment. Built with Dart, featuring offline caching, state management (Bloc/Provider), payment integration, and biometric security.
+                                </p>
+                                <ul class="space-y-2 text-xs text-kotlis-dark border-t border-kotlis-border pt-4">
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> iOS App Store & Google Play Store Publishing</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Smooth 60fps Animation Engines</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> RESTful & GraphQL API Connectivity</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchPage('contact')" class="mt-8 text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold transition flex items-center">
+                                <span>Get Mobile Quote</span> <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+
+                        <!-- Service 2 -->
+                        <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                            <div>
+                                <div class="w-12 h-12 bg-kotlis-dark text-kotlis-gold flex items-center justify-center text-xl font-bold mb-6">
+                                    <i class="fa-brands fa-meta"></i>
+                                </div>
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Paid Traffic Scaling</span>
+                                <h3 class="text-2xl font-serif font-bold text-kotlis-dark mt-2 mb-4">Meta & Google Ads Strategy</h3>
+                                <p class="text-kotlis-subtle text-xs leading-relaxed mb-6">
+                                    Precision-engineered ad funnels on Facebook, Instagram, and Google Search. Designed for maximum ROAS, lead capture automation, and conversion API integration.
+                                </p>
+                                <ul class="space-y-2 text-xs text-kotlis-dark border-t border-kotlis-border pt-4">
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Conversions API & Pixel Setup</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> High-Converting Copy & Video Creatives</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Real-time ROAS Dashboard & Tracking</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchPage('contact')" class="mt-8 text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold transition flex items-center">
+                                <span>Audit Ad Campaigns</span> <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+
+                        <!-- Service 3 -->
+                        <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                            <div>
+                                <div class="w-12 h-12 bg-kotlis-dark text-kotlis-gold flex items-center justify-center text-xl font-bold mb-6">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </div>
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Search Engine Indexing</span>
+                                <h3 class="text-2xl font-serif font-bold text-kotlis-dark mt-2 mb-4">SEO & AI Search Optimization</h3>
+                                <p class="text-kotlis-subtle text-xs leading-relaxed mb-6">
+                                    Rank on Page 1 of Google and index your platform directly into AI models like ChatGPT, Gemini, and Perplexity using semantic schema structured data.
+                                </p>
+                                <ul class="space-y-2 text-xs text-kotlis-dark border-t border-kotlis-border pt-4">
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> JSON-LD Structured Schema Markup</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Core Web Vitals & Speed Optimization</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> High Domain Authority Backlinks</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchPage('contact')" class="mt-8 text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold transition flex items-center">
+                                <span>Analyze SEO Score</span> <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+
+                        <!-- Service 4 -->
+                        <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                            <div>
+                                <div class="w-12 h-12 bg-kotlis-dark text-kotlis-gold flex items-center justify-center text-xl font-bold mb-6">
+                                    <i class="fa-solid fa-server"></i>
+                                </div>
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Cloud Infrastructure</span>
+                                <h3 class="text-2xl font-serif font-bold text-kotlis-dark mt-2 mb-4">Zero Downtime Cloud Migration</h3>
+                                <p class="text-kotlis-subtle text-xs leading-relaxed mb-6">
+                                    Migrate databases, full-stack web applications, and DNS infrastructure seamlessly without interrupting client traffic or SEO domain authority.
+                                </p>
+                                <ul class="space-y-2 text-xs text-kotlis-dark border-t border-kotlis-border pt-4">
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Database Replication & Sync</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> AWS, Vercel & Docker Deployments</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Zero Rank Drop SEO Safeguard</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchPage('migration')" class="mt-8 text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold transition flex items-center">
+                                <span>View Migration Protocol</span> <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+
+                        <!-- Service 5 -->
+                        <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                            <div>
+                                <div class="w-12 h-12 bg-kotlis-dark text-kotlis-gold flex items-center justify-center text-xl font-bold mb-6">
+                                    <i class="fa-solid fa-code"></i>
+                                </div>
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Web Engineering</span>
+                                <h3 class="text-2xl font-serif font-bold text-kotlis-dark mt-2 mb-4">Custom Full-Stack Web Apps</h3>
+                                <p class="text-kotlis-subtle text-xs leading-relaxed mb-6">
+                                    Tailored web platforms built using React, Next.js, and Node.js. Optimized for ultra-fast page speeds, responsive layouts, and luxury design standards.
+                                </p>
+                                <ul class="space-y-2 text-xs text-kotlis-dark border-t border-kotlis-border pt-4">
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> React / Next.js Server Components</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Tailored Editorial & Serif Typography</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Custom Lead Capture Integrations</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchPage('contact')" class="mt-8 text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold transition flex items-center">
+                                <span>Build Web App</span> <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+
+                        <!-- Service 6 -->
+                        <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                            <div>
+                                <div class="w-12 h-12 bg-kotlis-dark text-kotlis-gold flex items-center justify-center text-xl font-bold mb-6">
+                                    <i class="fa-solid fa-robot"></i>
+                                </div>
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Automation & CRM</span>
+                                <h3 class="text-2xl font-serif font-bold text-kotlis-dark mt-2 mb-4">AI Lead Capture & Workflows</h3>
+                                <p class="text-kotlis-subtle text-xs leading-relaxed mb-6">
+                                    Automated lead routing connecting Facebook lead ads, website forms, and WhatsApp bots straight into your central CRM platform in real time.
+                                </p>
+                                <ul class="space-y-2 text-xs text-kotlis-dark border-t border-kotlis-border pt-4">
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> WhatsApp & Email Instant Autoresponders</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> HubSpot, Salesforce & Custom Database Sync</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> 24/7 Automated Qualified Lead Screening</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchPage('contact')" class="mt-8 text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold transition flex items-center">
+                                <span>Setup Lead Automation</span> <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Full Service Catalog — Build the product. Grow the demand. -->
+                    <div class="mt-20 pt-16 border-t border-kotlis-border">
+                        <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+                            <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Everything Under One Roof</span>
+                            <h2 class="text-2xl sm:text-4xl font-extrabold text-kotlis-dark serif-title">Build the Product. Grow the Demand.</h2>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-xs text-kotlis-dark">
+                            <div>
+                                <h3 class="font-serif font-bold text-base text-kotlis-gold mb-3">Mobile</h3>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> Flutter App Development</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> Android App Development</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> iOS App Development</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> App Store & Play Store Deployment</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> App Maintenance</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-serif font-bold text-base text-kotlis-gold mb-3">Web & Commerce</h3>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> React / Next.js Development</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> WordPress Development</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> Elementor Development</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> Shopify Development</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> Webflow Development</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> Website Migration</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> E-commerce Solutions</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-serif font-bold text-base text-kotlis-gold mb-3">Product Systems</h3>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> Product Discovery & PRD</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> UI/UX Design</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> AI Integrations</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> API Integration</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> Firebase Development</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> Laravel Backend</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> QA & Automation Testing</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-serif font-bold text-base text-kotlis-gold mb-3">Growth</h3>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> Google Ads</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> Meta Ads</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> SEO</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> Website Optimization</li>
+                                    <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> Lead Generation & Business Solutions</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= PAGE 3: CASE STUDIES & PORTFOLIO INNER PAGE ================= -->
+        <div id="page-portfolio" class="page-content hidden">
+            <section class="py-16 bg-[#f9f9f9] border-b border-kotlis-border">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Ativak Works Complete Directory</span>
+                            <h2 class="text-3xl sm:text-5xl font-extrabold text-kotlis-dark serif-title mt-2">Projects, Apps & Case Studies (44)</h2>
+                            <!-- Complete Project Directory Callout -->
+                            <p class="text-xs text-kotlis-subtle mt-3 max-w-3xl leading-relaxed bg-white p-3 border-l-4 border-kotlis-gold shadow-sm">
+                                <i class="fa-solid fa-circle-check text-kotlis-gold mr-1"></i> <strong>Complete Catalog:</strong> All 44 completed projects with direct links to the live app or website where publicly available, across Mobile Apps (12), Websites (27), and QA Testing (5).
+                            </p>
+                        </div>
+                        
+                        <!-- Filter Controls -->
+                        <div class="flex flex-wrap gap-2 text-xs uppercase font-bold tracking-wider">
+                            <button onclick="filterPortfolio('all', this)" class="port-filter-btn px-4 py-2 border border-kotlis-dark bg-kotlis-dark text-white transition shadow-sm">All (44)</button>
+                            <button onclick="filterPortfolio('flutter', this)" class="port-filter-btn px-4 py-2 border border-kotlis-border bg-white text-kotlis-dark hover:border-kotlis-dark transition shadow-sm">Mobile Apps (12)</button>
+                            <button onclick="filterPortfolio('websites', this)" class="port-filter-btn px-4 py-2 border border-kotlis-border bg-white text-kotlis-dark hover:border-kotlis-dark transition shadow-sm">Websites (27)</button>
+                            <button onclick="filterPortfolio('qa', this)" class="port-filter-btn px-4 py-2 border border-kotlis-border bg-white text-kotlis-dark hover:border-kotlis-dark transition shadow-sm">QA & Testing (5)</button>
+                        </div>
+                    </div>
+
+                    <!-- Filterable Projects Gallery - Complete 43 Projects -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                        <!-- SECTION 1: MOBILE APPLICATIONS (12) -->
+                        <div class="portfolio-item flutter websites bg-white border-2 border-kotlis-gold p-5 shadow-md hover:border-kotlis-dark transition relative flex flex-col justify-between">
+                            <div>
+                                <span class="absolute -top-3 right-4 bg-kotlis-gold text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1">Verified Live Client</span>
+                                <img src="images/portfolio/first-aide.webp" alt="FIRST AIDE Healthcare App" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 01/11</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">FIRST AIDE Healthcare App</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Flutter medical application with digital prescriptions, tele-consultation, and online pharmacy ordering, paired with a synchronized web storefront.</p>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-kotlis-border flex flex-col gap-2 text-xs font-bold text-kotlis-dark">
+                                <a href="https://play.google.com/store/apps/details?id=com.firstaide.healthapplication" target="_blank" class="inline-flex items-center justify-between p-2 bg-kotlis-bg border border-kotlis-border hover:border-kotlis-gold transition">
+                                    <span><i class="fa-brands fa-google-play text-kotlis-gold mr-2"></i> Open App (Google Play)</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-kotlis-subtle"></i>
+                                </a>
+                                <a href="https://first.templateforwebsites.com" target="_blank" class="inline-flex items-center justify-between p-2 bg-kotlis-bg border border-kotlis-border hover:border-kotlis-gold transition">
+                                    <span><i class="fa-solid fa-store text-kotlis-gold mr-2"></i> Live Storefront</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-kotlis-subtle"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/fos-ecommerce.webp" alt="FOS Production" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 02/11</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">FOS Production</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">High-performance e-commerce mobile app with instant product searching and payment gateway checkout.</p>
+                            </div>
+                            <a href="https://play.google.com/store/apps/details?id=com.fosproduction.ecommerceapp" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/adk.jpg" alt="ADK / MedOnGo Smart Clinics" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 03/11</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">ADK / MedOnGo Smart Clinics</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Smart clinic management and patient health monitoring mobile app interface.</p>
+                            </div>
+                            <a href="https://play.google.com/store/apps/details?id=com.medongo.cms.maharashtra" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/pharma-invoice-extractor.jpg" alt="Pharma Invoice Extractor" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 04/11</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Pharma Invoice Extractor</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">OCR-powered mobile scanning app converting physical invoices into structured database entries.</p>
+                            </div>
+                            <a href="https://pharmainvoiceextractor.vercel.app" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/earneasy.jpg" alt="EarnEasy — Refer & Earn" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 05/11</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">EarnEasy — Refer & Earn</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Gamified referral rewards system mobile app with automated payout ledger integration.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/finpay.jpg" alt="FinPay — UPI Wallet" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 06/11</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">FinPay — UPI Wallet</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Secure biometric payment wallet supporting instant UPI transfers, bills, and card management.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/fos-messenger.webp" alt="FOS Messenger" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 07/11</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">FOS Messenger</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">End-to-end encrypted real-time messaging mobile platform with media sharing capabilities.</p>
+                            </div>
+                            <div class="mt-4 flex flex-col gap-2 text-xs font-bold text-kotlis-dark">
+                                <a href="https://play.google.com/store/apps/details?id=com.fruitsofspirit.android" target="_blank" class="inline-flex items-center justify-between p-2 bg-kotlis-bg border border-kotlis-border hover:border-kotlis-gold transition">
+                                    <span><i class="fa-brands fa-google-play text-kotlis-gold mr-2"></i> Google Play</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-kotlis-subtle"></i>
+                                </a>
+                                <a href="https://apps.apple.com/us/app/fos-messenger/id6757640264" target="_blank" class="inline-flex items-center justify-between p-2 bg-kotlis-bg border border-kotlis-border hover:border-kotlis-gold transition">
+                                    <span><i class="fa-brands fa-app-store-ios text-kotlis-gold mr-2"></i> App Store</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-kotlis-subtle"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/oro-os-logo.jpg" alt="ORO OS — Hotel Management" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 08/11</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">ORO OS — Hotel Management</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Mobile operating suite for hotel staff managing room service, check-ins, and house-keeping.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/jiffy-fuels.jpg" alt="Jiffy Fuels" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 09/11</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Jiffy Fuels</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">On-demand fuel delivery booking application with live GPS fleet dispatch tracking.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/dating-app.jpg" alt="Dating App" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 10/11</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Dating App</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Location-based social discovery app with real-time chat and profile verification filters.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/ai-store-builder.jpg" alt="AI Store Builder" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 11/12</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">AI Store Builder</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Generative AI mobile application enabling users to publish online stores directly from smartphones.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                        <div class="portfolio-item flutter bg-white border-2 border-kotlis-gold p-5 shadow-md hover:border-kotlis-dark transition relative flex flex-col justify-between">
+                            <div>
+                                <span class="absolute -top-3 right-4 bg-kotlis-gold text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1">Live Client</span>
+                                <img src="images/portfolio/bookmytask-logo.svg" alt="BookMyTask" class="w-full h-40 object-contain bg-kotlis-bg p-6 mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 12/12</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">BookMyTask</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">On-demand home services marketplace connecting users with verified professionals for cleaning, electrical, plumbing, pest control, carpentry, gardening and more.</p>
+                            </div>
+                            <div class="mt-4 flex flex-col gap-2 text-xs font-bold text-kotlis-dark">
+                                <a href="https://play.google.com/store/apps/details?id=com.bookmytask.com&hl=en_IN" target="_blank" class="inline-flex items-center justify-between p-2 bg-kotlis-bg border border-kotlis-border hover:border-kotlis-gold transition">
+                                    <span><i class="fa-brands fa-google-play text-kotlis-gold mr-2"></i> Google Play</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-kotlis-subtle"></i>
+                                </a>
+                                <a href="https://apps.apple.com/in/app/bmt-book-my-task/id6746551804" target="_blank" class="inline-flex items-center justify-between p-2 bg-kotlis-bg border border-kotlis-border hover:border-kotlis-gold transition">
+                                    <span><i class="fa-brands fa-app-store-ios text-kotlis-gold mr-2"></i> App Store</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-kotlis-subtle"></i>
+                                </a>
+                                <a href="https://bookmytask.com/" target="_blank" class="inline-flex items-center justify-between p-2 bg-kotlis-bg border border-kotlis-border hover:border-kotlis-gold transition">
+                                    <span><i class="fa-solid fa-globe text-kotlis-gold mr-2"></i> Website</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-kotlis-subtle"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 2: WEBSITES & WEB APPLICATIONS (27) -->
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/first-aide-web.png" alt="First-Aid Pharmacy Website" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 01/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">First-Aid Pharmacy Website</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Online pharmaceutical web store with prescription uploads and fast localized dispatch.</p>
+                            </div>
+                            <a href="https://first.templateforwebsites.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/amaysing-shop.jpg" alt="Amaysing Shop" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 02/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Amaysing Shop</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Custom retail web store focused on luxury goods and smooth checkout experience.</p>
+                            </div>
+                            <a href="https://amaysingshop.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/shopify-commerce-brand.jpg" alt="Shopify Storefront Sample" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 03/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Shopify Storefront Sample</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Custom liquid theme e-commerce setup optimized for high conversion rates.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/webflow-marketing-site.jpg" alt="Webflow Marketing Site Sample" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 04/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Webflow Marketing Site Sample</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Responsive landing page with rich interactions and seamless form capture.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/react-product-site.jpg" alt="React / Next.js Product Site" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 05/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">React / Next.js Product Site</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Ultra-fast server-side rendered application with automated SEO indexing.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/wordpress-elementor-site.jpg" alt="WordPress + Elementor Site" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 06/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">WordPress + Elementor Site</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Content-driven corporate web portal with custom post types and dynamic blocks.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/mugafi.jpg" alt="Mugafi" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 07/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Mugafi</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Media & creative learning platform with streaming courses and mentor connect.</p>
+                            </div>
+                            <a href="https://mugafi.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/slideit.jpg" alt="Slideit" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 08/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Slideit</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Interactive web presentation builder tool for modern sales teams.</p>
+                            </div>
+                            <a href="https://slideitapp.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/mawahib.jpg" alt="Mawahib AI" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 09/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Mawahib AI</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">AI-driven talent matchmaking portal connecting developers with global opportunities.</p>
+                            </div>
+                            <a href="https://mawahib.ai" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/crossbridge.jpg" alt="Crossbridge Estate" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 10/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Crossbridge Estate</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">High-end real estate listings web portal with interactive filter modules.</p>
+                            </div>
+                            <a href="https://www.crossbridge.estate" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/tophills-travels.jpg" alt="Tophills Travels" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 11/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Tophills Travels</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Travel and tour package booking platform with integrated lead routing.</p>
+                            </div>
+                            <a href="https://tophillstravels.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/crafted-vacays.jpg" alt="Crafted Vacays" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 12/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Crafted Vacays</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Bespoke luxury holiday itinerary booking portal with interactive trip customizer.</p>
+                            </div>
+                            <a href="https://craftedvacays.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/ontario-glass.jpg" alt="Ontario Glass Supplies" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 13/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Ontario Glass Supplies</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">B2B industrial catalog website for architectural and commercial glass supplies.</p>
+                            </div>
+                            <a href="https://ontarioglasssupplies.ca" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/yogkulam.jpg" alt="Yogkulam" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 14/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Yogkulam</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Yoga teacher training certification website with online module registration.</p>
+                            </div>
+                            <a href="https://www.yogkulam.org" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/drishti-yogshala.jpg" alt="Drishti Yogshala" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 15/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Drishti Yogshala</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Holistic wellness retreats and yoga course booking web platform.</p>
+                            </div>
+                            <a href="https://drishtiyogshala.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/ayurveda-heritage.jpg" alt="Ayurveda Heritage" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 16/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Ayurveda Heritage</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Traditional wellness healthcare platform featuring consult scheduling and store.</p>
+                            </div>
+                            <a href="https://www.ayurvedaheritage.org" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/shivalik-classes.jpg" alt="Shivalik Classes" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 17/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Shivalik Classes</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Educational coaching institute portal with student test portals and study downloads.</p>
+                            </div>
+                            <a href="https://shivalikclasses.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/sangyaan.jpg" alt="Sangyaan" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 18/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Sangyaan</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Competitive exam prep digital platform with online mock tests and analytics.</p>
+                            </div>
+                            <a href="https://sangyaan.in" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/cpctwale.jpg" alt="CPCTwale" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 19/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">CPCTwale</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Online typing assessment and certification portal for professional exam preparation.</p>
+                            </div>
+                            <a href="https://cpctwale.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/cccwale.jpg" alt="CCCWale" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 20/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">CCCWale</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Digital literacy exam prep web application with live timed quiz series.</p>
+                            </div>
+                            <a href="https://cccwale.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/toolweb.jpg" alt="Toolweb" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 21/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Toolweb</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">SaaS web utilities platform featuring free online converters and developer tools.</p>
+                            </div>
+                            <a href="https://toolweb.in" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/polat-global.jpg" alt="Polat Global" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 22/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Polat Global</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">International trade and global supply chain logistics web portal.</p>
+                            </div>
+                            <a href="https://polatglobal.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/polat-global-ru.jpg" alt="Polat Global — Russian Version" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 23/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Polat Global — Russian Version</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Localized Russian language edition of the Polat Global enterprise platform.</p>
+                            </div>
+                            <a href="https://polatglobal.ru" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/polat-global-cafe.jpg" alt="Polat Global Cafe" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 24/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Polat Global Cafe</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Hospitality storefront and digital ordering menu website.</p>
+                            </div>
+                            <a href="https://polatglobalcafe.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/jaambu.jpg" alt="Jaambu" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 25/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Jaambu</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">E-commerce brand store built with streamlined mobile checkout.</p>
+                            </div>
+                            <a href="https://jaambu.in" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/the-thekedaar.jpg" alt="The Thekedaar" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 26/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">The Thekedaar</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Construction and contracting service platform with cost estimation tools.</p>
+                            </div>
+                            <a href="https://thethekedaar.in" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/oroos.jpg" alt="Oroos" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 27/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Oroos</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">SaaS web management platform with real-time property management dashboards.</p>
+                            </div>
+                            <a href="https://oroos.org" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                        </div>
+
+                        <!-- SECTION 3: QA & TESTING PROJECTS (5) -->
+                        <div class="portfolio-item qa bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/ooulet.jpg" alt="Ooulet — Seller Platform QA" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">QA & Testing • 01/05</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Ooulet — Seller Platform QA</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">End-to-End automation testing suite for multi-vendor merchant dashboard and catalog sync.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                        <div class="portfolio-item qa bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/ooulet.jpg" alt="Ooulet — TDD & Golden Tests" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">QA & Testing • 02/05</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Ooulet — TDD & Golden Tests</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Flutter widget golden tests and test-driven development suite asserting exact UI fidelity.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                        <div class="portfolio-item qa bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/finpay.jpg" alt="Payment Gateway QA" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">QA & Testing • 03/05</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Payment Gateway QA</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Automated load testing and transaction failure recovery assertions across payment integrations.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                        <div class="portfolio-item qa bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/qa-release-placeholder.jpg" alt="Play Store Release QA" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">QA & Testing • 04/05</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Play Store Release QA</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">Pre-submission compliance checks, App Store Guideline verification, and Android performance benchmarking.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                        <div class="portfolio-item qa bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                            <div>
+                                <img src="images/portfolio/qa-healthcare-placeholder.jpg" alt="Healthcare App QA" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">QA & Testing • 05/05</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Healthcare App QA</h3>
+                                <p class="text-xs text-kotlis-subtle mt-2">HIPAA compliance data privacy auditing and automated patient journey stress testing.</p>
+                            </div>
+                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= PAGE 4: MIGRATION & PROTOCOL INNER PAGE ================= -->
+        <div id="page-migration" class="page-content hidden">
+            <section class="py-16 bg-white border-b border-kotlis-border">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                    <div class="text-center max-w-3xl mx-auto space-y-3">
+                        <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Systematic Migration Protocol</span>
+                        <h2 class="text-3xl sm:text-5xl font-extrabold text-kotlis-dark serif-title">Zero Downtime Guarantee</h2>
+                        <p class="text-kotlis-subtle text-sm">How Ativak Works ensures risk-free server, app, and domain transitions without losing customers or search positions.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="bg-kotlis-bg border border-kotlis-border p-8 relative">
+                            <div class="text-4xl font-serif font-bold text-kotlis-gold mb-4">01</div>
+                            <h3 class="text-xl font-bold font-serif text-kotlis-dark mb-2">Audit & Mirror Staging</h3>
+                            <p class="text-xs text-kotlis-subtle leading-relaxed">We extract full database dumps, media assets, and API routes into an isolated sandboxed staging server to verify complete fidelity.</p>
+                        </div>
+                        <div class="bg-kotlis-bg border border-kotlis-border p-8 relative">
+                            <div class="text-4xl font-serif font-bold text-kotlis-gold mb-4">02</div>
+                            <h3 class="text-xl font-bold font-serif text-kotlis-dark mb-2">Dual Sync & SSL Prep</h3>
+                            <p class="text-xs text-kotlis-subtle leading-relaxed">Real-time database sync keeps incoming web traffic active while modernizing hosting infrastructure and SSL certificates.</p>
+                        </div>
+                        <div class="bg-kotlis-bg border border-kotlis-border p-8 relative">
+                            <div class="text-4xl font-serif font-bold text-kotlis-gold mb-4">03</div>
+                            <h3 class="text-xl font-bold font-serif text-kotlis-dark mb-2">Instant DNS Cutover</h3>
+                            <p class="text-xs text-kotlis-subtle leading-relaxed">Low-TTL DNS TTL propagation switches live domain routing seamlessly. 100% continuous uptime guaranteed.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#f9f9f9] border border-kotlis-border p-8 text-center space-y-4 max-w-4xl mx-auto">
+                        <h4 class="font-serif font-bold text-2xl text-kotlis-dark">Planning a Complex Server or App Migration?</h4>
+                        <p class="text-xs text-kotlis-subtle max-w-xl mx-auto">Speak directly with our technical infrastructure team for a free migration risk review.</p>
+                        <button onclick="switchPage('contact')" class="px-8 py-3 bg-kotlis-dark text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">
+                            Schedule Technical Audit
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= PAGE 5: PRICING & CALCULATOR INNER PAGE ================= -->
+        <div id="page-pricing" class="page-content hidden">
+            <section class="py-16 bg-white border-b border-kotlis-border">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+                    <div class="text-center max-w-2xl mx-auto space-y-3">
+                        <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Pricing Tiers & Custom Estimator</span>
+                        <h2 class="text-3xl sm:text-5xl font-extrabold text-kotlis-dark serif-title">Transparent Tech Investment</h2>
+                    </div>
+
+                    <!-- Interactive Price Estimator -->
+                    <div class="bg-kotlis-bg border border-kotlis-border p-8 max-w-3xl mx-auto shadow-sm">
+                        <h3 class="font-serif font-bold text-xl text-kotlis-dark mb-6 text-center">Interactive Estimate Calculator</h3>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Select Primary Service</label>
+                                <select id="calcService" onchange="calculateTotal()" class="w-full p-3 border border-kotlis-border bg-white text-xs text-kotlis-dark font-semibold">
+                                    <option value="499">SEO & Local Google Search Boost ($499/mo)</option>
+                                    <option value="899">Meta & Google Paid Ads Engine ($899/mo)</option>
+                                    <option value="1500">Cross-Platform Flutter Mobile App ($1,500 base)</option>
+                                    <option value="1200">Zero-Downtime Server Migration ($1,200 base)</option>
+                                </select>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark">Add-on Modules</label>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-kotlis-dark">
+                                    <label class="flex items-center space-x-2 bg-white p-3 border border-kotlis-border cursor-pointer">
+                                        <input type="checkbox" id="addonSchema" onchange="calculateTotal()" class="accent-kotlis-gold">
+                                        <span>AI Search Schema Markup (+$250)</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 bg-white p-3 border border-kotlis-border cursor-pointer">
+                                        <input type="checkbox" id="addonCRM" onchange="calculateTotal()" class="accent-kotlis-gold">
+                                        <span>WhatsApp & Lead CRM Sync (+$300)</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="pt-6 border-t border-kotlis-border flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs uppercase font-bold text-kotlis-subtle">Estimated Investment:</span>
+                                    <div id="calcOutput" class="text-3xl font-serif font-bold text-kotlis-dark">$499</div>
+                                </div>
+                                <button onclick="switchPage('contact')" class="px-6 py-3 bg-kotlis-gold text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-dark transition">
+                                    Book This Estimate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pricing Cards Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Starter Engine</span>
+                                <div class="mt-4 flex items-baseline">
+                                    <span class="text-4xl font-serif font-bold text-kotlis-dark">$499</span>
+                                    <span class="ml-2 text-xs text-kotlis-subtle uppercase">/ month</span>
+                                </div>
+                                <ul class="mt-6 space-y-3 text-xs text-kotlis-dark">
+                                    <li><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Local SEO Ranking</li>
+                                    <li><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Meta Ad Setup</li>
+                                    <li><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> WhatsApp Automation</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchPage('contact')" class="mt-8 py-3 border border-kotlis-dark text-xs font-bold uppercase tracking-widest hover:bg-kotlis-dark hover:text-white transition">Select Plan</button>
+                        </div>
+
+                        <div class="bg-white border-2 border-kotlis-gold p-8 flex flex-col justify-between relative shadow-lg">
+                            <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-kotlis-gold text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1">Popular</span>
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Growth Engine</span>
+                                <div class="mt-4 flex items-baseline">
+                                    <span class="text-4xl font-serif font-bold text-kotlis-dark">$1,299</span>
+                                    <span class="ml-2 text-xs text-kotlis-subtle uppercase">/ month</span>
+                                </div>
+                                <ul class="mt-6 space-y-3 text-xs text-kotlis-dark">
+                                    <li><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Omni-Channel Ads (Meta + Google)</li>
+                                    <li><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Advanced AI SEO & Schema</li>
+                                    <li><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Cloud Migration Safeguard</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchPage('contact')" class="mt-8 py-3 bg-kotlis-dark text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">Select Plan</button>
+                        </div>
+
+                        <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Enterprise & Flutter</span>
+                                <div class="mt-4 flex items-baseline">
+                                    <span class="text-4xl font-serif font-bold text-kotlis-dark">Custom</span>
+                                </div>
+                                <ul class="mt-6 space-y-3 text-xs text-kotlis-dark">
+                                    <li><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Bespoke Flutter App Development</li>
+                                    <li><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Dedicated Tech Team SLA</li>
+                                    <li><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Full System Migration</li>
+                                </ul>
+                            </div>
+                            <button onclick="switchPage('contact')" class="mt-8 py-3 border border-kotlis-dark text-xs font-bold uppercase tracking-widest hover:bg-kotlis-dark hover:text-white transition">Select Plan</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= PAGE 6: CONTACT & AUDIT INNER PAGE ================= -->
+        <div id="page-contact" class="page-content hidden">
+            <section class="py-16 bg-[#f9f9f9]">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="bg-white border border-kotlis-border p-8 sm:p-14 kotlis-shadow">
+                        <div class="text-center mb-10">
+                            <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Ativak Contact Portal</span>
+                            <h2 class="text-3xl sm:text-4xl font-extrabold text-kotlis-dark serif-title mt-2">Request Free Technical Audit</h2>
+                            <p class="text-xs text-kotlis-subtle mt-2">Submit your requirements directly to our core engineering team.</p>
+                            <a href="https://wa.me/918126666331" target="_blank" class="inline-flex items-center gap-2 mt-4 px-5 py-2 bg-[#25D366] text-white text-xs font-bold uppercase tracking-wider hover:opacity-90 transition">
+                                <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+                            </a>
+                        </div>
+
+                        <!-- Replace YOUR_FORM_ID below with your Formspree form id (formspree.io) -->
+                        <form id="ativakContactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="contactName" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Your Name</label>
+                                    <input id="contactName" name="name" type="text" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="John Doe">
+                                </div>
+                                <div>
+                                    <label for="contactEmail" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Email Address</label>
+                                    <input id="contactEmail" name="email" type="email" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="john@company.com">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="contactService" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Primary Service Needed</label>
+                                    <select id="contactService" name="service" class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition">
+                                        <option>Flutter Mobile App Development</option>
+                                        <option>Meta & Google Ads Strategy</option>
+                                        <option>SEO & AI Search Indexing</option>
+                                        <option>Zero-Downtime Migration</option>
+                                        <option>Custom Web Application</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="contactUrl" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Website / Project URL</label>
+                                    <input id="contactUrl" name="project_url" type="text" class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="https://example.com">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="contactBrief" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Project Brief & Details</label>
+                                <textarea id="contactBrief" name="brief" rows="4" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="Tell us about your app features, paid budget, or hosting server setup..."></textarea>
+                            </div>
+
+                            <button id="contactSubmitBtn" type="submit" class="w-full py-4 bg-kotlis-dark text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition duration-300">
+                                Send Audit Request
+                            </button>
+                        </form>
+
+                        <div id="contactSuccess" class="hidden mt-6 p-4 border border-kotlis-gold bg-kotlis-gold/10 text-kotlis-dark text-center text-xs font-bold uppercase tracking-wider">
+                            <i class="fa-solid fa-check mr-2 text-kotlis-gold"></i> Request received! A consultant will reach out within 24 hours.
+                        </div>
+                        <div id="contactError" class="hidden mt-6 p-4 border border-red-400 bg-red-50 text-red-700 text-center text-xs font-bold uppercase tracking-wider">
+                            <i class="fa-solid fa-triangle-exclamation mr-2"></i> Something went wrong. Please email us directly or try again.
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-kotlis-dark text-white py-12 border-t border-kotlis-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-kotlis-gold text-white font-serif font-bold text-sm flex items-center justify-center">
+                    A
+                </div>
+                <span class="font-serif text-lg tracking-widest uppercase">Ativak<span class="text-kotlis-gold">.works</span></span>
+            </div>
+
+            <div class="flex flex-wrap gap-6 text-xs font-semibold uppercase tracking-widest text-kotlis-border">
+                <button onclick="switchPage('home')" class="hover:text-kotlis-gold transition">Home</button>
+                <button onclick="switchPage('services')" class="hover:text-kotlis-gold transition">Services</button>
+                <button onclick="switchPage('portfolio')" class="hover:text-kotlis-gold transition">Case Studies</button>
+                <button onclick="switchPage('migration')" class="hover:text-kotlis-gold transition">Migration Protocol</button>
+                <button onclick="switchPage('pricing')" class="hover:text-kotlis-gold transition">Pricing</button>
+                <button onclick="switchPage('contact')" class="hover:text-kotlis-gold transition">Contact</button>
+            </div>
+
+            <div class="text-[11px] text-kotlis-subtle">
+                &copy; 2026 Ativak Works Studio. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Logic Script -->
+    <script>
+        // Switch between SPA inner pages
+        function switchPage(pageId) {
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(p => p.classList.add('hidden'));
+
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+
+            // Update nav active states
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('nav-active'));
+
+            const activeNav = document.getElementById(`nav-${pageId}`);
+            if (activeNav) {
+                activeNav.classList.add('nav-active');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.add('hidden');
+        }
+
+        // Professional Portfolio filtering function with active indicator updates
+        function filterPortfolio(category, btnElement) {
+            const items = document.querySelectorAll('.portfolio-item');
+            items.forEach(item => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Reset all filter button styles
+            const filterBtns = document.querySelectorAll('.port-filter-btn');
+            filterBtns.forEach(btn => {
+                btn.classList.remove('bg-kotlis-dark', 'text-white', 'border-kotlis-dark');
+                btn.classList.add('bg-white', 'text-kotlis-dark', 'border-kotlis-border');
+            });
+
+            // Highlight the clicked filter button
+            if (btnElement) {
+                btnElement.classList.remove('bg-white', 'text-kotlis-dark', 'border-kotlis-border');
+                btnElement.classList.add('bg-kotlis-dark', 'text-white', 'border-kotlis-dark');
+            }
+        }
+
+        // Price calculator logic — recurring (monthly) and one-time services shown separately
+        const RECURRING_SERVICES = new Set(['499', '899']);
+
+        function calculateTotal() {
+            const select = document.getElementById('calcService');
+            const base = parseInt(select.value, 10);
+            const isRecurring = RECURRING_SERVICES.has(select.value);
+            const addonSchema = document.getElementById('addonSchema').checked ? 250 : 0;
+            const addonCRM = document.getElementById('addonCRM').checked ? 300 : 0;
+            const total = base + addonSchema + addonCRM;
+            const suffix = isRecurring ? '/mo' : ' one-time';
+
+            document.getElementById('calcOutput').innerText = `$${total.toLocaleString()}${suffix}`;
+        }
+
+        // Contact form submit — posts to the Formspree endpoint set in the form's action attribute
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const form = document.getElementById('ativakContactForm');
+            const submitBtn = document.getElementById('contactSubmitBtn');
+            const successMsg = document.getElementById('contactSuccess');
+            const errorMsg = document.getElementById('contactError');
+
+            successMsg.classList.add('hidden');
+            errorMsg.classList.add('hidden');
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Sending...';
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    form.reset();
+                    form.style.opacity = '0.4';
+                    form.style.pointerEvents = 'none';
+                    successMsg.classList.remove('hidden');
+                } else {
+                    errorMsg.classList.remove('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'Send Audit Request';
+                }
+            } catch (err) {
+                errorMsg.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Send Audit Request';
+            }
+        }
+    </script>
+</body>
+</html>
