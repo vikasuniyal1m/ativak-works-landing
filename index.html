@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
@@ -28,6 +28,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- GSAP + ScrollTrigger for scroll-linked motion -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -38,13 +41,15 @@
                     },
                     colors: {
                         kotlis: {
-                            gold: '#c5a47e',
-                            goldHover: '#b08b5c',
-                            bg: '#fbfbfb',
-                            card: '#ffffff',
-                            dark: '#111111',
-                            subtle: '#666666',
-                            border: '#e5e5e5'
+                            gold: 'var(--kotlis-gold)',
+                            goldHover: 'var(--kotlis-gold-hover)',
+                            glow: 'var(--kotlis-glow)',
+                            bg: 'var(--kotlis-bg)',
+                            card: 'rgb(var(--kotlis-card-rgb) / <alpha-value>)',
+                            dark: 'var(--kotlis-dark)',
+                            subtle: 'var(--kotlis-subtle)',
+                            border: 'var(--kotlis-border)',
+                            fill: 'var(--kotlis-fill)'
                         }
                     }
                 }
@@ -52,10 +57,26 @@
         }
     </script>
     <style>
+        /* Accent color lives here as CSS variables — change ACTIVE_THEME in the
+           script below (1, 2, 3...) and every gold-tinted element updates together. */
+        :root {
+            --kotlis-gold: #c5a47e;
+            --kotlis-gold-hover: #b08b5c;
+            --kotlis-gold-rgb: 197, 164, 126;
+            --kotlis-glow: #34d399;
+            --kotlis-bg: #f7fbf9;
+            --kotlis-bg-alt: #eaf4f0;
+            --kotlis-dark: #111111;
+            --kotlis-subtle: #666666;
+            --kotlis-border: #e5e5e5;
+            --kotlis-card-rgb: 255, 255, 255;
+            --kotlis-fill: #111111;
+        }
         body {
-            background-color: #fbfbfb;
-            color: #111111;
+            background-color: var(--kotlis-bg);
+            color: var(--kotlis-dark);
             font-family: 'Inter', sans-serif;
+            transition: background-color 0.6s ease, color 0.6s ease;
         }
         .serif-title {
             font-family: 'Playfair Display', serif;
@@ -67,19 +88,95 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
         .nav-active {
-            color: #c5a47e;
-            border-bottom: 2px solid #c5a47e;
+            color: var(--kotlis-gold);
+            border-bottom: 2px solid var(--kotlis-gold);
+        }
+        /* Scroll reveal base state â€” GSAP animates these in on scroll */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(40px);
+            will-change: transform, opacity;
+        }
+        .reveal-fade {
+            opacity: 0;
+            will-change: opacity;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .reveal-up, .reveal-fade { opacity: 1 !important; transform: none !important; }
+        }
+        /* Custom cursor (desktop only) */
+        @media (hover: hover) and (pointer: fine) {
+            body { cursor: none; }
+            a, button, input, select, textarea { cursor: none; }
+        }
+        #cursorDot, #cursorRing {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+        #cursorDot {
+            width: 8px; height: 8px;
+            background: var(--kotlis-gold);
+            border-radius: 50%;
+            transition: opacity .25s ease;
+        }
+        #cursorRing {
+            width: 34px; height: 34px;
+            background: var(--kotlis-gold);
+            border-radius: 50%;
+            opacity: 0.16;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #ffffff;
+            box-shadow: 0 0 0 0 rgba(var(--kotlis-gold-rgb, 0,0,0), 0);
+            transition: width .35s cubic-bezier(.16,1,.3,1), height .35s cubic-bezier(.16,1,.3,1),
+                        opacity .35s ease, box-shadow .35s ease;
+        }
+        #cursorRing.cursor-hover {
+            width: 64px; height: 64px;
+            opacity: 1;
+            box-shadow: 0 6px 24px -4px rgba(0, 0, 0, 0.35);
+        }
+        #cursorDot.cursor-hover {
+            opacity: 0;
+        }
+        #cursorRing.cursor-hover span {
+            opacity: 1;
+            transform: scale(1);
+        }
+        #cursorRing span {
+            opacity: 0;
+            transform: scale(0.6);
+            transition: opacity .25s ease, transform .25s ease;
+        }
+        @keyframes activityRowIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .activity-row {
+            animation: activityRowIn 0.4s ease forwards;
         }
     </style>
 </head>
 <body class="selection:bg-kotlis-gold selection:text-white font-sans antialiased overflow-x-hidden min-h-screen flex flex-col justify-between">
 
+    <!-- Custom Cursor (desktop only, via CSS) -->
+    <div id="cursorDot" class="hidden md:block"></div>
+    <div id="cursorRing" class="hidden md:block"><span id="cursorLabel">View</span></div>
+
     <!-- Header Navigation -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-kotlis-border shadow-sm">
+    <header class="sticky top-0 z-50 bg-kotlis-card/95 backdrop-blur-md border-b border-kotlis-border shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- Brand Logo -->
             <button onclick="switchPage('home')" class="flex items-center space-x-3 group text-left">
-                <div class="w-10 h-10 rounded-none bg-kotlis-dark flex items-center justify-center text-kotlis-gold font-serif font-bold text-xl group-hover:bg-kotlis-gold group-hover:text-white transition duration-300">
+                <div class="w-10 h-10 rounded-none bg-kotlis-fill flex items-center justify-center text-kotlis-gold font-serif font-bold text-xl group-hover:bg-kotlis-gold group-hover:text-white transition duration-300">
                     A
                 </div>
                 <div class="flex flex-col">
@@ -98,7 +195,7 @@
             </nav>
 
             <div class="flex items-center space-x-4">
-                <button onclick="switchPage('contact')" class="hidden sm:inline-flex items-center justify-center px-6 py-3 border border-kotlis-dark text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:bg-kotlis-dark hover:text-white transition duration-300">
+                <button onclick="switchPage('contact')" class="hidden sm:inline-flex items-center justify-center px-6 py-3 border border-kotlis-dark text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:bg-kotlis-fill hover:text-white transition duration-300">
                     Request Free Audit
                 </button>
                 <button id="mobileMenuBtn" class="md:hidden text-kotlis-dark text-2xl p-2 focus:outline-none">
@@ -108,21 +205,23 @@
         </div>
 
         <!-- Mobile Nav Dropdown -->
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-kotlis-border px-6 py-6 space-y-4 shadow-lg">
+        <div id="mobileMenu" class="hidden md:hidden bg-kotlis-card border-b border-kotlis-border px-6 py-6 space-y-4 shadow-lg">
             <button onclick="switchPage('home'); toggleMobileMenu();" class="block w-full text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold">Home</button>
             <button onclick="switchPage('services'); toggleMobileMenu();" class="block w-full text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold">Services Detail</button>
             <button onclick="switchPage('portfolio'); toggleMobileMenu();" class="block w-full text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold">Case Studies & Apps</button>
             <button onclick="switchPage('migration'); toggleMobileMenu();" class="block w-full text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold">Migration & Protocol</button>
             <button onclick="switchPage('pricing'); toggleMobileMenu();" class="block w-full text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold">Pricing Tiers</button>
-            <button onclick="switchPage('contact'); toggleMobileMenu();" class="block w-full text-center py-3 bg-kotlis-dark text-white text-xs font-bold uppercase tracking-widest">Request Audit</button>
+            <button onclick="switchPage('contact'); toggleMobileMenu();" class="block w-full text-center py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest">Request Audit</button>
         </div>
     </header>
 
     <main class="flex-grow">
         <!-- ================= PAGE 1: HOME ================= -->
         <div id="page-home" class="page-content">
-            <section class="relative pt-16 pb-20 lg:pt-24 lg:pb-32 bg-[#f9f9f9] border-b border-kotlis-border">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <section class="relative pt-16 pb-20 lg:pt-24 lg:pb-32 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border overflow-hidden">
+                <!-- Three.js floating 3D shape â€” decorative, sits behind the hero content -->
+                <canvas id="hero3dCanvas" class="hidden sm:block absolute inset-0 w-full h-full pointer-events-none z-0" aria-hidden="true"></canvas>
+                <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                         <div class="lg:col-span-7 space-y-6">
                             <div class="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-widest text-kotlis-gold">
@@ -136,10 +235,10 @@
                                 Ativak Works (<span class="font-semibold text-kotlis-dark">ativak-works.vercel.app</span>). We engineer cross-platform iOS & Android mobile apps, custom web applications, zero-downtime cloud migrations, and high-ROAS performance campaigns.
                             </p>
                             <div class="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                                <button onclick="switchPage('contact')" class="px-8 py-4 bg-kotlis-dark text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition duration-300 text-center">
+                                <button onclick="switchPage('contact')" class="px-8 py-4 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition duration-300 text-center">
                                     Get Custom Estimate
                                 </button>
-                                <button onclick="switchPage('portfolio')" class="px-8 py-4 border border-kotlis-border bg-white text-kotlis-dark text-xs font-bold uppercase tracking-widest hover:border-kotlis-dark transition duration-300 text-center">
+                                <button onclick="switchPage('portfolio')" class="px-8 py-4 border border-kotlis-border bg-kotlis-card text-kotlis-dark text-xs font-bold uppercase tracking-widest hover:border-kotlis-dark transition duration-300 text-center">
                                     Explore Case Studies
                                 </button>
                             </div>
@@ -162,31 +261,80 @@
                         <!-- Hero Visual Grid -->
                         <div class="lg:col-span-5 grid grid-cols-2 gap-4 relative">
                             <div class="space-y-4">
-                                <div class="relative overflow-hidden group shadow-md border border-kotlis-border bg-white p-2">
-                                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Ativak Analytics" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
-                                    <div class="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 text-[10px] uppercase font-bold tracking-wider text-kotlis-dark border border-kotlis-border">
-                                        Analytics & Conversions
+                                <!-- Live build/deploy terminal — typed code, a build/deploy progress bar, then a LIVE badge, looping -->
+                                <div class="relative overflow-hidden shadow-md border border-kotlis-border bg-[#0d1117] p-0 h-64 flex flex-col">
+                                    <div class="flex items-center gap-1.5 px-3 py-2 bg-[#161b22] border-b border-white/10 shrink-0">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></span>
+                                        <span class="ml-2 text-[10px] text-gray-400 font-mono">ativak-works — web</span>
+                                    </div>
+                                    <div id="deployTerminal" class="flex-1 overflow-hidden px-4 py-3 font-mono text-[11px] leading-relaxed text-[#9fe6b0]"></div>
+                                    <div class="px-4 pb-3 shrink-0">
+                                        <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                                            <div id="deployBar" class="h-full bg-kotlis-glow rounded-full" style="width:0%"></div>
+                                        </div>
+                                        <div class="flex items-center justify-between mt-2">
+                                            <span id="deployStatusText" class="text-[10px] font-mono text-gray-400">Building…</span>
+                                            <span id="deployLiveBadge" class="hidden items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#27c93f]">
+                                                <span class="relative flex w-1.5 h-1.5">
+                                    <span class="absolute inline-flex h-full w-full rounded-full bg-[#27c93f] opacity-75 animate-ping"></span>
+                                    <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#27c93f]"></span>
+                                </span> Live
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="relative overflow-hidden group shadow-md border border-kotlis-border bg-white p-2">
-                                    <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80" alt="Flutter Mobile Apps" class="w-full h-44 object-cover group-hover:scale-105 transition duration-500">
-                                    <div class="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 text-[10px] uppercase font-bold tracking-wider text-kotlis-dark border border-kotlis-border">
-                                        Flutter iOS & Android
+                                <!-- Team: a live activity feed, commits/PRs streaming in -->
+                                <div class="relative overflow-hidden shadow-md border border-kotlis-border bg-kotlis-card h-44 flex flex-col">
+                                    <div class="flex items-center justify-between px-4 pt-3 pb-2 border-b border-kotlis-border shrink-0">
+                                        <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle">Ativak Engineering Team</span>
+                                        <span class="flex items-center gap-1.5 text-[10px] font-bold text-emerald-600">
+                                            <span class="relative flex w-1.5 h-1.5">
+                                                <span class="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75 animate-ping"></span>
+                                                <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                                            </span> Online
+                                        </span>
                                     </div>
+                                    <div id="teamActivityFeed" class="flex-1 overflow-hidden px-4 py-2 space-y-2.5"></div>
                                 </div>
                             </div>
 
                             <div class="space-y-4 pt-8">
-                                <div class="relative overflow-hidden group shadow-md border border-kotlis-border bg-white p-2">
-                                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" alt="Ativak Developers" class="w-full h-44 object-cover group-hover:scale-105 transition duration-500">
-                                    <div class="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 text-[10px] uppercase font-bold tracking-wider text-kotlis-dark border border-kotlis-border">
-                                        Ativak Engineers
+                                <!-- Android: circular build-progress ring, Play Store style -->
+                                <div class="relative overflow-hidden shadow-md border border-kotlis-border bg-kotlis-card h-44 flex items-center gap-4 px-5">
+                                    <svg width="76" height="76" viewBox="0 0 76 76" class="shrink-0 -rotate-90">
+                                        <circle cx="38" cy="38" r="32" fill="none" stroke="currentColor" stroke-width="6" class="text-kotlis-border"></circle>
+                                        <circle id="androidRing" cx="38" cy="38" r="32" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" class="text-kotlis-gold" stroke-dasharray="201" stroke-dashoffset="201"></circle>
+                                    </svg>
+                                    <div class="absolute left-[50px] top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-kotlis-fill flex items-center justify-center">
+                                        <i class="fa-brands fa-google-play text-kotlis-glow text-sm"></i>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <div class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Android · Google Play</div>
+                                        <div id="androidStatusText" class="text-sm font-serif font-bold text-kotlis-dark mt-1">Building…</div>
+                                        <div id="androidStep" class="text-[11px] text-kotlis-subtle mt-1 font-mono truncate">./gradlew bundleRelease</div>
+                                        <span id="androidLiveBadge" class="hidden items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-600 mt-1">
+                                            <span class="relative flex w-1.5 h-1.5">
+                                                <span class="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75 animate-ping"></span>
+                                                <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                                            </span> Live on Play Store
+                                        </span>
                                     </div>
                                 </div>
-                                <div class="relative overflow-hidden group shadow-md border border-kotlis-border bg-white p-2">
-                                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" alt="Meta Ads Optimization" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
-                                    <div class="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 text-[10px] uppercase font-bold tracking-wider text-kotlis-dark border border-kotlis-border">
-                                        Meta & Google Campaigns
+
+                                <!-- iOS: light App Store Connect-style checklist card -->
+                                <div class="relative overflow-hidden shadow-md border border-kotlis-border bg-kotlis-card h-64 flex flex-col">
+                                    <div class="flex items-center gap-2 px-5 pt-4 pb-3 border-b border-kotlis-border">
+                                        <i class="fa-brands fa-apple text-kotlis-dark"></i>
+                                        <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle">App Store Connect</span>
+                                    </div>
+                                    <div id="iosChecklist" class="flex-1 px-5 py-4 space-y-3"></div>
+                                    <div id="iosLiveBadge" class="hidden items-center gap-2 px-5 py-3 border-t border-kotlis-border text-xs font-bold uppercase tracking-wider text-emerald-600">
+                                        <span class="relative flex w-1.5 h-1.5">
+                                            <span class="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75 animate-ping"></span>
+                                            <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                                        </span> Live on the App Store
                                     </div>
                                 </div>
                             </div>
@@ -196,28 +344,28 @@
             </section>
 
             <!-- Section Teasers on Home Page -->
-            <section class="py-20 bg-white border-b border-kotlis-border">
+            <section class="py-20 bg-kotlis-card border-b border-kotlis-border">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
                     <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Core Capabilities</span>
                     <h2 class="text-3xl font-bold font-serif text-kotlis-dark">Everything Needed to Scale Modern Digital Products</h2>
                     <p class="text-kotlis-subtle text-sm max-w-2xl mx-auto">From native cross-platform mobile experiences to multi-channel advertising engines and cloud server migrations.</p>
                     <div class="pt-6">
-                        <button onclick="switchPage('services')" class="px-8 py-3 bg-kotlis-dark text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">View Detailed Services Inner Page <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                        <button onclick="switchPage('services')" class="px-8 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">View Detailed Services Inner Page <i class="fa-solid fa-arrow-right ml-2"></i></button>
                     </div>
                 </div>
             </section>
 
             <!-- About / Mission Strip -->
-            <section class="py-16 bg-[#f9f9f9] border-b border-kotlis-border">
+            <section class="py-16 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border">
                 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
                     <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Who We Are</span>
-                    <h2 class="text-2xl sm:text-3xl font-bold font-serif text-kotlis-dark">Help founders ship reliable products faster — then connect them to measurable demand.</h2>
+                    <h2 class="text-2xl sm:text-3xl font-bold font-serif text-kotlis-dark">Help founders ship reliable products faster â€” then connect them to measurable demand.</h2>
                     <p class="text-kotlis-subtle text-sm max-w-2xl mx-auto">A remote-first product & growth studio: clear communication, clean architecture, honest scope, and shipping over slide decks.</p>
                 </div>
             </section>
 
             <!-- Team Strip -->
-            <section class="py-16 bg-white border-b border-kotlis-border">
+            <section class="py-16 bg-kotlis-card border-b border-kotlis-border">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-10">
                     <div class="space-y-3">
                         <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">The Team</span>
@@ -227,13 +375,13 @@
                         <div class="border border-kotlis-border p-4">
                             <img src="images/team/vikas.jpeg" alt="Vikas Uniyal" class="w-full h-72 object-contain bg-kotlis-bg p-2 mb-3" loading="lazy">
                             <h3 class="font-serif font-bold text-sm text-kotlis-dark">Vikas Uniyal</h3>
-                            <p class="text-[10px] uppercase tracking-wider text-kotlis-gold font-bold mt-1">Founder · Full Stack</p>
+                            <p class="text-[10px] uppercase tracking-wider text-kotlis-gold font-bold mt-1">Founder Â· Full Stack</p>
                             <p class="text-[11px] text-kotlis-subtle mt-2">App Development, Game Development, Website Development & Design, and CRM. Also handles Meta Ads, lead generation, AI automations & business solution promotion.</p>
                         </div>
                         <div class="border border-kotlis-border p-4">
                             <img src="images/team/rohitkotnala.jfif" alt="Rohit Kotnala" class="w-full h-72 object-contain bg-kotlis-bg p-2 mb-3" loading="lazy">
                             <h3 class="font-serif font-bold text-sm text-kotlis-dark">Rohit Kotnala</h3>
-                            <p class="text-[10px] uppercase tracking-wider text-kotlis-gold font-bold mt-1">Business Solutions · Client Handling</p>
+                            <p class="text-[10px] uppercase tracking-wider text-kotlis-gold font-bold mt-1">Business Solutions Â· Client Handling</p>
                             <p class="text-[11px] text-kotlis-subtle mt-2">Finds leads, brings in business, and handles client solutions end-to-end. Also handles Meta Ads, lead generation, and AI automations.</p>
                         </div>
                     </div>
@@ -241,22 +389,22 @@
             </section>
 
             <!-- Blog Teaser Strip -->
-            <section class="py-16 bg-[#f9f9f9]">
+            <section class="py-16 bg-[var(--kotlis-bg-alt)]">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-10">
                     <div class="space-y-3">
                         <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">From the Blog</span>
                         <h2 class="text-2xl sm:text-3xl font-bold font-serif text-kotlis-dark">Latest Insights</h2>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
-                        <div class="bg-white border border-kotlis-border p-5">
+                        <div class="bg-kotlis-card border border-kotlis-border p-5">
                             <h3 class="font-serif font-bold text-sm text-kotlis-dark">Flutter vs Native for Startups: When Cross-Platform Wins</h3>
                             <p class="text-xs text-kotlis-subtle mt-2">Guidance on choosing between Flutter and native development for startup projects.</p>
                         </div>
-                        <div class="bg-white border border-kotlis-border p-5">
+                        <div class="bg-kotlis-card border border-kotlis-border p-5">
                             <h3 class="font-serif font-bold text-sm text-kotlis-dark">Website Migration Checklist (SEO-Safe Cutover)</h3>
                             <p class="text-xs text-kotlis-subtle mt-2">Redirects, analytics, and the steps that keep rankings intact during a migration.</p>
                         </div>
-                        <div class="bg-white border border-kotlis-border p-5">
+                        <div class="bg-kotlis-card border border-kotlis-border p-5">
                             <h3 class="font-serif font-bold text-sm text-kotlis-dark">Google Ads Setup Checklist for App & SaaS Launches</h3>
                             <p class="text-xs text-kotlis-subtle mt-2">Campaign fundamentals for app and SaaS marketing in the first 30 days.</p>
                         </div>
@@ -267,8 +415,9 @@
 
         <!-- ================= PAGE 2: SERVICES INNER PAGE ================= -->
         <div id="page-services" class="page-content hidden">
-            <section class="py-16 bg-white border-b border-kotlis-border">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <section class="py-16 bg-kotlis-card border-b border-kotlis-border relative overflow-hidden">
+                <canvas id="servicesShapeCanvas" class="hidden lg:block absolute top-0 right-0 w-[420px] h-[420px] pointer-events-none z-0" aria-hidden="true"></canvas>
+                <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
                         <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Inner Service Specifications</span>
                         <h2 class="text-3xl sm:text-5xl font-extrabold text-kotlis-dark serif-title">Engineering & Growth Solutions</h2>
@@ -279,8 +428,8 @@
                         <!-- Service 1 -->
                         <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
                             <div>
-                                <div class="w-12 h-12 bg-kotlis-dark text-kotlis-gold flex items-center justify-center text-xl font-bold mb-6">
-                                    <i class="fa-brands fa-flutter"></i>
+                                <div class="w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
+                                    <i class="fa-solid fa-mobile-screen-button"></i>
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Cross-Platform Mobile</span>
                                 <h3 class="text-2xl font-serif font-bold text-kotlis-dark mt-2 mb-4">Flutter iOS & Android Apps</h3>
@@ -301,7 +450,7 @@
                         <!-- Service 2 -->
                         <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
                             <div>
-                                <div class="w-12 h-12 bg-kotlis-dark text-kotlis-gold flex items-center justify-center text-xl font-bold mb-6">
+                                <div class="w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
                                     <i class="fa-brands fa-meta"></i>
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Paid Traffic Scaling</span>
@@ -323,7 +472,7 @@
                         <!-- Service 3 -->
                         <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
                             <div>
-                                <div class="w-12 h-12 bg-kotlis-dark text-kotlis-gold flex items-center justify-center text-xl font-bold mb-6">
+                                <div class="w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Search Engine Indexing</span>
@@ -345,7 +494,7 @@
                         <!-- Service 4 -->
                         <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
                             <div>
-                                <div class="w-12 h-12 bg-kotlis-dark text-kotlis-gold flex items-center justify-center text-xl font-bold mb-6">
+                                <div class="w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
                                     <i class="fa-solid fa-server"></i>
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Cloud Infrastructure</span>
@@ -367,7 +516,7 @@
                         <!-- Service 5 -->
                         <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
                             <div>
-                                <div class="w-12 h-12 bg-kotlis-dark text-kotlis-gold flex items-center justify-center text-xl font-bold mb-6">
+                                <div class="w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
                                     <i class="fa-solid fa-code"></i>
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Web Engineering</span>
@@ -389,7 +538,7 @@
                         <!-- Service 6 -->
                         <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
                             <div>
-                                <div class="w-12 h-12 bg-kotlis-dark text-kotlis-gold flex items-center justify-center text-xl font-bold mb-6">
+                                <div class="w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
                                     <i class="fa-solid fa-robot"></i>
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Automation & CRM</span>
@@ -409,7 +558,7 @@
                         </div>
                     </div>
 
-                    <!-- Full Service Catalog — Build the product. Grow the demand. -->
+                    <!-- Full Service Catalog â€” Build the product. Grow the demand. -->
                     <div class="mt-20 pt-16 border-t border-kotlis-border">
                         <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
                             <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Everything Under One Roof</span>
@@ -468,24 +617,25 @@
 
         <!-- ================= PAGE 3: CASE STUDIES & PORTFOLIO INNER PAGE ================= -->
         <div id="page-portfolio" class="page-content hidden">
-            <section class="py-16 bg-[#f9f9f9] border-b border-kotlis-border">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <section class="py-16 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border relative overflow-hidden">
+                <canvas id="portfolioShapeCanvas" class="hidden lg:block absolute top-0 right-0 w-[420px] h-[420px] pointer-events-none z-0" aria-hidden="true"></canvas>
+                <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
                         <div>
                             <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Ativak Works Complete Directory</span>
                             <h2 class="text-3xl sm:text-5xl font-extrabold text-kotlis-dark serif-title mt-2">Projects, Apps & Case Studies (44)</h2>
                             <!-- Complete Project Directory Callout -->
-                            <p class="text-xs text-kotlis-subtle mt-3 max-w-3xl leading-relaxed bg-white p-3 border-l-4 border-kotlis-gold shadow-sm">
+                            <p class="text-xs text-kotlis-subtle mt-3 max-w-3xl leading-relaxed bg-kotlis-card p-3 border-l-4 border-kotlis-gold shadow-sm">
                                 <i class="fa-solid fa-circle-check text-kotlis-gold mr-1"></i> <strong>Complete Catalog:</strong> All 44 completed projects with direct links to the live app or website where publicly available, across Mobile Apps (12), Websites (27), and QA Testing (5).
                             </p>
                         </div>
                         
                         <!-- Filter Controls -->
                         <div class="flex flex-wrap gap-2 text-xs uppercase font-bold tracking-wider">
-                            <button onclick="filterPortfolio('all', this)" class="port-filter-btn px-4 py-2 border border-kotlis-dark bg-kotlis-dark text-white transition shadow-sm">All (44)</button>
-                            <button onclick="filterPortfolio('flutter', this)" class="port-filter-btn px-4 py-2 border border-kotlis-border bg-white text-kotlis-dark hover:border-kotlis-dark transition shadow-sm">Mobile Apps (12)</button>
-                            <button onclick="filterPortfolio('websites', this)" class="port-filter-btn px-4 py-2 border border-kotlis-border bg-white text-kotlis-dark hover:border-kotlis-dark transition shadow-sm">Websites (27)</button>
-                            <button onclick="filterPortfolio('qa', this)" class="port-filter-btn px-4 py-2 border border-kotlis-border bg-white text-kotlis-dark hover:border-kotlis-dark transition shadow-sm">QA & Testing (5)</button>
+                            <button onclick="filterPortfolio('all', this)" class="port-filter-btn px-4 py-2 border border-kotlis-dark bg-kotlis-fill text-white transition shadow-sm">All (44)</button>
+                            <button onclick="filterPortfolio('flutter', this)" class="port-filter-btn px-4 py-2 border border-kotlis-border bg-kotlis-card text-kotlis-dark hover:border-kotlis-dark transition shadow-sm">Mobile Apps (12)</button>
+                            <button onclick="filterPortfolio('websites', this)" class="port-filter-btn px-4 py-2 border border-kotlis-border bg-kotlis-card text-kotlis-dark hover:border-kotlis-dark transition shadow-sm">Websites (27)</button>
+                            <button onclick="filterPortfolio('qa', this)" class="port-filter-btn px-4 py-2 border border-kotlis-border bg-kotlis-card text-kotlis-dark hover:border-kotlis-dark transition shadow-sm">QA & Testing (5)</button>
                         </div>
                     </div>
 
@@ -493,11 +643,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                         <!-- SECTION 1: MOBILE APPLICATIONS (12) -->
-                        <div class="portfolio-item flutter websites bg-white border-2 border-kotlis-gold p-5 shadow-md hover:border-kotlis-dark transition relative flex flex-col justify-between">
+                        <div class="portfolio-item flutter websites bg-kotlis-card border-2 border-kotlis-gold p-5 shadow-md hover:border-kotlis-dark transition relative flex flex-col justify-between">
                             <div>
                                 <span class="absolute -top-3 right-4 bg-kotlis-gold text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1">Verified Live Client</span>
                                 <img src="images/portfolio/first-aide.webp" alt="FIRST AIDE Healthcare App" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 01/11</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App â€¢ 01/11</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">FIRST AIDE Healthcare App</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Flutter medical application with digital prescriptions, tele-consultation, and online pharmacy ordering, paired with a synchronized web storefront.</p>
                             </div>
@@ -513,60 +663,60 @@
                             </div>
                         </div>
 
-                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/fos-ecommerce.webp" alt="FOS Production" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 02/11</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App â€¢ 02/11</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">FOS Production</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">High-performance e-commerce mobile app with instant product searching and payment gateway checkout.</p>
                             </div>
-                            <a href="https://play.google.com/store/apps/details?id=com.fosproduction.ecommerceapp" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://play.google.com/store/apps/details?id=com.fosproduction.ecommerceapp" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/adk.jpg" alt="ADK / MedOnGo Smart Clinics" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 03/11</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App â€¢ 03/11</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">ADK / MedOnGo Smart Clinics</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Smart clinic management and patient health monitoring mobile app interface.</p>
                             </div>
-                            <a href="https://play.google.com/store/apps/details?id=com.medongo.cms.maharashtra" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://play.google.com/store/apps/details?id=com.medongo.cms.maharashtra" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/pharma-invoice-extractor.jpg" alt="Pharma Invoice Extractor" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 04/11</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App â€¢ 04/11</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Pharma Invoice Extractor</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">OCR-powered mobile scanning app converting physical invoices into structured database entries.</p>
                             </div>
-                            <a href="https://pharmainvoiceextractor.vercel.app" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://pharmainvoiceextractor.vercel.app" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
-                                <img src="images/portfolio/earneasy.jpg" alt="EarnEasy — Refer & Earn" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 05/11</span>
-                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">EarnEasy — Refer & Earn</h3>
+                                <img src="images/portfolio/earneasy.jpg" alt="EarnEasy â€” Refer & Earn" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App â€¢ 05/11</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">EarnEasy â€” Refer & Earn</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Gamified referral rewards system mobile app with automated payout ledger integration.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
 
-                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
-                                <img src="images/portfolio/finpay.jpg" alt="FinPay — UPI Wallet" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 06/11</span>
-                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">FinPay — UPI Wallet</h3>
+                                <img src="images/portfolio/finpay.jpg" alt="FinPay â€” UPI Wallet" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App â€¢ 06/11</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">FinPay â€” UPI Wallet</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Secure biometric payment wallet supporting instant UPI transfers, bills, and card management.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
 
-                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/fos-messenger.webp" alt="FOS Messenger" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 07/11</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App â€¢ 07/11</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">FOS Messenger</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">End-to-end encrypted real-time messaging mobile platform with media sharing capabilities.</p>
                             </div>
@@ -582,51 +732,51 @@
                             </div>
                         </div>
 
-                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
-                                <img src="images/portfolio/oro-os-logo.jpg" alt="ORO OS — Hotel Management" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 08/11</span>
-                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">ORO OS — Hotel Management</h3>
+                                <img src="images/portfolio/oro-os-logo.jpg" alt="ORO OS â€” Hotel Management" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App â€¢ 08/11</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">ORO OS â€” Hotel Management</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Mobile operating suite for hotel staff managing room service, check-ins, and house-keeping.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
 
-                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/jiffy-fuels.jpg" alt="Jiffy Fuels" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 09/11</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App â€¢ 09/11</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Jiffy Fuels</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">On-demand fuel delivery booking application with live GPS fleet dispatch tracking.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
 
-                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/dating-app.jpg" alt="Dating App" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 10/11</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App â€¢ 10/11</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Dating App</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Location-based social discovery app with real-time chat and profile verification filters.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
 
-                        <div class="portfolio-item flutter bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/ai-store-builder.jpg" alt="AI Store Builder" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 11/12</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App â€¢ 11/12</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">AI Store Builder</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Generative AI mobile application enabling users to publish online stores directly from smartphones.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
 
-                        <div class="portfolio-item flutter bg-white border-2 border-kotlis-gold p-5 shadow-md hover:border-kotlis-dark transition relative flex flex-col justify-between">
+                        <div class="portfolio-item flutter bg-kotlis-card border-2 border-kotlis-gold p-5 shadow-md hover:border-kotlis-dark transition relative flex flex-col justify-between">
                             <div>
                                 <span class="absolute -top-3 right-4 bg-kotlis-gold text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1">Live Client</span>
                                 <img src="images/portfolio/bookmytask-logo.svg" alt="BookMyTask" class="w-full h-40 object-contain bg-kotlis-bg p-6 mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 12/12</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App â€¢ 12/12</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">BookMyTask</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">On-demand home services marketplace connecting users with verified professionals for cleaning, electrical, plumbing, pest control, carpentry, gardening and more.</p>
                             </div>
@@ -647,321 +797,321 @@
                         </div>
 
                         <!-- SECTION 2: WEBSITES & WEB APPLICATIONS (27) -->
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/first-aide-web.png" alt="First-Aid Pharmacy Website" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 01/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 01/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">First-Aid Pharmacy Website</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Online pharmaceutical web store with prescription uploads and fast localized dispatch.</p>
                             </div>
-                            <a href="https://first.templateforwebsites.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://first.templateforwebsites.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/amaysing-shop.jpg" alt="Amaysing Shop" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 02/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 02/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Amaysing Shop</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Custom retail web store focused on luxury goods and smooth checkout experience.</p>
                             </div>
-                            <a href="https://amaysingshop.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://amaysingshop.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/shopify-commerce-brand.jpg" alt="Shopify Storefront Sample" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 03/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 03/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Shopify Storefront Sample</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Custom liquid theme e-commerce setup optimized for high conversion rates.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/webflow-marketing-site.jpg" alt="Webflow Marketing Site Sample" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 04/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 04/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Webflow Marketing Site Sample</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Responsive landing page with rich interactions and seamless form capture.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/react-product-site.jpg" alt="React / Next.js Product Site" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 05/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 05/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">React / Next.js Product Site</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Ultra-fast server-side rendered application with automated SEO indexing.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/wordpress-elementor-site.jpg" alt="WordPress + Elementor Site" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 06/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 06/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">WordPress + Elementor Site</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Content-driven corporate web portal with custom post types and dynamic blocks.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/mugafi.jpg" alt="Mugafi" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 07/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 07/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Mugafi</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Media & creative learning platform with streaming courses and mentor connect.</p>
                             </div>
-                            <a href="https://mugafi.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://mugafi.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/slideit.jpg" alt="Slideit" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 08/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 08/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Slideit</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Interactive web presentation builder tool for modern sales teams.</p>
                             </div>
-                            <a href="https://slideitapp.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://slideitapp.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/mawahib.jpg" alt="Mawahib AI" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 09/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 09/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Mawahib AI</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">AI-driven talent matchmaking portal connecting developers with global opportunities.</p>
                             </div>
-                            <a href="https://mawahib.ai" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://mawahib.ai" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/crossbridge.jpg" alt="Crossbridge Estate" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 10/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 10/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Crossbridge Estate</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">High-end real estate listings web portal with interactive filter modules.</p>
                             </div>
-                            <a href="https://www.crossbridge.estate" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://www.crossbridge.estate" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/tophills-travels.jpg" alt="Tophills Travels" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 11/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 11/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Tophills Travels</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Travel and tour package booking platform with integrated lead routing.</p>
                             </div>
-                            <a href="https://tophillstravels.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://tophillstravels.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/crafted-vacays.jpg" alt="Crafted Vacays" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 12/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 12/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Crafted Vacays</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Bespoke luxury holiday itinerary booking portal with interactive trip customizer.</p>
                             </div>
-                            <a href="https://craftedvacays.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://craftedvacays.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/ontario-glass.jpg" alt="Ontario Glass Supplies" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 13/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 13/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Ontario Glass Supplies</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">B2B industrial catalog website for architectural and commercial glass supplies.</p>
                             </div>
-                            <a href="https://ontarioglasssupplies.ca" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://ontarioglasssupplies.ca" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/yogkulam.jpg" alt="Yogkulam" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 14/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 14/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Yogkulam</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Yoga teacher training certification website with online module registration.</p>
                             </div>
-                            <a href="https://www.yogkulam.org" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://www.yogkulam.org" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/drishti-yogshala.jpg" alt="Drishti Yogshala" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 15/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 15/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Drishti Yogshala</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Holistic wellness retreats and yoga course booking web platform.</p>
                             </div>
-                            <a href="https://drishtiyogshala.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://drishtiyogshala.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/ayurveda-heritage.jpg" alt="Ayurveda Heritage" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 16/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 16/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Ayurveda Heritage</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Traditional wellness healthcare platform featuring consult scheduling and store.</p>
                             </div>
-                            <a href="https://www.ayurvedaheritage.org" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://www.ayurvedaheritage.org" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/shivalik-classes.jpg" alt="Shivalik Classes" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 17/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 17/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Shivalik Classes</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Educational coaching institute portal with student test portals and study downloads.</p>
                             </div>
-                            <a href="https://shivalikclasses.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://shivalikclasses.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/sangyaan.jpg" alt="Sangyaan" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 18/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 18/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Sangyaan</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Competitive exam prep digital platform with online mock tests and analytics.</p>
                             </div>
-                            <a href="https://sangyaan.in" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://sangyaan.in" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/cpctwale.jpg" alt="CPCTwale" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 19/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 19/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">CPCTwale</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Online typing assessment and certification portal for professional exam preparation.</p>
                             </div>
-                            <a href="https://cpctwale.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://cpctwale.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/cccwale.jpg" alt="CCCWale" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 20/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 20/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">CCCWale</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Digital literacy exam prep web application with live timed quiz series.</p>
                             </div>
-                            <a href="https://cccwale.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://cccwale.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/toolweb.jpg" alt="Toolweb" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 21/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 21/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Toolweb</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">SaaS web utilities platform featuring free online converters and developer tools.</p>
                             </div>
-                            <a href="https://toolweb.in" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://toolweb.in" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/polat-global.jpg" alt="Polat Global" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 22/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 22/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Polat Global</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">International trade and global supply chain logistics web portal.</p>
                             </div>
-                            <a href="https://polatglobal.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://polatglobal.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
-                                <img src="images/portfolio/polat-global-ru.jpg" alt="Polat Global — Russian Version" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 23/27</span>
-                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Polat Global — Russian Version</h3>
+                                <img src="images/portfolio/polat-global-ru.jpg" alt="Polat Global â€” Russian Version" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 23/27</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Polat Global â€” Russian Version</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Localized Russian language edition of the Polat Global enterprise platform.</p>
                             </div>
-                            <a href="https://polatglobal.ru" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://polatglobal.ru" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/polat-global-cafe.jpg" alt="Polat Global Cafe" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 24/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 24/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Polat Global Cafe</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Hospitality storefront and digital ordering menu website.</p>
                             </div>
-                            <a href="https://polatglobalcafe.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://polatglobalcafe.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/jaambu.jpg" alt="Jaambu" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 25/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 25/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Jaambu</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">E-commerce brand store built with streamlined mobile checkout.</p>
                             </div>
-                            <a href="https://jaambu.in" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://jaambu.in" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/the-thekedaar.jpg" alt="The Thekedaar" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 26/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 26/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">The Thekedaar</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Construction and contracting service platform with cost estimation tools.</p>
                             </div>
-                            <a href="https://thethekedaar.in" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://thethekedaar.in" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
-                        <div class="portfolio-item websites bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/oroos.jpg" alt="Oroos" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 27/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website â€¢ 27/27</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Oroos</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">SaaS web management platform with real-time property management dashboards.</p>
                             </div>
-                            <a href="https://oroos.org" target="_blank" class="mt-4 text-center py-2 bg-kotlis-dark text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="https://oroos.org" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
                         <!-- SECTION 3: QA & TESTING PROJECTS (5) -->
-                        <div class="portfolio-item qa bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item qa bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
-                                <img src="images/portfolio/ooulet.jpg" alt="Ooulet — Seller Platform QA" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">QA & Testing • 01/05</span>
-                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Ooulet — Seller Platform QA</h3>
+                                <img src="images/portfolio/ooulet.jpg" alt="Ooulet â€” Seller Platform QA" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">QA & Testing â€¢ 01/05</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Ooulet â€” Seller Platform QA</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">End-to-End automation testing suite for multi-vendor merchant dashboard and catalog sync.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
 
-                        <div class="portfolio-item qa bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item qa bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
-                                <img src="images/portfolio/ooulet.jpg" alt="Ooulet — TDD & Golden Tests" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">QA & Testing • 02/05</span>
-                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Ooulet — TDD & Golden Tests</h3>
+                                <img src="images/portfolio/ooulet.jpg" alt="Ooulet â€” TDD & Golden Tests" class="w-full h-40 object-cover mb-3" loading="lazy">
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">QA & Testing â€¢ 02/05</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Ooulet â€” TDD & Golden Tests</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Flutter widget golden tests and test-driven development suite asserting exact UI fidelity.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
 
-                        <div class="portfolio-item qa bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item qa bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/finpay.jpg" alt="Payment Gateway QA" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">QA & Testing • 03/05</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">QA & Testing â€¢ 03/05</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Payment Gateway QA</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Automated load testing and transaction failure recovery assertions across payment integrations.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
 
-                        <div class="portfolio-item qa bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item qa bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/qa-release-placeholder.jpg" alt="Play Store Release QA" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">QA & Testing • 04/05</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">QA & Testing â€¢ 04/05</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Play Store Release QA</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Pre-submission compliance checks, App Store Guideline verification, and Android performance benchmarking.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
 
-                        <div class="portfolio-item qa bg-white border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
+                        <div class="portfolio-item qa bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/qa-healthcare-placeholder.jpg" alt="Healthcare App QA" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-dark text-kotlis-gold px-2 py-1 font-bold uppercase tracking-widest">QA & Testing • 05/05</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">QA & Testing â€¢ 05/05</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Healthcare App QA</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">HIPAA compliance data privacy auditing and automated patient journey stress testing.</p>
                             </div>
@@ -975,8 +1125,9 @@
 
         <!-- ================= PAGE 4: MIGRATION & PROTOCOL INNER PAGE ================= -->
         <div id="page-migration" class="page-content hidden">
-            <section class="py-16 bg-white border-b border-kotlis-border">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <section class="py-16 bg-kotlis-card border-b border-kotlis-border relative overflow-hidden">
+                <canvas id="migrationShapeCanvas" class="hidden lg:block absolute top-0 right-0 w-[420px] h-[420px] pointer-events-none z-0" aria-hidden="true"></canvas>
+                <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-3xl mx-auto space-y-3">
                         <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Systematic Migration Protocol</span>
                         <h2 class="text-3xl sm:text-5xl font-extrabold text-kotlis-dark serif-title">Zero Downtime Guarantee</h2>
@@ -1001,10 +1152,10 @@
                         </div>
                     </div>
 
-                    <div class="bg-[#f9f9f9] border border-kotlis-border p-8 text-center space-y-4 max-w-4xl mx-auto">
+                    <div class="bg-[var(--kotlis-bg-alt)] border border-kotlis-border p-8 text-center space-y-4 max-w-4xl mx-auto">
                         <h4 class="font-serif font-bold text-2xl text-kotlis-dark">Planning a Complex Server or App Migration?</h4>
                         <p class="text-xs text-kotlis-subtle max-w-xl mx-auto">Speak directly with our technical infrastructure team for a free migration risk review.</p>
-                        <button onclick="switchPage('contact')" class="px-8 py-3 bg-kotlis-dark text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">
+                        <button onclick="switchPage('contact')" class="px-8 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">
                             Schedule Technical Audit
                         </button>
                     </div>
@@ -1014,8 +1165,9 @@
 
         <!-- ================= PAGE 5: PRICING & CALCULATOR INNER PAGE ================= -->
         <div id="page-pricing" class="page-content hidden">
-            <section class="py-16 bg-white border-b border-kotlis-border">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+            <section class="py-16 bg-kotlis-card border-b border-kotlis-border relative overflow-hidden">
+                <canvas id="pricingShapeCanvas" class="hidden lg:block absolute top-0 right-0 w-[420px] h-[420px] pointer-events-none z-0" aria-hidden="true"></canvas>
+                <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
                         <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Pricing Tiers & Custom Estimator</span>
                         <h2 class="text-3xl sm:text-5xl font-extrabold text-kotlis-dark serif-title">Transparent Tech Investment</h2>
@@ -1028,7 +1180,7 @@
                         <div class="space-y-6">
                             <div>
                                 <label class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Select Primary Service</label>
-                                <select id="calcService" onchange="calculateTotal()" class="w-full p-3 border border-kotlis-border bg-white text-xs text-kotlis-dark font-semibold">
+                                <select id="calcService" onchange="calculateTotal()" class="w-full p-3 border border-kotlis-border bg-kotlis-card text-xs text-kotlis-dark font-semibold">
                                     <option value="499">SEO & Local Google Search Boost ($499/mo)</option>
                                     <option value="899">Meta & Google Paid Ads Engine ($899/mo)</option>
                                     <option value="1500">Cross-Platform Flutter Mobile App ($1,500 base)</option>
@@ -1039,11 +1191,11 @@
                             <div class="space-y-2">
                                 <label class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark">Add-on Modules</label>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-kotlis-dark">
-                                    <label class="flex items-center space-x-2 bg-white p-3 border border-kotlis-border cursor-pointer">
+                                    <label class="flex items-center space-x-2 bg-kotlis-card p-3 border border-kotlis-border cursor-pointer">
                                         <input type="checkbox" id="addonSchema" onchange="calculateTotal()" class="accent-kotlis-gold">
                                         <span>AI Search Schema Markup (+$250)</span>
                                     </label>
-                                    <label class="flex items-center space-x-2 bg-white p-3 border border-kotlis-border cursor-pointer">
+                                    <label class="flex items-center space-x-2 bg-kotlis-card p-3 border border-kotlis-border cursor-pointer">
                                         <input type="checkbox" id="addonCRM" onchange="calculateTotal()" class="accent-kotlis-gold">
                                         <span>WhatsApp & Lead CRM Sync (+$300)</span>
                                     </label>
@@ -1055,7 +1207,7 @@
                                     <span class="text-xs uppercase font-bold text-kotlis-subtle">Estimated Investment:</span>
                                     <div id="calcOutput" class="text-3xl font-serif font-bold text-kotlis-dark">$499</div>
                                 </div>
-                                <button onclick="switchPage('contact')" class="px-6 py-3 bg-kotlis-gold text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-dark transition">
+                                <button onclick="switchPage('contact')" class="px-6 py-3 bg-kotlis-gold text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-fill transition">
                                     Book This Estimate
                                 </button>
                             </div>
@@ -1077,10 +1229,10 @@
                                     <li><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> WhatsApp Automation</li>
                                 </ul>
                             </div>
-                            <button onclick="switchPage('contact')" class="mt-8 py-3 border border-kotlis-dark text-xs font-bold uppercase tracking-widest hover:bg-kotlis-dark hover:text-white transition">Select Plan</button>
+                            <button onclick="switchPage('contact')" class="mt-8 py-3 border border-kotlis-dark text-xs font-bold uppercase tracking-widest hover:bg-kotlis-fill hover:text-white transition">Select Plan</button>
                         </div>
 
-                        <div class="bg-white border-2 border-kotlis-gold p-8 flex flex-col justify-between relative shadow-lg">
+                        <div class="bg-kotlis-card border-2 border-kotlis-gold p-8 flex flex-col justify-between relative shadow-lg">
                             <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-kotlis-gold text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1">Popular</span>
                             <div>
                                 <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Growth Engine</span>
@@ -1094,7 +1246,7 @@
                                     <li><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Cloud Migration Safeguard</li>
                                 </ul>
                             </div>
-                            <button onclick="switchPage('contact')" class="mt-8 py-3 bg-kotlis-dark text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">Select Plan</button>
+                            <button onclick="switchPage('contact')" class="mt-8 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">Select Plan</button>
                         </div>
 
                         <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between">
@@ -1109,7 +1261,7 @@
                                     <li><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Full System Migration</li>
                                 </ul>
                             </div>
-                            <button onclick="switchPage('contact')" class="mt-8 py-3 border border-kotlis-dark text-xs font-bold uppercase tracking-widest hover:bg-kotlis-dark hover:text-white transition">Select Plan</button>
+                            <button onclick="switchPage('contact')" class="mt-8 py-3 border border-kotlis-dark text-xs font-bold uppercase tracking-widest hover:bg-kotlis-fill hover:text-white transition">Select Plan</button>
                         </div>
                     </div>
                 </div>
@@ -1118,9 +1270,10 @@
 
         <!-- ================= PAGE 6: CONTACT & AUDIT INNER PAGE ================= -->
         <div id="page-contact" class="page-content hidden">
-            <section class="py-16 bg-[#f9f9f9]">
-                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="bg-white border border-kotlis-border p-8 sm:p-14 kotlis-shadow">
+            <section class="py-16 bg-[var(--kotlis-bg-alt)] relative overflow-hidden">
+                <canvas id="contactShapeCanvas" class="hidden lg:block absolute top-0 right-0 w-[420px] h-[420px] pointer-events-none z-0" aria-hidden="true"></canvas>
+                <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="bg-kotlis-card border border-kotlis-border p-8 sm:p-14 kotlis-shadow">
                         <div class="text-center mb-10">
                             <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Ativak Contact Portal</span>
                             <h2 class="text-3xl sm:text-4xl font-extrabold text-kotlis-dark serif-title mt-2">Request Free Technical Audit</h2>
@@ -1165,7 +1318,7 @@
                                 <textarea id="contactBrief" name="brief" rows="4" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="Tell us about your app features, paid budget, or hosting server setup..."></textarea>
                             </div>
 
-                            <button id="contactSubmitBtn" type="submit" class="w-full py-4 bg-kotlis-dark text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition duration-300">
+                            <button id="contactSubmitBtn" type="submit" class="w-full py-4 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition duration-300">
                                 Send Audit Request
                             </button>
                         </form>
@@ -1183,7 +1336,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-kotlis-dark text-white py-12 border-t border-kotlis-border">
+    <footer class="bg-kotlis-fill text-white py-12 border-t border-kotlis-border">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center space-x-3">
                 <div class="w-8 h-8 bg-kotlis-gold text-white font-serif font-bold text-sm flex items-center justify-center">
@@ -1209,26 +1362,91 @@
 
     <!-- Interactive Logic Script -->
     <script>
-        // Switch between SPA inner pages
+        // ============== Accent Theme Switcher ==============
+        // Change ACTIVE_THEME to 1, 2, 3, 4, or 5 and every gold-tinted
+        // element — text, borders, cursor, nav underline, 3D shapes — updates together.
+        // Each theme also carries a light, tinted background pair so the page
+        // background always harmonizes with whichever accent is active — never stark white.
+        // Light themes keep the original ink/card/fill values; the dark theme
+        // flips text to near-white, cards to dark surfaces, and fills to a
+        // lifted dark-grey so buttons stay visible against the black page.
+        const LIGHT_SURFACE = { dark: '#111111', subtle: '#666666', border: '#e5e5e5', cardRgb: '255, 255, 255', fill: '#111111', wire: '#111111' };
+        const DARK_SURFACE  = { dark: '#f5f5f5', subtle: '#a3a3a3', border: '#2a2a2a', cardRgb: '20, 20, 20',   fill: '#1c1c1c', wire: '#ffffff' };
+
+        // `glow` is a brighter version of the accent, reserved for dark surfaces
+        // (the deploy terminal, dark-theme fills) where the main accent itself
+        // might be too dark/saturated to read clearly.
+        // Background stays a fixed neutral white/grey across every theme —
+        // only the accent (text, buttons, icons, terminal, grid) changes color.
+        const NEUTRAL_BG = { bg: '#ffffff', bgAlt: '#f7f7f7' };
+        const THEME_PRESETS = {
+            2: { name: 'Deep Emerald',  hex: '#1f6e5c', hover: '#17523f', glow: '#34d399', ...NEUTRAL_BG, ...LIGHT_SURFACE },
+            3: { name: 'Terracotta',    hex: '#c1542f', hover: '#a8431f', glow: '#fb923c', ...NEUTRAL_BG, ...LIGHT_SURFACE },
+            4: { name: 'Deep Burgundy', hex: '#7a2634', hover: '#5e1c27', glow: '#fb7185', ...NEUTRAL_BG, ...LIGHT_SURFACE }
+        };
+        let ACTIVE_THEME = 2; // <-- change this number to switch the whole site's accent + background color
+
+        function applyTheme(themeNumber) {
+            const preset = THEME_PRESETS[themeNumber];
+            if (!preset) return;
+            ACTIVE_THEME = themeNumber;
+            const root = document.documentElement.style;
+            root.setProperty('--kotlis-gold', preset.hex);
+            root.setProperty('--kotlis-gold-hover', preset.hover);
+            root.setProperty('--kotlis-glow', preset.glow);
+            root.setProperty('--kotlis-bg', preset.bg);
+            root.setProperty('--kotlis-bg-alt', preset.bgAlt);
+            root.setProperty('--kotlis-dark', preset.dark);
+            root.setProperty('--kotlis-subtle', preset.subtle);
+            root.setProperty('--kotlis-border', preset.border);
+            root.setProperty('--kotlis-card-rgb', preset.cardRgb);
+            root.setProperty('--kotlis-fill', preset.fill);
+            // The tech-grid canvases read --kotlis-gold directly each frame, so
+            // no extra work is needed here to re-color them.
+        }
+        // Try it live from the browser console: setAtivakTheme(3)
+        window.setAtivakTheme = applyTheme;
+
+        // Auto-cycle through every theme every 18 seconds
+        function startThemeAutoCycle(intervalMs = 18000) {
+            const themeNumbers = Object.keys(THEME_PRESETS).map(Number).sort((a, b) => a - b);
+            setInterval(() => {
+                const currentIndex = themeNumbers.indexOf(ACTIVE_THEME);
+                const nextTheme = themeNumbers[(currentIndex + 1) % themeNumbers.length];
+                applyTheme(nextTheme);
+            }, intervalMs);
+        }
+
+        // Switch between SPA inner pages, with a smooth crossfade between them
         function switchPage(pageId) {
             const pages = document.querySelectorAll('.page-content');
-            pages.forEach(p => p.classList.add('hidden'));
-
+            const currentPage = Array.from(pages).find(p => !p.classList.contains('hidden'));
             const targetPage = document.getElementById(`page-${pageId}`);
-            if (targetPage) {
-                targetPage.classList.remove('hidden');
-            }
+            if (!targetPage || targetPage === currentPage) return;
 
-            // Update nav active states
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => link.classList.remove('nav-active'));
-
             const activeNav = document.getElementById(`nav-${pageId}`);
-            if (activeNav) {
-                activeNav.classList.add('nav-active');
-            }
+            if (activeNav) activeNav.classList.add('nav-active');
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const finishSwitch = () => {
+                pages.forEach(p => p.classList.add('hidden'));
+                targetPage.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+                if (typeof gsap !== 'undefined') {
+                    gsap.fromTo(targetPage, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
+                }
+                if (typeof afterPageSwitch === 'function') afterPageSwitch(pageId);
+            };
+
+            if (typeof gsap === 'undefined' || !currentPage) {
+                finishSwitch();
+                return;
+            }
+            gsap.to(currentPage, {
+                opacity: 0, y: -12, duration: 0.25, ease: 'power1.in',
+                onComplete: finishSwitch
+            });
         }
 
         // Mobile menu toggle
@@ -1257,18 +1475,18 @@
             // Reset all filter button styles
             const filterBtns = document.querySelectorAll('.port-filter-btn');
             filterBtns.forEach(btn => {
-                btn.classList.remove('bg-kotlis-dark', 'text-white', 'border-kotlis-dark');
-                btn.classList.add('bg-white', 'text-kotlis-dark', 'border-kotlis-border');
+                btn.classList.remove('bg-kotlis-fill', 'text-white', 'border-kotlis-dark');
+                btn.classList.add('bg-kotlis-card', 'text-kotlis-dark', 'border-kotlis-border');
             });
 
             // Highlight the clicked filter button
             if (btnElement) {
-                btnElement.classList.remove('bg-white', 'text-kotlis-dark', 'border-kotlis-border');
-                btnElement.classList.add('bg-kotlis-dark', 'text-white', 'border-kotlis-dark');
+                btnElement.classList.remove('bg-kotlis-card', 'text-kotlis-dark', 'border-kotlis-border');
+                btnElement.classList.add('bg-kotlis-fill', 'text-white', 'border-kotlis-dark');
             }
         }
 
-        // Price calculator logic — recurring (monthly) and one-time services shown separately
+        // Price calculator logic â€” recurring (monthly) and one-time services shown separately
         const RECURRING_SERVICES = new Set(['499', '899']);
 
         function calculateTotal() {
@@ -1283,7 +1501,7 @@
             document.getElementById('calcOutput').innerText = `$${total.toLocaleString()}${suffix}`;
         }
 
-        // Contact form submit — posts to the Formspree endpoint set in the form's action attribute
+        // Contact form submit â€” posts to the Formspree endpoint set in the form's action attribute
         async function handleFormSubmit(e) {
             e.preventDefault();
             const form = document.getElementById('ativakContactForm');
@@ -1319,6 +1537,499 @@
                 submitBtn.innerText = 'Send Audit Request';
             }
         }
+
+        // ============== GSAP Scroll Animations & Interactive Motion ==============
+        gsap.registerPlugin(ScrollTrigger);
+
+        function initRevealAnimations(scope) {
+            // Section headers / text blocks fade up as they enter the viewport
+            scope.querySelectorAll('section').forEach(section => {
+                const targets = section.querySelectorAll(':scope > div > *, :scope > div > div > *');
+                if (!targets.length) return;
+                gsap.fromTo(targets, {
+                    opacity: 0,
+                    y: 40
+                }, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.9,
+                    ease: 'power3.out',
+                    stagger: 0.08,
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    }
+                });
+            });
+
+            // Portfolio / service cards get a slightly springier reveal
+            gsap.utils.toArray(scope.querySelectorAll('.portfolio-item')).forEach((card, i) => {
+                gsap.fromTo(card, { opacity: 0, y: 50, scale: 0.96 }, {
+                    opacity: 1, y: 0, scale: 1,
+                    duration: 0.7,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 90%',
+                        toggleActions: 'play none none none'
+                    }
+                });
+            });
+        }
+
+        // Hero entrance animation (runs once on load, not scroll-triggered)
+        function initHeroEntrance() {
+            const hero = document.querySelector('#page-home section');
+            if (!hero) return;
+            const copy = hero.querySelectorAll('.lg\\:col-span-7 > *');
+            const images = hero.querySelectorAll('.lg\\:col-span-5 .relative.overflow-hidden');
+            gsap.fromTo(copy, { opacity: 0, y: 30 }, {
+                opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.12
+            });
+            gsap.fromTo(images, { opacity: 0, y: 50, scale: 0.95 }, {
+                opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power3.out', stagger: 0.1, delay: 0.2
+            });
+        }
+
+        // Subtle parallax drift on hero images as the page scrolls
+        function initHeroParallax() {
+            const images = document.querySelectorAll('#page-home .lg\\:col-span-5 img');
+            images.forEach((img, i) => {
+                gsap.to(img, {
+                    y: i % 2 === 0 ? -25 : 25,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: '#page-home section',
+                        start: 'top top',
+                        end: 'bottom top',
+                        scrub: true
+                    }
+                });
+            });
+        }
+
+        // Custom cursor â€” dot follows instantly, ring follows with lag; both scale up over links/buttons
+        function initCustomCursor() {
+            const dot = document.getElementById('cursorDot');
+            const ring = document.getElementById('cursorRing');
+            if (!dot || !ring || window.matchMedia('(hover: hover) and (pointer: fine)').matches === false) return;
+
+            const ringPos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+            let mouseX = ringPos.x, mouseY = ringPos.y;
+
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                gsap.set(dot, { x: mouseX, y: mouseY });
+            });
+
+            gsap.ticker.add(() => {
+                ringPos.x += (mouseX - ringPos.x) * 0.15;
+                ringPos.y += (mouseY - ringPos.y) * 0.15;
+                gsap.set(ring, { x: ringPos.x, y: ringPos.y });
+            });
+
+            const label = document.getElementById('cursorLabel');
+            document.addEventListener('mouseover', (e) => {
+                const target = e.target.closest('a, button, input, textarea, select');
+                if (target) {
+                    ring.classList.add('cursor-hover');
+                    dot.classList.add('cursor-hover');
+                    if (label) {
+                        if (target.tagName === 'A' && target.target === '_blank') label.textContent = 'Open';
+                        else if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT') label.textContent = 'Type';
+                        else if (target.closest('.nav-link') || target.id?.startsWith('nav-')) label.textContent = 'Go';
+                        else label.textContent = 'View';
+                    }
+                }
+            });
+            document.addEventListener('mouseout', (e) => {
+                if (e.target.closest('a, button, input, textarea, select')) {
+                    ring.classList.remove('cursor-hover');
+                    dot.classList.remove('cursor-hover');
+                }
+            });
+        }
+
+        // Magnetic pull effect on primary CTA buttons
+        function initMagneticButtons() {
+            const buttons = document.querySelectorAll('header button, main button, main a');
+            buttons.forEach(btn => {
+                btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const relX = e.clientX - rect.left - rect.width / 2;
+                    const relY = e.clientY - rect.top - rect.height / 2;
+                    gsap.to(btn, { x: relX * 0.2, y: relY * 0.3, duration: 0.3, ease: 'power2.out' });
+                });
+                btn.addEventListener('mouseleave', () => {
+                    gsap.to(btn, { x: 0, y: 0, duration: 0.4, ease: 'power3.out' });
+                });
+            });
+        }
+
+        // ============== Tech Grid Visual (Canvas 2D) ==============
+        // A lightweight animated "circuit board / data network" visual used on
+        // every page: drifting nodes, connecting lines, and small pulses that
+        // travel along edges like live data packets. No 3D library needed.
+        function hexToRgbTriplet(hex) {
+            hex = (hex || '#1f6e5c').replace('#', '').trim();
+            if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+            const num = parseInt(hex, 16) || 0;
+            return `${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}`;
+        }
+
+        function initTechGrid(canvasId, options = {}) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas || !canvas.getContext) return;
+            if (canvas.dataset.gridInited) return;
+            canvas.dataset.gridInited = '1';
+
+            const ctx = canvas.getContext('2d');
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const nodeCount = options.nodeCount || 26;
+            const maxLinkDist = options.maxLinkDist || 130;
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+            let width = 0, height = 0, nodes = [], pulses = [], lastPulseTime = 0;
+
+            function resize() {
+                const rect = canvas.getBoundingClientRect();
+                width = rect.width || canvas.clientWidth || 400;
+                height = rect.height || canvas.clientHeight || 400;
+                canvas.width = Math.max(1, Math.round(width * dpr));
+                canvas.height = Math.max(1, Math.round(height * dpr));
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+
+            function seedNodes() {
+                nodes = Array.from({ length: nodeCount }, () => ({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 0.18,
+                    vy: (Math.random() - 0.5) * 0.18,
+                    r: Math.random() * 1.4 + 1.4
+                }));
+            }
+
+            resize();
+            seedNodes();
+            window.addEventListener('resize', () => { resize(); });
+
+            function spawnPulse() {
+                if (nodes.length < 2) return;
+                const a = nodes[Math.floor(Math.random() * nodes.length)];
+                let best = null, bestD = Infinity;
+                nodes.forEach(b => {
+                    if (b === a) return;
+                    const d = Math.hypot(a.x - b.x, a.y - b.y);
+                    if (d < maxLinkDist && d < bestD) { bestD = d; best = b; }
+                });
+                if (best) pulses.push({ a, b: best, t: 0, speed: 0.018 + Math.random() * 0.02 });
+            }
+
+            function frame(ts) {
+                if (!reduceMotion) {
+                    nodes.forEach(n => {
+                        n.x += n.vx; n.y += n.vy;
+                        if (n.x < 0 || n.x > width) n.vx *= -1;
+                        if (n.y < 0 || n.y > height) n.vy *= -1;
+                    });
+                    if (ts - lastPulseTime > 650) { spawnPulse(); lastPulseTime = ts; }
+                    pulses.forEach(p => { p.t += p.speed; });
+                    pulses = pulses.filter(p => p.t < 1);
+                }
+
+                ctx.clearRect(0, 0, width, height);
+                const rgb = hexToRgbTriplet(getComputedStyle(document.documentElement).getPropertyValue('--kotlis-gold'));
+
+                ctx.lineWidth = 1;
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const a = nodes[i], b = nodes[j];
+                        const d = Math.hypot(a.x - b.x, a.y - b.y);
+                        if (d < maxLinkDist) {
+                            ctx.strokeStyle = `rgba(${rgb}, ${(1 - d / maxLinkDist) * 0.32})`;
+                            ctx.beginPath();
+                            ctx.moveTo(a.x, a.y);
+                            ctx.lineTo(b.x, b.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                ctx.fillStyle = `rgba(${rgb}, 0.9)`;
+                nodes.forEach(n => {
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                ctx.fillStyle = `rgba(${rgb}, 1)`;
+                pulses.forEach(p => {
+                    const x = p.a.x + (p.b.x - p.a.x) * p.t;
+                    const y = p.a.y + (p.b.y - p.a.y) * p.t;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 2.4, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(frame);
+            }
+            requestAnimationFrame(frame);
+        }
+
+        // Maps each inner page to its decorative canvas, so the grid is only
+        // built once a page is actually visible (hidden pages have 0 size).
+        function initPageGrid(pageId) {
+            const canvasByPage = {
+                services: 'servicesShapeCanvas',
+                portfolio: 'portfolioShapeCanvas',
+                migration: 'migrationShapeCanvas',
+                pricing: 'pricingShapeCanvas',
+                contact: 'contactShapeCanvas'
+            };
+            const id = canvasByPage[pageId];
+            if (id) initTechGrid(id, { nodeCount: 20, maxLinkDist: 110 });
+        }
+
+        // ============== Hero "Build & Deploy" Terminals ==============
+        // A looping mock terminal: types out a build/test/deploy log, fills a
+        // progress bar in step, then flips to a pulsing LIVE badge before resetting.
+        // Reused for the web/Flutter, Android, and iOS pipelines with their own log lines.
+        function initDeployTerminal(ids, steps) {
+            const term = document.getElementById(ids.term);
+            const bar = document.getElementById(ids.bar);
+            const statusText = document.getElementById(ids.status);
+            const liveBadge = document.getElementById(ids.live);
+            if (!term || !bar || !statusText || !liveBadge) return;
+
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            // Stagger each terminal's loop start slightly so all three don't type in lockstep
+            const startDelay = ids.startDelay || 0;
+
+            function typeLine(lineEl, text, onDone) {
+                let i = 0;
+                if (reduceMotion) { lineEl.textContent = text; onDone(); return; }
+                (function typeChar() {
+                    lineEl.textContent = text.slice(0, i) + (i < text.length ? '▌' : '');
+                    if (i < text.length) {
+                        i++;
+                        setTimeout(typeChar, 14 + Math.random() * 18);
+                    } else {
+                        lineEl.textContent = text;
+                        onDone();
+                    }
+                })();
+            }
+
+            function runStep(index) {
+                if (index >= steps.length) {
+                    setTimeout(resetAndLoop, 2600);
+                    return;
+                }
+                const step = steps[index];
+                const lineEl = document.createElement('div');
+                lineEl.className = step.text.startsWith('$') ? 'text-gray-400' : (step.text.startsWith('🚀') || step.text.startsWith('📦') || step.text.startsWith('🍏')) ? 'text-kotlis-glow font-bold' : 'text-[#9fe6b0]';
+                term.appendChild(lineEl);
+                term.scrollTop = term.scrollHeight;
+
+                typeLine(lineEl, step.text, () => {
+                    bar.style.width = step.progress + '%';
+                    statusText.textContent = step.status;
+                    if (index === steps.length - 1) {
+                        statusText.classList.add('hidden');
+                        liveBadge.classList.remove('hidden');
+                        liveBadge.classList.add('flex');
+                    }
+                    term.scrollTop = term.scrollHeight;
+                    setTimeout(() => runStep(index + 1), 320);
+                });
+            }
+
+            function resetAndLoop() {
+                term.innerHTML = '';
+                bar.style.width = '0%';
+                statusText.textContent = 'Building…';
+                statusText.classList.remove('hidden');
+                liveBadge.classList.add('hidden');
+                liveBadge.classList.remove('flex');
+                runStep(0);
+            }
+
+            setTimeout(resetAndLoop, startDelay);
+        }
+
+        function initAllDeployTerminals() {
+            initDeployTerminal(
+                { term: 'deployTerminal', bar: 'deployBar', status: 'deployStatusText', live: 'deployLiveBadge', startDelay: 0 },
+                [
+                    { text: '$ git push origin main', status: 'Building…', progress: 14 },
+                    { text: '✓ Next.js build… 24 pages compiled', status: 'Building…', progress: 36 },
+                    { text: '✓ Lighthouse score 98/100', status: 'Optimizing…', progress: 56 },
+                    { text: '$ vercel --prod', status: 'Deploying…', progress: 72 },
+                    { text: '✓ Uploading static assets + edge functions', status: 'Deploying…', progress: 88 },
+                    { text: '✓ DNS propagated, SSL issued', status: 'Deploying…', progress: 96 },
+                    { text: '🚀 Deployed → ativak-works.vercel.app', status: 'Live', progress: 100 }
+                ]
+            );
+            initAndroidRing();
+            initIosChecklist();
+            initTeamActivityFeed();
+        }
+
+        // Team: a live activity feed — commits, PRs, and CI pings streaming in
+        // one at a time, like a GitHub/Slack feed, keeping only the latest few rows.
+        function initTeamActivityFeed() {
+            const feed = document.getElementById('teamActivityFeed');
+            if (!feed) return;
+
+            const entries = [
+                { initials: 'VU', name: 'Vikas', action: 'pushed 3 commits to main' },
+                { initials: 'RK', name: 'Rohit', action: 'closed issue #128' },
+                { initials: 'CI', name: 'CI/CD', action: 'all checks passed ✓' },
+                { initials: 'VU', name: 'Vikas', action: 'merged PR #42' },
+                { initials: 'RK', name: 'Rohit', action: 'opened PR — fix webhook' },
+                { initials: 'CI', name: 'CI/CD', action: 'deployed to production 🚀' }
+            ];
+            const MAX_ROWS = 4;
+            let i = 0;
+
+            function addRow() {
+                const e = entries[i % entries.length];
+                i++;
+                const row = document.createElement('div');
+                row.className = 'activity-row flex items-center gap-2';
+                row.innerHTML =
+                    `<span class="w-6 h-6 rounded-full bg-kotlis-fill text-kotlis-glow text-[9px] font-bold flex items-center justify-center shrink-0">${e.initials}</span>` +
+                    `<span class="text-[11px] text-kotlis-dark truncate"><span class="font-bold">${e.name}</span> ${e.action}</span>` +
+                    `<span class="text-[9px] text-kotlis-subtle ml-auto shrink-0">now</span>`;
+                feed.insertBefore(row, feed.firstChild);
+                while (feed.children.length > MAX_ROWS) feed.removeChild(feed.lastChild);
+            }
+
+            addRow();
+            setInterval(addRow, 1800);
+        }
+
+        // Android: a circular progress ring fills as the build advances through
+        // stages, swapping the step label underneath — Play Store publish flow.
+        function initAndroidRing() {
+            const ring = document.getElementById('androidRing');
+            const statusText = document.getElementById('androidStatusText');
+            const stepText = document.getElementById('androidStep');
+            const liveBadge = document.getElementById('androidLiveBadge');
+            if (!ring || !statusText || !stepText || !liveBadge) return;
+
+            const CIRCUMFERENCE = 201;
+            const steps = [
+                { status: 'Building…', step: './gradlew bundleRelease', progress: 25 },
+                { status: 'Shrinking…', step: 'R8 shrink + obfuscate', progress: 50 },
+                { status: 'Signing…', step: 'Signing app bundle (jks)', progress: 75 },
+                { status: 'Publishing…', step: 'play-publish --track production', progress: 95 },
+                { status: 'Live', step: 'Published to Google Play', progress: 100 }
+            ];
+
+            function run(index) {
+                if (index >= steps.length) { setTimeout(() => { reset(); run(0); }, 2600); return; }
+                const s = steps[index];
+                ring.style.transition = 'stroke-dashoffset 0.6s ease';
+                ring.style.strokeDashoffset = CIRCUMFERENCE - (CIRCUMFERENCE * s.progress / 100);
+                statusText.textContent = s.status;
+                stepText.textContent = s.step;
+                if (index === steps.length - 1) {
+                    liveBadge.classList.remove('hidden');
+                    liveBadge.classList.add('flex');
+                }
+                setTimeout(() => run(index + 1), 900);
+            }
+            function reset() {
+                ring.style.transition = 'none';
+                ring.style.strokeDashoffset = CIRCUMFERENCE;
+                liveBadge.classList.add('hidden');
+                liveBadge.classList.remove('flex');
+            }
+            reset();
+            setTimeout(() => run(0), 900);
+        }
+
+        // iOS: a checklist that ticks items off one at a time, App Store Connect style.
+        function initIosChecklist() {
+            const list = document.getElementById('iosChecklist');
+            const liveBadge = document.getElementById('iosLiveBadge');
+            if (!list || !liveBadge) return;
+
+            const tasks = [
+                'Compiling Swift sources',
+                'Running XCTest suite (28/28)',
+                'Signing with distribution certificate',
+                'Uploading build to App Store Connect',
+                'Processing for TestFlight & release'
+            ];
+
+            function render() {
+                list.innerHTML = '';
+                tasks.forEach(t => {
+                    const row = document.createElement('div');
+                    row.className = 'task-row flex items-center gap-2.5 text-xs text-kotlis-subtle';
+                    row.innerHTML = `<span class="task-check w-4 h-4 rounded-full border border-kotlis-border flex items-center justify-center shrink-0 transition"></span><span class="task-label">${t}</span>`;
+                    list.appendChild(row);
+                });
+            }
+
+            function tick(index) {
+                const rows = list.querySelectorAll('.task-row');
+                if (index >= rows.length) {
+                    liveBadge.classList.remove('hidden');
+                    liveBadge.classList.add('flex');
+                    setTimeout(() => { render(); liveBadge.classList.add('hidden'); liveBadge.classList.remove('flex'); setTimeout(() => tick(0), 500); }, 2600);
+                    return;
+                }
+                const row = rows[index];
+                const check = row.querySelector('.task-check');
+                const label = row.querySelector('.task-label');
+                check.classList.add('bg-kotlis-gold', 'border-kotlis-gold');
+                check.innerHTML = '<i class="fa-solid fa-check text-white text-[9px]"></i>';
+                label.classList.remove('text-kotlis-subtle');
+                label.classList.add('text-kotlis-dark', 'font-semibold');
+                setTimeout(() => tick(index + 1), 550);
+            }
+
+            render();
+            setTimeout(() => tick(0), 1400);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTheme(ACTIVE_THEME);
+            initHeroEntrance();
+            initHeroParallax();
+            // Only the already-visible home page gets scroll-reveal tweens at load time —
+            // ScrollTrigger can't measure positions inside a display:none page, which left
+            // hidden pages' text/buttons stuck invisible. Each inner page gets its reveal
+            // tweens lazily, the first time it's actually switched to (see afterPageSwitch).
+            initRevealAnimations(document.getElementById('page-home'));
+            initCustomCursor();
+            initMagneticButtons();
+            initTechGrid('hero3dCanvas', { nodeCount: 34, maxLinkDist: 150 });
+            initAllDeployTerminals();
+        });
+
+        // Runs once the fade-out/fade-in swap inside switchPage() has actually landed
+        function afterPageSwitch(pageId) {
+            const pageEl = document.getElementById(`page-${pageId}`);
+            if (pageEl && !pageEl.dataset.revealInited) {
+                pageEl.dataset.revealInited = '1';
+                initRevealAnimations(pageEl);
+            }
+            initPageGrid(pageId);
+            ScrollTrigger.refresh();
+        }
     </script>
 </body>
 </html>
+
+
+
+
+
+
