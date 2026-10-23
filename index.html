@@ -1735,7 +1735,10 @@
             3: { name: 'Terracotta',    hex: '#8a3317', hover: '#6b2710', glow: '#fb923c', ...NEUTRAL_BG, ...LIGHT_SURFACE },
             4: { name: 'Deep Burgundy', hex: '#4e0f1a', hover: '#380a12', glow: '#fb7185', ...NEUTRAL_BG, ...LIGHT_SURFACE },
             5: { name: 'Gold on White', hex: '#a9850f', hover: '#8a6c0c', glow: '#e8c468', ...NEUTRAL_BG, ...LIGHT_SURFACE },
-            6: { name: 'Dark Teal on White', hex: '#0f4c46', hover: '#0a3733', glow: '#2dd4bf', ...NEUTRAL_BG, ...LIGHT_SURFACE }
+            6: { name: 'Refire Teal', hex: '#024950', hover: '#003135', glow: '#0fa4af', ...NEUTRAL_BG, ...LIGHT_SURFACE },
+            // Rust accent from the same reference palette (#964734), as an
+            // alternate to try alongside the teal — same white background.
+            57: { name: 'Refire Rust', hex: '#964734', hover: '#6f3326', glow: '#0fa4af', ...NEUTRAL_BG, ...LIGHT_SURFACE }
         };
 
         // ~50 additional accent presets for the color-scheme picker, generated
@@ -2563,7 +2566,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            applyTheme(6); // Dark Teal on White is the site's committed default theme
+            applyTheme(6); // Refire Teal is the site's committed default theme
             initHeroEntrance();
             initCountUp();
             initTiltCards(document.getElementById('page-home'));
