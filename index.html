@@ -223,8 +223,14 @@
         .story-stage {
             transition: opacity 0.3s ease;
         }
-        .story-skel-line {
-            transition: background-color 0.3s ease;
+        .story-reveal {
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .story-reveal.is-visible {
+            opacity: 1;
+            transform: none;
         }
     </style>
 </head>
@@ -425,7 +431,31 @@
                                 <div class="w-5 h-5 rounded bg-kotlis-gold shrink-0"></div>
                                 <div class="h-2 w-16 rounded bg-kotlis-border"></div>
                             </div>
-                            <div id="storyStage1Lines" class="p-3 space-y-2.5"></div>
+                            <!-- Real app-screen pieces (not generic gray boxes), each
+                                 revealed in turn via the .story-reveal opacity toggle. -->
+                            <div class="p-3 space-y-2.5">
+                                <div class="story-reveal relative w-full h-16 rounded-md bg-[rgba(var(--kotlis-gold-rgb),0.12)] border border-kotlis-gold/40 flex items-center justify-center">
+                                    <i class="fa-regular fa-image text-kotlis-gold/70"></i>
+                                </div>
+                                <div class="story-reveal h-2.5 w-5/6 rounded bg-kotlis-dark/80"></div>
+                                <div class="story-reveal flex items-center gap-0.5 text-[10px] text-kotlis-gold">
+                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+                                    <span class="text-kotlis-subtle ml-1">4.9 (2.1k)</span>
+                                </div>
+                                <div class="story-reveal flex items-center gap-2 p-2 rounded border border-kotlis-border">
+                                    <div class="w-6 h-6 rounded-full bg-kotlis-gold/30 flex items-center justify-center shrink-0">
+                                        <i class="fa-solid fa-bolt text-kotlis-gold text-[9px]"></i>
+                                    </div>
+                                    <div class="flex-1 space-y-1">
+                                        <div class="h-1.5 w-3/4 rounded bg-kotlis-border"></div>
+                                        <div class="h-1.5 w-1/2 rounded bg-kotlis-border"></div>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-right text-kotlis-border text-[10px]"></i>
+                                </div>
+                                <div class="story-reveal h-9 w-full rounded bg-kotlis-gold flex items-center justify-center text-white text-[10px] font-bold uppercase tracking-wider gap-1.5">
+                                    <i class="fa-solid fa-rocket text-[10px]"></i> Get Started
+                                </div>
+                            </div>
                         </div>
                         <p class="text-kotlis-dark text-center text-sm sm:base max-w-md"><span class="text-kotlis-gold font-bold">Day 1 —</span> Your app takes shape, screen by screen.</p>
                     </div>
@@ -453,9 +483,9 @@
                                 </div>
                             </div>
                             <div class="flex items-end justify-center gap-3 h-20">
-                                <div class="w-7 bg-kotlis-gold/40 rounded-t" style="height:20%"></div>
-                                <div class="w-7 bg-kotlis-gold/60 rounded-t" style="height:35%"></div>
-                                <div class="w-7 bg-kotlis-gold/80 rounded-t" style="height:55%"></div>
+                                <div class="w-7 rounded-t" style="height:20%; background:rgba(var(--kotlis-gold-rgb),0.4)"></div>
+                                <div class="w-7 rounded-t" style="height:35%; background:rgba(var(--kotlis-gold-rgb),0.6)"></div>
+                                <div class="w-7 rounded-t" style="height:55%; background:rgba(var(--kotlis-gold-rgb),0.8)"></div>
                                 <div id="storyBar4" class="w-7 bg-kotlis-gold rounded-t transition-all duration-700" style="height:20%"></div>
                                 <div id="storyBar5" class="w-7 bg-kotlis-gold rounded-t transition-all duration-700" style="height:20%"></div>
                             </div>
@@ -1787,8 +1817,12 @@
         gsap.registerPlugin(ScrollTrigger);
 
         function initRevealAnimations(scope) {
-            // Section headers / text blocks fade up as they enter the viewport
+            // Section headers / text blocks fade up as they enter the viewport.
+            // buildStorySection manages its own stage opacity via scroll scrub
+            // (initBuildStoryScroll) — this generic reveal would fade all three
+            // stages to visible at once and fight that, so it's skipped here.
             scope.querySelectorAll('section').forEach(section => {
+                if (section.id === 'buildStorySection') return;
                 const targets = section.querySelectorAll(':scope > div > *, :scope > div > div > *');
                 if (!targets.length) return;
                 gsap.fromTo(targets, {
@@ -2284,33 +2318,15 @@
 
             const stages = ['storyStage1', 'storyStage2', 'storyStage3'].map(id => document.getElementById(id));
             const dots = document.querySelectorAll('.storyDot');
-            const linesContainer = document.getElementById('storyStage1Lines');
             const roasEl = document.getElementById('storyRoas');
             const impressionsEl = document.getElementById('storyImpressions');
             const clicksEl = document.getElementById('storyClicks');
             const rankEl = document.getElementById('storyRank');
             const bar4 = document.getElementById('storyBar4');
             const bar5 = document.getElementById('storyBar5');
-
-            // Build the phone-screen widgets once: a banner image block, two
-            // text lines, a list row with a thumbnail, and a CTA button —
-            // recognizable app-screen pieces instead of plain skeleton lines.
-            if (linesContainer && !linesContainer.dataset.built) {
-                linesContainer.dataset.built = '1';
-                const widgets = [
-                    { h: 'h-16', w: 'w-full', rounded: 'rounded-md' },   // banner image
-                    { h: 'h-2.5', w: 'w-5/6', rounded: 'rounded' },       // title line
-                    { h: 'h-2', w: 'w-3/5', rounded: 'rounded' },         // subtitle line
-                    { h: 'h-10', w: 'w-full', rounded: 'rounded' },       // list row
-                    { h: 'h-8', w: 'w-full', rounded: 'rounded' }         // CTA button
-                ];
-                widgets.forEach(w => {
-                    const el = document.createElement('div');
-                    el.className = `story-skel-line ${w.h} ${w.w} ${w.rounded} bg-kotlis-gold/0 border border-kotlis-gold/0 transition-colors duration-500`;
-                    linesContainer.appendChild(el);
-                });
-            }
-            const skelLines = linesContainer ? linesContainer.querySelectorAll('.story-skel-line') : [];
+            // The actual app-screen pieces (banner, title, rating, list row, CTA
+            // button) markup is static in the HTML — just reveal them in order.
+            const revealEls = stages[0] ? stages[0].querySelectorAll('.story-reveal') : [];
 
             function setStage(index, progressWithinStage) {
                 stages.forEach((el, i) => {
@@ -2322,13 +2338,9 @@
                     d.classList.toggle('bg-kotlis-border', i !== index);
                 });
                 if (index === 0) {
-                    const visibleCount = Math.floor(progressWithinStage * skelLines.length);
-                    skelLines.forEach((line, i) => {
-                        const on = i < visibleCount;
-                        line.classList.toggle('bg-kotlis-gold/20', on);
-                        line.classList.toggle('border-kotlis-gold/50', on);
-                        line.classList.toggle('bg-kotlis-gold/0', !on);
-                        line.classList.toggle('border-kotlis-gold/0', !on);
+                    const visibleCount = Math.floor(progressWithinStage * revealEls.length);
+                    revealEls.forEach((el, i) => {
+                        el.classList.toggle('is-visible', i < visibleCount);
                     });
                 } else if (index === 1) {
                     const roas = (1 + progressWithinStage * 4.2).toFixed(1);
