@@ -212,6 +212,12 @@
         @media (prefers-reduced-motion: reduce) {
             .orbit-border::before { animation: none; }
         }
+        .story-stage {
+            transition: opacity 0.3s ease;
+        }
+        .story-skel-line {
+            transition: background-color 0.3s ease;
+        }
     </style>
 </head>
 <body class="selection:bg-kotlis-gold selection:text-white font-sans antialiased overflow-x-hidden min-h-screen flex flex-col justify-between">
@@ -389,6 +395,64 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <!-- ========= Scroll Storytelling Trial: "Watch It Get Built" =========
+                 A pinned, scroll-scrubbed sequence — three builds come alive as the
+                 visitor scrolls, instead of a static features list. Trial section:
+                 if this direction lands, the same technique extends to other pages. -->
+            <section id="buildStorySection" class="relative bg-kotlis-fill" style="height: 300vh;">
+                <div class="sticky top-0 h-screen overflow-hidden flex flex-col items-center justify-center px-4">
+                    <span class="absolute top-10 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-kotlis-gold text-center w-full">Watch It Get Built</span>
+
+                    <!-- Stage 1: Flutter app assembling -->
+                    <div id="storyStage1" class="story-stage absolute inset-0 flex flex-col items-center justify-center gap-6 px-6">
+                        <div class="relative w-40 h-72 border-2 border-kotlis-gold/60 rounded-[1.5rem] bg-black/20 overflow-hidden">
+                            <div id="storyStage1Lines" class="p-4 space-y-3"></div>
+                        </div>
+                        <p class="text-white text-center text-sm sm:base max-w-md"><span class="text-kotlis-gold font-bold">Day 1 —</span> Your app takes shape, screen by screen.</p>
+                    </div>
+
+                    <!-- Stage 2: ROAS climbing -->
+                    <div id="storyStage2" class="story-stage absolute inset-0 flex flex-col items-center justify-center gap-6 px-6 opacity-0">
+                        <div class="w-full max-w-sm flex items-end justify-center gap-3 h-40">
+                            <div class="w-8 bg-kotlis-gold/40 rounded-t" style="height:20%"></div>
+                            <div class="w-8 bg-kotlis-gold/60 rounded-t" style="height:35%"></div>
+                            <div class="w-8 bg-kotlis-gold/80 rounded-t" style="height:55%"></div>
+                            <div id="storyBar4" class="w-8 bg-kotlis-gold rounded-t transition-all duration-700" style="height:20%"></div>
+                            <div id="storyBar5" class="w-8 bg-kotlis-gold rounded-t transition-all duration-700" style="height:20%"></div>
+                        </div>
+                        <p class="text-white text-center text-sm sm:base max-w-md"><span class="text-kotlis-gold font-bold">Week 2 —</span> Paid campaigns start converting. ROAS <span id="storyRoas" class="font-bold text-kotlis-gold">1.0x</span></p>
+                    </div>
+
+                    <!-- Stage 3: SEO rank jump -->
+                    <div id="storyStage3" class="story-stage absolute inset-0 flex flex-col items-center justify-center gap-6 px-6 opacity-0">
+                        <div class="w-full max-w-sm bg-white/95 text-left p-4 shadow-xl">
+                            <div class="text-[10px] text-gray-400 mb-1">google.com/search</div>
+                            <div class="text-blue-700 text-sm font-semibold truncate">yourbrand.com — Official Site</div>
+                            <div class="text-emerald-700 text-[11px]">yourbrand.com</div>
+                            <div class="text-gray-500 text-[11px] mt-1">Ranked <span id="storyRank" class="font-bold text-kotlis-dark">#8</span> → climbing with every optimization pass.</div>
+                        </div>
+                        <p class="text-white text-center text-sm sm:base max-w-md"><span class="text-kotlis-gold font-bold">Month 1 —</span> You show up first, on Google and AI search.</p>
+                    </div>
+
+                    <!-- Progress dots -->
+                    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-2">
+                        <span class="storyDot w-2 h-2 rounded-full bg-kotlis-gold"></span>
+                        <span class="storyDot w-2 h-2 rounded-full bg-white/30"></span>
+                        <span class="storyDot w-2 h-2 rounded-full bg-white/30"></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Emotional hook + low-friction CTA, right after the story -->
+            <section class="py-16 bg-kotlis-fill border-b border-kotlis-border text-center">
+                <div class="max-w-2xl mx-auto px-4 space-y-5">
+                    <h3 class="text-white text-2xl sm:text-3xl font-serif font-bold">Imagine your product live like this — shipped, ranking, and converting.</h3>
+                    <a href="https://wa.me/918126666331?text=BUILD" target="_blank" class="inline-flex items-center gap-2 px-8 py-4 bg-kotlis-gold text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition">
+                        <i class="fa-brands fa-whatsapp"></i> DM "BUILD" and let's ship it
+                    </a>
                 </div>
             </section>
 
@@ -2149,7 +2213,79 @@
             initMagneticButtons();
             initTechGrid('hero3dCanvas', { nodeCount: 34, maxLinkDist: 150 });
             initAllDeployTerminals();
+            initBuildStoryScroll();
         });
+
+        // Scroll-scrubbed "Watch It Get Built" sequence on the home page:
+        // one pinned viewport, three stages crossfade as the visitor scrolls.
+        function initBuildStoryScroll() {
+            const section = document.getElementById('buildStorySection');
+            if (!section || typeof gsap === 'undefined') return;
+
+            const stages = ['storyStage1', 'storyStage2', 'storyStage3'].map(id => document.getElementById(id));
+            const dots = document.querySelectorAll('.storyDot');
+            const linesContainer = document.getElementById('storyStage1Lines');
+            const roasEl = document.getElementById('storyRoas');
+            const rankEl = document.getElementById('storyRank');
+            const bar4 = document.getElementById('storyBar4');
+            const bar5 = document.getElementById('storyBar5');
+
+            // Build the phone-screen skeleton lines once
+            if (linesContainer && !linesContainer.dataset.built) {
+                linesContainer.dataset.built = '1';
+                const widths = ['70%', '90%', '60%', '85%', '50%'];
+                widths.forEach(w => {
+                    const line = document.createElement('div');
+                    line.className = 'story-skel-line h-3 rounded bg-kotlis-gold/0';
+                    line.style.width = w;
+                    linesContainer.appendChild(line);
+                });
+            }
+            const skelLines = linesContainer ? linesContainer.querySelectorAll('.story-skel-line') : [];
+
+            function setStage(index, progressWithinStage) {
+                stages.forEach((el, i) => {
+                    if (!el) return;
+                    el.style.opacity = i === index ? '1' : '0';
+                });
+                dots.forEach((d, i) => {
+                    d.classList.toggle('bg-kotlis-gold', i === index);
+                    d.classList.toggle('bg-white/30', i !== index);
+                });
+                if (index === 0) {
+                    const visibleCount = Math.floor(progressWithinStage * skelLines.length);
+                    skelLines.forEach((line, i) => {
+                        line.classList.toggle('bg-kotlis-gold/70', i < visibleCount);
+                        line.classList.toggle('bg-kotlis-gold/0', i >= visibleCount);
+                    });
+                } else if (index === 1) {
+                    const roas = (1 + progressWithinStage * 4.2).toFixed(1);
+                    if (roasEl) roasEl.textContent = roas + 'x';
+                    if (bar4) bar4.style.height = (20 + progressWithinStage * 55) + '%';
+                    if (bar5) bar5.style.height = (20 + progressWithinStage * 75) + '%';
+                } else if (index === 2) {
+                    const rank = Math.max(1, Math.round(8 - progressWithinStage * 7));
+                    if (rankEl) rankEl.textContent = '#' + rank;
+                }
+            }
+
+            ScrollTrigger.create({
+                trigger: section,
+                start: 'top top',
+                end: 'bottom bottom',
+                scrub: true,
+                onUpdate: self => {
+                    const p = self.progress; // 0 -> 1 across the whole pinned section
+                    const stageCount = 3;
+                    const scaled = p * stageCount;
+                    const index = Math.min(stageCount - 1, Math.floor(scaled));
+                    const withinStage = scaled - index;
+                    setStage(index, withinStage);
+                }
+            });
+
+            setStage(0, 0);
+        }
 
         // Runs once the fade-out/fade-in swap inside switchPage() has actually landed
         function afterPageSwitch(pageId) {
