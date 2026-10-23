@@ -163,6 +163,35 @@
         .activity-row {
             animation: activityRowIn 0.4s ease forwards;
         }
+        /* Shooting-star border: a bright point continuously orbits the card edge */
+        .orbit-border {
+            position: relative;
+        }
+        .orbit-border::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            padding: 2px;
+            background: conic-gradient(from 0deg,
+                transparent 0%,
+                transparent 85%,
+                var(--kotlis-gold) 93%,
+                #ffffff 96%,
+                var(--kotlis-gold) 99%,
+                transparent 100%);
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: orbitSpin 4s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes orbitSpin {
+            to { transform: rotate(360deg); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .orbit-border::before { animation: none; }
+        }
     </style>
 </head>
 <body class="selection:bg-kotlis-gold selection:text-white font-sans antialiased overflow-x-hidden min-h-screen flex flex-col justify-between">
@@ -372,13 +401,13 @@
                         <h2 class="text-2xl sm:text-3xl font-bold font-serif text-kotlis-dark">The People Behind the Build</h2>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left max-w-2xl mx-auto">
-                        <div class="border border-kotlis-border p-4">
+                        <div class="orbit-border border border-kotlis-border p-4">
                             <img src="images/team/vikas.jpeg" alt="Vikas Uniyal" class="w-full h-72 object-contain bg-kotlis-bg p-2 mb-3" loading="lazy">
                             <h3 class="font-serif font-bold text-sm text-kotlis-dark">Vikas Uniyal</h3>
                             <p class="text-[10px] uppercase tracking-wider text-kotlis-gold font-bold mt-1">Founder Â· Full Stack</p>
                             <p class="text-[11px] text-kotlis-subtle mt-2">App Development, Game Development, Website Development & Design, and CRM. Also handles Meta Ads, lead generation, AI automations & business solution promotion.</p>
                         </div>
-                        <div class="border border-kotlis-border p-4">
+                        <div class="orbit-border border border-kotlis-border p-4">
                             <img src="images/team/rohitkotnala.jfif" alt="Rohit Kotnala" class="w-full h-72 object-contain bg-kotlis-bg p-2 mb-3" loading="lazy">
                             <h3 class="font-serif font-bold text-sm text-kotlis-dark">Rohit Kotnala</h3>
                             <p class="text-[10px] uppercase tracking-wider text-kotlis-gold font-bold mt-1">Business Solutions Â· Client Handling</p>
