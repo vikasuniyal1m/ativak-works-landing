@@ -1804,7 +1804,7 @@
             };
         });
 
-        let ACTIVE_THEME = 0; // <-- change this number to switch the whole site's accent + background color
+        let ACTIVE_THEME = 2; // <-- change this number to switch the whole site's accent + background color
 
 
         function applyTheme(themeNumber) {
@@ -2595,7 +2595,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            applyTheme(0); // Monochrome is the site's committed default theme
+            applyTheme(2); // Deep Emerald is the site's committed default theme (matches the live deployment)
             initHeroEntrance();
             initCountUp();
             initTiltCards(document.getElementById('page-home'));
