@@ -78,11 +78,24 @@
             font-family: 'Inter', sans-serif;
             transition: background-color 0.6s ease, color 0.6s ease;
         }
-        /* Subtle dot-grid texture — applied per-section since each section
-           already paints its own solid background-color over the body. */
+        /* Subtle dot-grid texture + a slow-breathing accent gradient wash —
+           applied per-section since each section paints its own solid
+           background-color over the body. */
         body, section {
-            background-image: radial-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px);
-            background-size: 26px 26px;
+            background-image:
+                radial-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+                radial-gradient(circle at 15% 15%, rgba(var(--kotlis-gold-rgb), 0.16), transparent 55%),
+                radial-gradient(circle at 85% 85%, rgba(var(--kotlis-gold-rgb), 0.12), transparent 55%);
+            background-size: 26px 26px, 200% 200%, 200% 200%;
+            background-position: 0 0, 0% 0%, 100% 100%;
+            animation: gradientWash 20s ease-in-out infinite alternate;
+        }
+        @keyframes gradientWash {
+            0%   { background-position: 0 0, 0% 0%, 100% 100%; }
+            100% { background-position: 0 0, 100% 60%, 10% 100%; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            body, section { animation: none; }
         }
         .serif-title {
             font-family: 'Playfair Display', serif;
@@ -1428,6 +1441,7 @@
             ACTIVE_THEME = themeNumber;
             const root = document.documentElement.style;
             root.setProperty('--kotlis-gold', preset.hex);
+            root.setProperty('--kotlis-gold-rgb', hexToRgbTriplet(preset.hex));
             root.setProperty('--kotlis-gold-hover', preset.hover);
             root.setProperty('--kotlis-glow', preset.glow);
             root.setProperty('--kotlis-bg', preset.bg);
