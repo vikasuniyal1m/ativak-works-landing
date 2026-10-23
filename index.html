@@ -275,6 +275,40 @@
         @media (prefers-reduced-motion: reduce) {
             #heroBlob { animation: none; }
         }
+        /* Watery cursor trail + click ripple (Lusion-inspired): short-lived
+           divs spawned on mousemove/click, animated with CSS, then removed.
+           No canvas loop, no WebGL — cheap even though it feels "liquid". */
+        .cursor-droplet {
+            position: absolute;
+            left: 0; top: 0;
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            pointer-events: none;
+            background: radial-gradient(circle, rgba(var(--kotlis-gold-rgb), 0.3), transparent 70%);
+            transform: translate(-50%, -50%) scale(0.3);
+            opacity: 0.55;
+            animation: dropletFade 0.9s ease-out forwards;
+        }
+        @keyframes dropletFade {
+            to { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
+        }
+        .click-ripple {
+            position: absolute;
+            left: 0; top: 0;
+            width: 10px; height: 10px;
+            border: 2px solid rgba(var(--kotlis-gold-rgb), 0.55);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.8;
+            animation: rippleExpand 0.9s cubic-bezier(.22,.61,.36,1) forwards;
+        }
+        @keyframes rippleExpand {
+            to { transform: translate(-50%, -50%) scale(26); opacity: 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .cursor-droplet, .click-ripple { display: none; }
+        }
     </style>
 </head>
 <body class="selection:bg-kotlis-gold selection:text-white font-sans antialiased overflow-x-hidden min-h-screen flex flex-col justify-between">
@@ -1992,16 +2026,54 @@
             const hero = blob ? blob.closest('section') : null;
             if (!blob || !hero) return;
             if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+            // Watery cursor trail: a small droplet spawns every ~45ms of
+            // movement, animates via CSS, then removes itself — throttled by
+            // time AND a hard cap on live droplets so a fast mouse can't pile
+            // up DOM nodes. Click gets a bigger expanding ripple on top.
+            let lastDropletAt = 0;
+            let liveDroplets = 0;
+            const MAX_LIVE_DROPLETS = 8;
+
+            function spawnAt(x, y, className, life) {
+                const el = document.createElement('div');
+                el.className = className;
+                el.style.transform = `translate(${x}px, ${y}px)`;
+                hero.appendChild(el);
+                setTimeout(() => el.remove(), life);
+                return el;
+            }
+
             hero.addEventListener('mousemove', (e) => {
                 const rect = hero.getBoundingClientRect();
-                const relX = (e.clientX - rect.left) / rect.width - 0.5;
-                const relY = (e.clientY - rect.top) / rect.height - 0.5;
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const relX = x / rect.width - 0.5;
+                const relY = y / rect.height - 0.5;
                 blob.style.setProperty('--blobX', `${relX * -40}px`);
                 blob.style.setProperty('--blobY', `${relY * -40}px`);
+
+                const now = performance.now();
+                if (now - lastDropletAt > 45 && liveDroplets < MAX_LIVE_DROPLETS) {
+                    lastDropletAt = now;
+                    liveDroplets++;
+                    const el = spawnAt(x, y, 'cursor-droplet', 900);
+                    el.style.left = x + 'px';
+                    el.style.top = y + 'px';
+                    el.style.transform = 'translate(-50%, -50%) scale(0.3)';
+                    setTimeout(() => { liveDroplets--; }, 900);
+                }
             });
             hero.addEventListener('mouseleave', () => {
                 blob.style.setProperty('--blobX', '0px');
                 blob.style.setProperty('--blobY', '0px');
+            });
+            hero.addEventListener('click', (e) => {
+                const rect = hero.getBoundingClientRect();
+                const el = spawnAt(0, 0, 'click-ripple', 900);
+                el.style.left = (e.clientX - rect.left) + 'px';
+                el.style.top = (e.clientY - rect.top) + 'px';
             });
         }
 
