@@ -232,6 +232,23 @@
             opacity: 1;
             transform: none;
         }
+        /* Lightweight 3D-feel card tilt (CSS transform, no WebGL) — JS sets
+           --tiltX/--tiltY per mousemove in initTiltCards(). Desktop only. */
+        @media (hover: hover) and (pointer: fine) {
+            .tilt-card {
+                --tiltX: 0deg;
+                --tiltY: 0deg;
+                transform: perspective(900px) rotateX(var(--tiltX)) rotateY(var(--tiltY)) translateZ(0);
+                transition: transform 0.15s ease-out, border-color 0.3s ease;
+                will-change: transform;
+            }
+            .tilt-icon {
+                transition: transform 0.35s cubic-bezier(.34,1.56,.64,1);
+            }
+            .tilt-card:hover .tilt-icon {
+                transform: scale(1.12) rotate(-6deg);
+            }
+        }
     </style>
 </head>
 <body class="selection:bg-kotlis-gold selection:text-white font-sans antialiased overflow-x-hidden min-h-screen flex flex-col justify-between">
@@ -595,9 +612,9 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <!-- Service 1 -->
-                        <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                        <div class="tilt-card bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
                             <div>
-                                <div class="w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
+                                <div class="tilt-icon w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
                                     <i class="fa-solid fa-mobile-screen-button"></i>
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Cross-Platform Mobile</span>
@@ -617,9 +634,9 @@
                         </div>
 
                         <!-- Service 2 -->
-                        <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                        <div class="tilt-card bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
                             <div>
-                                <div class="w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
+                                <div class="tilt-icon w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
                                     <i class="fa-brands fa-meta"></i>
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Paid Traffic Scaling</span>
@@ -639,9 +656,9 @@
                         </div>
 
                         <!-- Service 3 -->
-                        <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                        <div class="tilt-card bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
                             <div>
-                                <div class="w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
+                                <div class="tilt-icon w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Search Engine Indexing</span>
@@ -661,9 +678,9 @@
                         </div>
 
                         <!-- Service 4 -->
-                        <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                        <div class="tilt-card bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
                             <div>
-                                <div class="w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
+                                <div class="tilt-icon w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
                                     <i class="fa-solid fa-server"></i>
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Cloud Infrastructure</span>
@@ -683,9 +700,9 @@
                         </div>
 
                         <!-- Service 5 -->
-                        <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                        <div class="tilt-card bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
                             <div>
-                                <div class="w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
+                                <div class="tilt-icon w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
                                     <i class="fa-solid fa-code"></i>
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Web Engineering</span>
@@ -705,9 +722,9 @@
                         </div>
 
                         <!-- Service 6 -->
-                        <div class="bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                        <div class="tilt-card bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
                             <div>
-                                <div class="w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
+                                <div class="tilt-icon w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6">
                                     <i class="fa-solid fa-robot"></i>
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Automation & CRM</span>
@@ -1936,6 +1953,29 @@
             });
         }
 
+        // Lightweight 3D-feel tilt for .tilt-card elements (service cards):
+        // CSS transform only, driven by mouse position — no WebGL/3D library,
+        // so it stays cheap on mobile and low-end devices. Desktop-only via
+        // the (hover: hover) media query already scoping the CSS transition.
+        function initTiltCards(scope) {
+            if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+            (scope || document).querySelectorAll('.tilt-card').forEach(card => {
+                if (card.dataset.tiltInited) return;
+                card.dataset.tiltInited = '1';
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const relX = (e.clientX - rect.left) / rect.width - 0.5;
+                    const relY = (e.clientY - rect.top) / rect.height - 0.5;
+                    card.style.setProperty('--tiltY', `${relX * 8}deg`);
+                    card.style.setProperty('--tiltX', `${-relY * 8}deg`);
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.setProperty('--tiltY', '0deg');
+                    card.style.setProperty('--tiltX', '0deg');
+                });
+            });
+        }
+
         // ============== Tech Grid Visual (Canvas 2D) ==============
         // A lightweight animated "circuit board / data network" visual used on
         // every page: drifting nodes, connecting lines, and small pulses that
@@ -2369,6 +2409,7 @@
                 initRevealAnimations(pageEl);
             }
             initPageGrid(pageId);
+            if (pageEl) initTiltCards(pageEl);
             ScrollTrigger.refresh();
         }
     </script>
