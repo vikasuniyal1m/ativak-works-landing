@@ -1332,7 +1332,23 @@
                             </a>
                         </div>
 
-                        <!-- Replace YOUR_FORM_ID below with your Formspree form id (formspree.io) -->
+                        <!-- Reassurance strip: reduces submission friction right above the form -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10 text-center">
+                            <div class="p-4 border border-kotlis-border bg-kotlis-bg">
+                                <i class="fa-regular fa-clock text-kotlis-gold"></i>
+                                <p class="text-[11px] font-bold uppercase tracking-wider text-kotlis-dark mt-2">Reply within 24h</p>
+                            </div>
+                            <div class="p-4 border border-kotlis-border bg-kotlis-bg">
+                                <i class="fa-regular fa-handshake text-kotlis-gold"></i>
+                                <p class="text-[11px] font-bold uppercase tracking-wider text-kotlis-dark mt-2">No-obligation audit</p>
+                            </div>
+                            <div class="p-4 border border-kotlis-border bg-kotlis-bg">
+                                <i class="fa-regular fa-lock text-kotlis-gold"></i>
+                                <p class="text-[11px] font-bold uppercase tracking-wider text-kotlis-dark mt-2">Your details stay private</p>
+                            </div>
+                        </div>
+
+                        <!-- Replace YOUR_FORM_ID below with your real Formspree form id (formspree.io) -->
                         <form id="ativakContactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="handleFormSubmit(event)" class="space-y-6">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
@@ -1409,8 +1425,39 @@
         </div>
     </footer>
 
+    <!-- Floating persistent conversion CTA — visible on every page after a short scroll,
+         so booking an audit is never more than one click away regardless of scroll depth. -->
+    <div id="floatingCta" class="fixed bottom-5 right-4 sm:right-6 z-40 flex flex-col items-end gap-3 opacity-0 translate-y-4 pointer-events-none transition-all duration-300">
+        <a href="https://wa.me/918126666331" target="_blank" aria-label="Chat on WhatsApp"
+           class="pointer-events-auto w-12 h-12 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-lg hover:scale-105 transition">
+            <i class="fa-brands fa-whatsapp text-xl"></i>
+        </a>
+        <button onclick="switchPage('contact')" aria-label="Request free audit"
+                class="pointer-events-auto flex items-center gap-2 px-5 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest shadow-lg hover:bg-kotlis-gold transition">
+            <i class="fa-solid fa-magnifying-glass-chart"></i> Free Audit
+        </button>
+    </div>
+
     <!-- Interactive Logic Script -->
     <script>
+        // Show the floating CTA once the visitor has scrolled past the hero,
+        // and hide it again near the footer so it never covers the contact form.
+        (function initFloatingCta() {
+            const el = document.getElementById('floatingCta');
+            if (!el) return;
+            function toggle() {
+                const pastHero = window.scrollY > 400;
+                const nearBottom = (window.innerHeight + window.scrollY) > (document.body.scrollHeight - 160);
+                const show = pastHero && !nearBottom;
+                el.classList.toggle('opacity-0', !show);
+                el.classList.toggle('translate-y-4', !show);
+                el.classList.toggle('pointer-events-none', !show);
+            }
+            window.addEventListener('scroll', toggle, { passive: true });
+            window.addEventListener('resize', toggle);
+            toggle();
+        })();
+
         // ============== Accent Theme Switcher ==============
         // Change ACTIVE_THEME to 1, 2, 3, 4, or 5 and every gold-tinted
         // element — text, borders, cursor, nav underline, 3D shapes — updates together.
@@ -1563,6 +1610,19 @@
             errorMsg.classList.add('hidden');
             submitBtn.disabled = true;
             submitBtn.innerText = 'Sending...';
+
+            // The Formspree endpoint still has a placeholder ID until it's configured
+            // with a real form — route to WhatsApp instead of silently failing.
+            if (form.action.includes('YOUR_FORM_ID')) {
+                const data = new FormData(form);
+                const summary = `New audit request%0A*Name:* ${encodeURIComponent(data.get('name') || '')}%0A*Email:* ${encodeURIComponent(data.get('email') || '')}%0A*Service:* ${encodeURIComponent(data.get('service') || '')}%0A*URL:* ${encodeURIComponent(data.get('project_url') || '')}%0A*Brief:* ${encodeURIComponent(data.get('brief') || '')}`;
+                window.open(`https://wa.me/918126666331?text=${summary}`, '_blank');
+                form.reset();
+                successMsg.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Send Audit Request';
+                return;
+            }
 
             try {
                 const response = await fetch(form.action, {
