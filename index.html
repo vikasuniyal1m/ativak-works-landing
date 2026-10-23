@@ -345,7 +345,18 @@
                 <button onclick="switchPage('pricing')" id="nav-pricing" class="py-2 hover:text-kotlis-gold transition nav-link">Pricing & Calculator</button>
             </nav>
 
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-4 relative">
+                <!-- Color scheme picker: ~50 accent presets, click to preview the
+                     whole site in that color instantly (same CSS-var theme system
+                     already driving ACTIVE_THEME). Pure client-side, no reload. -->
+                <button id="colorPickerBtn" onclick="toggleColorPicker()" aria-label="Choose a color theme"
+                        class="w-9 h-9 rounded-full border border-kotlis-border overflow-hidden shrink-0"
+                        style="background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red);">
+                </button>
+                <div id="colorPickerPanel" class="hidden absolute top-14 right-0 w-[320px] sm:w-[380px] bg-kotlis-card border border-kotlis-border shadow-xl p-4 z-50 max-h-[70vh] overflow-y-auto">
+                    <div class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle mb-3">Pick a color theme — click to preview</div>
+                    <div id="colorPickerGrid" class="grid grid-cols-8 sm:grid-cols-9 gap-2"></div>
+                </div>
                 <button onclick="switchPage('contact')" class="hidden sm:inline-flex items-center justify-center px-6 py-3 border border-kotlis-dark text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:bg-kotlis-fill hover:text-white transition duration-300">
                     Request Free Audit
                 </button>
@@ -1720,6 +1731,42 @@
             5: { name: 'Gold on White', hex: '#a9850f', hover: '#8a6c0c', glow: '#e8c468', ...NEUTRAL_BG, ...LIGHT_SURFACE },
             6: { name: 'Dark Teal on White', hex: '#0f4c46', hover: '#0a3733', glow: '#2dd4bf', ...NEUTRAL_BG, ...LIGHT_SURFACE }
         };
+
+        // ~50 additional accent presets for the color-scheme picker, generated
+        // from evenly-spaced hues rather than hand-specifying 50 hex triples.
+        // Same saturation/lightness recipe every time keeps them all readable
+        // on a white background: hex (the accent itself) a bit darker/saturated,
+        // hover darker still, glow brighter — for contrast on dark fills (icons,
+        // the deploy terminal) regardless of which hue is picked.
+        function hslToHex(h, s, l) {
+            s /= 100; l /= 100;
+            const k = n => (n + h / 30) % 12;
+            const a = s * Math.min(l, 1 - l);
+            const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+            const toHex = x => Math.round(255 * x).toString(16).padStart(2, '0');
+            return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`;
+        }
+        const COLOR_PICKER_NAMES = [
+            'Crimson', 'Scarlet', 'Vermilion', 'Coral', 'Tangerine', 'Amber', 'Marigold', 'Gold',
+            'Mustard', 'Olive', 'Chartreuse', 'Lime', 'Fern', 'Forest', 'Emerald', 'Jade',
+            'Mint', 'Seafoam', 'Teal', 'Turquoise', 'Cyan', 'Aqua', 'Sky', 'Azure',
+            'Cobalt', 'Sapphire', 'Royal Blue', 'Indigo', 'Periwinkle', 'Violet', 'Lavender', 'Purple',
+            'Amethyst', 'Orchid', 'Plum', 'Magenta', 'Fuchsia', 'Berry', 'Rose', 'Blush',
+            'Pink', 'Garnet', 'Wine', 'Maroon', 'Rust', 'Terracotta', 'Copper', 'Bronze',
+            'Sand', 'Slate Blue'
+        ];
+        COLOR_PICKER_NAMES.forEach((name, i) => {
+            const hue = Math.round(i * (360 / COLOR_PICKER_NAMES.length));
+            THEME_PRESETS[7 + i] = {
+                name,
+                hex: hslToHex(hue, 70, 38),
+                hover: hslToHex(hue, 72, 26),
+                glow: hslToHex(hue, 80, 62),
+                ...NEUTRAL_BG,
+                ...LIGHT_SURFACE
+            };
+        });
+
         let ACTIVE_THEME = 6; // <-- change this number to switch the whole site's accent + background color
 
         function applyTheme(themeNumber) {
@@ -1741,7 +1788,44 @@
             root.setProperty('--kotlis-dot-rgb', preset.dotRgb);
             // The tech-grid canvases read --kotlis-gold directly each frame, so
             // no extra work is needed here to re-color them.
+            renderColorPickerGrid();
         }
+
+        // ============== Color Scheme Picker ==============
+        function renderColorPickerGrid() {
+            const grid = document.getElementById('colorPickerGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            Object.keys(THEME_PRESETS).map(Number).sort((a, b) => a - b).forEach(id => {
+                const preset = THEME_PRESETS[id];
+                const swatch = document.createElement('button');
+                swatch.title = preset.name;
+                swatch.setAttribute('aria-label', `Preview ${preset.name} theme`);
+                swatch.onclick = () => applyTheme(id);
+                const active = id === ACTIVE_THEME;
+                swatch.className = 'w-7 h-7 rounded-full border-2 transition hover:scale-110' +
+                    (active ? ' border-kotlis-dark' : ' border-transparent');
+                swatch.style.background = preset.hex;
+                grid.appendChild(swatch);
+            });
+        }
+
+        function toggleColorPicker() {
+            const panel = document.getElementById('colorPickerPanel');
+            if (!panel) return;
+            const show = panel.classList.contains('hidden');
+            panel.classList.toggle('hidden', !show);
+            if (show) renderColorPickerGrid();
+        }
+
+        document.addEventListener('click', (e) => {
+            const panel = document.getElementById('colorPickerPanel');
+            const btn = document.getElementById('colorPickerBtn');
+            if (!panel || panel.classList.contains('hidden')) return;
+            if (!panel.contains(e.target) && e.target !== btn) {
+                panel.classList.add('hidden');
+            }
+        });
         // Try it live from the browser console: setAtivakTheme(3)
         window.setAtivakTheme = applyTheme;
 
