@@ -425,16 +425,24 @@
                          generic mockup. The actual screenshot wipes into view top-down
                          as the visitor scrolls, like the screen is being assembled. -->
                     <div id="storyStage1" class="story-stage absolute inset-0 flex flex-col items-center justify-center gap-6 px-6">
-                        <div class="relative w-44 h-80 border-2 border-kotlis-gold/60 rounded-[1.5rem] bg-kotlis-bg overflow-hidden shadow-lg">
-                            <!-- App header: visible from the start, like a splash shell -->
-                            <div class="relative z-10 flex items-center gap-2 px-3 py-2.5 border-b border-kotlis-border bg-kotlis-card">
-                                <img src="images/portfolio/first-aide.webp" alt="" class="w-5 h-5 rounded object-cover shrink-0">
-                                <span class="text-[10px] font-bold text-kotlis-dark truncate">FIRST AIDE — Healthcare</span>
+                        <!-- The source screenshot is a wide 832x406 banner, not a tall
+                             phone capture — framed to its real aspect ratio (browser-chrome
+                             style, matching the hero's terminal cards) so the whole image
+                             shows cleanly instead of being cropped into a phone shape. -->
+                        <div class="relative w-full max-w-sm border border-kotlis-border rounded-lg overflow-hidden shadow-lg bg-kotlis-card">
+                            <div class="flex items-center gap-1.5 px-3 py-2 bg-kotlis-bg border-b border-kotlis-border">
+                                <span class="w-2.5 h-2.5 rounded-full bg-red-400"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-green-400"></span>
+                                <span class="ml-2 text-[10px] text-kotlis-subtle font-mono truncate">first-aide.app — building</span>
                             </div>
-                            <div id="storyAppImageWrap" class="absolute inset-x-0 bottom-0 top-[37px] overflow-hidden" style="clip-path: inset(100% 0 0 0);">
+                            <div class="relative bg-white" style="aspect-ratio: 832 / 406;">
                                 <img src="images/portfolio/first-aide.webp" alt="FIRST AIDE app screenshot" class="w-full h-full object-cover">
+                                <!-- Solid mask shrinking from the right reveals the full,
+                                     uncropped image left-to-right as the visitor scrolls. -->
+                                <div id="storyAppImageMask" class="absolute inset-y-0 right-0 bg-kotlis-card" style="width: 100%;"></div>
                             </div>
-                            <div id="storyLiveBadge" class="absolute bottom-2 left-2 right-2 opacity-0 transition-opacity duration-500 flex items-center justify-center gap-1.5 py-1.5 bg-kotlis-dark/90 text-white text-[9px] font-bold uppercase tracking-wider rounded z-10">
+                            <div id="storyLiveBadge" class="opacity-0 transition-opacity duration-500 flex items-center justify-center gap-1.5 py-2 bg-kotlis-dark text-white text-[10px] font-bold uppercase tracking-wider">
                                 <i class="fa-brands fa-google-play text-kotlis-gold"></i> Live on Google Play
                             </div>
                         </div>
@@ -2305,7 +2313,7 @@
             const rankEl = document.getElementById('storyRank');
             const bar4 = document.getElementById('storyBar4');
             const bar5 = document.getElementById('storyBar5');
-            const appImageWrap = document.getElementById('storyAppImageWrap');
+            const appImageMask = document.getElementById('storyAppImageMask');
             const liveBadge = document.getElementById('storyLiveBadge');
 
             function setStage(index, progressWithinStage) {
@@ -2318,7 +2326,7 @@
                     d.classList.toggle('bg-kotlis-border', i !== index);
                 });
                 if (index === 0) {
-                    if (appImageWrap) appImageWrap.style.clipPath = `inset(${100 - progressWithinStage * 100}% 0 0 0)`;
+                    if (appImageMask) appImageMask.style.width = (100 - progressWithinStage * 100) + '%';
                     if (liveBadge) liveBadge.style.opacity = progressWithinStage > 0.9 ? '1' : '0';
                 } else if (index === 1) {
                     const roas = (1 + progressWithinStage * 4.2).toFixed(1);
