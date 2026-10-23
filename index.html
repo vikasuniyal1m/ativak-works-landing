@@ -393,14 +393,23 @@
                 <div id="heroBlob" class="hidden sm:block absolute -z-0 pointer-events-none" aria-hidden="true"></div>
                 <!-- Three.js floating 3D shape â€” decorative, sits behind the hero content -->
                 <canvas id="hero3dCanvas" class="hidden sm:block absolute inset-0 w-full h-full pointer-events-none z-0" aria-hidden="true"></canvas>
-                <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <!-- Editorial/magazine touches: a rotated spine label down the far
+                     left edge, and a huge faint folio numeral behind the headline —
+                     pure typography/layout, no extra libraries. -->
+                <div class="hidden lg:block absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-bold uppercase tracking-[0.3em] text-kotlis-subtle pointer-events-none select-none z-20" style="writing-mode: vertical-rl; transform: translateY(-50%) rotate(180deg);">
+                    Ativak Works &nbsp;—&nbsp; Studio Showcase &nbsp;—&nbsp; 2026
+                </div>
+                <div class="hidden md:block absolute right-0 top-0 text-[260px] lg:text-[340px] font-serif font-bold leading-none text-kotlis-dark/[0.035] select-none pointer-events-none" aria-hidden="true">01</div>
+
+                <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:pl-28 lg:pr-8">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                         <div class="lg:col-span-7 space-y-6">
-                            <div class="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-widest text-kotlis-gold">
-                                <span class="w-8 h-[1px] bg-kotlis-gold"></span>
-                                <span>Ativak Works Official Studio Showcase</span>
+                            <div class="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-kotlis-gold border-b border-kotlis-dark/10 pb-3">
+                                <span class="flex items-center gap-2"><span class="w-8 h-[1px] bg-kotlis-gold"></span> Ativak Works Official Studio Showcase</span>
+                                <span class="hidden sm:inline text-kotlis-subtle font-mono tracking-normal">N°. 01 / 2026</span>
                             </div>
-                            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-kotlis-dark serif-title leading-tight">
+                            <h1 class="text-5xl sm:text-7xl lg:text-8xl font-extrabold text-kotlis-dark serif-title leading-[0.95] tracking-tight">
                                 Crafting <span class="italic font-normal text-kotlis-gold">Flutter Apps,</span> Scalable Web, Meta Ads & SEO engines.
                             </h1>
                             <p class="text-kotlis-subtle text-base sm:text-lg leading-relaxed max-w-2xl">
@@ -414,18 +423,20 @@
                                     Explore Case Studies
                                 </button>
                             </div>
-                            <div class="pt-8 border-t border-kotlis-border grid grid-cols-3 gap-6">
-                                <div>
-                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark count-up" data-count-to="100" data-count-suffix="%">0%</div>
-                                    <div class="text-[11px] uppercase tracking-wider text-kotlis-subtle mt-1">Zero Downtime Migration</div>
+                            <!-- Fact-strip, magazine spec-sheet style: thick black rule,
+                                 huge numerals, tiny tracked labels, thin dividers between. -->
+                            <div class="pt-8 mt-2 border-t-2 border-kotlis-dark grid grid-cols-3 divide-x divide-kotlis-border">
+                                <div class="pr-4 sm:pr-6">
+                                    <div class="text-3xl sm:text-4xl font-serif font-bold text-kotlis-dark count-up" data-count-to="100" data-count-suffix="%">0%</div>
+                                    <div class="text-[10px] uppercase tracking-wider text-kotlis-subtle mt-1">Zero Downtime Migration</div>
                                 </div>
-                                <div>
-                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark count-up" data-count-to="5.2" data-count-suffix="x" data-count-decimals="1">0x</div>
-                                    <div class="text-[11px] uppercase tracking-wider text-kotlis-subtle mt-1">Avg Paid Ads ROAS</div>
+                                <div class="px-4 sm:px-6">
+                                    <div class="text-3xl sm:text-4xl font-serif font-bold text-kotlis-dark count-up" data-count-to="5.2" data-count-suffix="x" data-count-decimals="1">0x</div>
+                                    <div class="text-[10px] uppercase tracking-wider text-kotlis-subtle mt-1">Avg Paid Ads ROAS</div>
                                 </div>
-                                <div>
-                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark count-up" data-count-to="1" data-count-prefix="#">#0</div>
-                                    <div class="text-[11px] uppercase tracking-wider text-kotlis-subtle mt-1">Google & AI Indexing</div>
+                                <div class="pl-4 sm:pl-6">
+                                    <div class="text-3xl sm:text-4xl font-serif font-bold text-kotlis-dark count-up" data-count-to="1" data-count-prefix="#">#0</div>
+                                    <div class="text-[10px] uppercase tracking-wider text-kotlis-subtle mt-1">Google & AI Indexing</div>
                                 </div>
                             </div>
                         </div>
@@ -1708,6 +1719,7 @@
             toggle();
         })();
 
+
         // ============== Accent Theme Switcher ==============
         // Change ACTIVE_THEME to 1, 2, 3, 4, or 5 and every gold-tinted
         // element — text, borders, cursor, nav underline, 3D shapes — updates together.
@@ -1743,7 +1755,16 @@
             6: { name: 'Refire Teal', hex: '#024950', hover: '#003135', glow: '#0fa4af', ...NEUTRAL_BG, ...LIGHT_SURFACE },
             // Rust accent from the same reference palette (#964734), as an
             // alternate to try alongside the teal — same white background.
-            57: { name: 'Refire Rust', hex: '#964734', hover: '#6f3326', glow: '#0fa4af', ...NEUTRAL_BG, ...LIGHT_SURFACE }
+            57: { name: 'Refire Rust', hex: '#964734', hover: '#6f3326', glow: '#0fa4af', ...NEUTRAL_BG, ...LIGHT_SURFACE },
+
+            // Digital Marketing Themes
+            100: { name: 'Growth Teal', hex: '#087F8C', hover: '#065F68', glow: '#2DD4BF', ...NEUTRAL_BG, ...LIGHT_SURFACE },
+            101: { name: 'Electric Blue', hex: '#2563EB', hover: '#1D4ED8', glow: '#60A5FA', ...NEUTRAL_BG, ...LIGHT_SURFACE },
+            102: { name: 'Premium Indigo', hex: '#4F46E5', hover: '#3730A3', glow: '#818CF8', ...NEUTRAL_BG, ...LIGHT_SURFACE },
+            103: { name: 'Growth Green', hex: '#15803D', hover: '#166534', glow: '#4ADE80', ...NEUTRAL_BG, ...LIGHT_SURFACE },
+            104: { name: 'Coral Creative', hex: '#E85D4A', hover: '#C24132', glow: '#FB8C78', ...NEUTRAL_BG, ...LIGHT_SURFACE },
+            105: { name: 'Midnight Navy', hex: '#1E3A5F', hover: '#152A45', glow: '#60A5FA', ...NEUTRAL_BG, ...LIGHT_SURFACE },
+            106: { name: 'Modern Teal', hex: '#024950', hover: '#003135', glow: '#0fa4af', ...NEUTRAL_BG, ...LIGHT_SURFACE }
         };
 
         // ~50 additional accent presets for the color-scheme picker, generated
@@ -1781,7 +1802,8 @@
             };
         });
 
-        let ACTIVE_THEME = 0; // <-- change this number to switch the whole site's accent + background color
+        let ACTIVE_THEME = 100; // <-- change this number to switch the whole site's accent + background color
+
 
         function applyTheme(themeNumber) {
             const preset = THEME_PRESETS[themeNumber];
