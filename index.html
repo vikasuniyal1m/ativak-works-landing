@@ -1566,12 +1566,17 @@
         // Background stays a fixed neutral white/grey across every theme —
         // only the accent (text, buttons, icons, terminal, grid) changes color.
         const NEUTRAL_BG = { bg: '#ffffff', bgAlt: '#f7f7f7' };
+        // Dark theme carries its own near-black, warm-tinted background pair
+        // instead of the light NEUTRAL_BG, so it reads as one deliberate
+        // premium surface rather than a light page with a dark accent.
+        const NOIR_BG = { bg: '#0b0f0e', bgAlt: '#11161a' };
         const THEME_PRESETS = {
+            1: { name: 'Noir Gold',     hex: '#c9a227', hover: '#a9850f', glow: '#e8c468', ...NOIR_BG, ...DARK_SURFACE },
             2: { name: 'Deep Emerald',  hex: '#123f32', hover: '#0c2b22', glow: '#34d399', ...NEUTRAL_BG, ...LIGHT_SURFACE },
             3: { name: 'Terracotta',    hex: '#8a3317', hover: '#6b2710', glow: '#fb923c', ...NEUTRAL_BG, ...LIGHT_SURFACE },
             4: { name: 'Deep Burgundy', hex: '#4e0f1a', hover: '#380a12', glow: '#fb7185', ...NEUTRAL_BG, ...LIGHT_SURFACE }
         };
-        let ACTIVE_THEME = 2; // <-- change this number to switch the whole site's accent + background color
+        let ACTIVE_THEME = 1; // <-- change this number to switch the whole site's accent + background color
 
         function applyTheme(themeNumber) {
             const preset = THEME_PRESETS[themeNumber];
