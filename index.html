@@ -333,7 +333,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- Brand Logo -->
             <button onclick="switchPage('home')" class="flex items-center space-x-3 group text-left">
-                <div class="w-10 h-10 rounded-none bg-kotlis-fill flex items-center justify-center text-kotlis-gold font-serif font-bold text-xl group-hover:bg-kotlis-gold group-hover:text-white transition duration-300">
+                <div class="w-10 h-10 rounded-none bg-kotlis-fill flex items-center justify-center text-kotlis-glow font-serif font-bold text-xl group-hover:bg-kotlis-gold group-hover:text-white transition duration-300">
                     A
                 </div>
                 <div class="flex flex-col">
@@ -1730,6 +1730,11 @@
         // premium surface rather than a light page with a dark accent.
         const NOIR_BG = { bg: '#0b0f0e', bgAlt: '#11161a' };
         const THEME_PRESETS = {
+            // No accent color at all — black/white/grey only. The "gold" CSS
+            // variable just becomes near-black here, so every element that
+            // reads it (text highlights, icons, borders, buttons) ends up
+            // monochrome instead of colored.
+            0: { name: 'Monochrome', hex: '#1a1a1a', hover: '#000000', glow: '#9ca3af', ...NEUTRAL_BG, ...LIGHT_SURFACE },
             1: { name: 'Noir Gold',     hex: '#c9a227', hover: '#a9850f', glow: '#e8c468', ...NOIR_BG, ...DARK_SURFACE },
             2: { name: 'Deep Emerald',  hex: '#123f32', hover: '#0c2b22', glow: '#34d399', ...NEUTRAL_BG, ...LIGHT_SURFACE },
             3: { name: 'Terracotta',    hex: '#8a3317', hover: '#6b2710', glow: '#fb923c', ...NEUTRAL_BG, ...LIGHT_SURFACE },
@@ -1776,7 +1781,7 @@
             };
         });
 
-        let ACTIVE_THEME = 6; // <-- change this number to switch the whole site's accent + background color
+        let ACTIVE_THEME = 0; // <-- change this number to switch the whole site's accent + background color
 
         function applyTheme(themeNumber) {
             const preset = THEME_PRESETS[themeNumber];
@@ -2566,7 +2571,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            applyTheme(6); // Refire Teal is the site's committed default theme
+            applyTheme(0); // Monochrome is the site's committed default theme
             initHeroEntrance();
             initCountUp();
             initTiltCards(document.getElementById('page-home'));
