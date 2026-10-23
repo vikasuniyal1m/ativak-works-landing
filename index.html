@@ -89,11 +89,15 @@
             background-image: radial-gradient(rgba(var(--kotlis-dot-rgb, 0, 0, 0), 0.06) 1px, transparent 1px);
             background-size: 26px 26px;
         }
+        /* No colored tint here on purpose — the page background must stay
+           white/neutral no matter which accent is picked from the color
+           picker. Only the dot-grid texture (also neutral, via --kotlis-dot-rgb)
+           plus a very faint grey glow, never the accent color itself. */
         .bg-wash {
             background-image:
                 radial-gradient(rgba(var(--kotlis-dot-rgb, 0, 0, 0), 0.06) 1px, transparent 1px),
-                radial-gradient(circle at 15% 15%, rgba(var(--kotlis-gold-rgb), 0.08), transparent 55%),
-                radial-gradient(circle at 85% 85%, rgba(var(--kotlis-gold-rgb), 0.06), transparent 55%);
+                radial-gradient(circle at 15% 15%, rgba(0, 0, 0, 0.035), transparent 55%),
+                radial-gradient(circle at 85% 85%, rgba(0, 0, 0, 0.03), transparent 55%);
             background-size: 26px 26px, 200% 200%, 200% 200%;
             background-position: 0 0, 0% 0%, 100% 100%;
             animation: gradientWash 20s ease-in-out infinite alternate;
@@ -257,7 +261,9 @@
             right: -140px;
             width: 620px;
             height: 620px;
-            background: linear-gradient(135deg, rgba(var(--kotlis-gold-rgb), 0.5), rgba(var(--kotlis-gold-rgb), 0.08));
+            /* Neutral grey, not the accent color — the page background must
+               read as white regardless of which color-picker theme is active. */
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.02));
             filter: blur(50px);
             --blobX: 0px;
             --blobY: 0px;
