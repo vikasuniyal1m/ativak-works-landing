@@ -1648,9 +1648,10 @@
             2: { name: 'Deep Emerald',  hex: '#123f32', hover: '#0c2b22', glow: '#34d399', ...NEUTRAL_BG, ...LIGHT_SURFACE },
             3: { name: 'Terracotta',    hex: '#8a3317', hover: '#6b2710', glow: '#fb923c', ...NEUTRAL_BG, ...LIGHT_SURFACE },
             4: { name: 'Deep Burgundy', hex: '#4e0f1a', hover: '#380a12', glow: '#fb7185', ...NEUTRAL_BG, ...LIGHT_SURFACE },
-            5: { name: 'Gold on White', hex: '#a9850f', hover: '#8a6c0c', glow: '#e8c468', ...NEUTRAL_BG, ...LIGHT_SURFACE }
+            5: { name: 'Gold on White', hex: '#a9850f', hover: '#8a6c0c', glow: '#e8c468', ...NEUTRAL_BG, ...LIGHT_SURFACE },
+            6: { name: 'Dark Teal on White', hex: '#0f4c46', hover: '#0a3733', glow: '#2dd4bf', ...NEUTRAL_BG, ...LIGHT_SURFACE }
         };
-        let ACTIVE_THEME = 5; // <-- change this number to switch the whole site's accent + background color
+        let ACTIVE_THEME = 6; // <-- change this number to switch the whole site's accent + background color
 
         function applyTheme(themeNumber) {
             const preset = THEME_PRESETS[themeNumber];
@@ -2324,7 +2325,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            applyTheme(5); // Gold on White is the site's committed default theme
+            applyTheme(6); // Dark Teal on White is the site's committed default theme
             initHeroEntrance();
             initHeroParallax();
             // Only the already-visible home page gets scroll-reveal tweens at load time —
