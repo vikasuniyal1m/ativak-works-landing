@@ -399,15 +399,15 @@
                             </div>
                             <div class="pt-8 border-t border-kotlis-border grid grid-cols-3 gap-6">
                                 <div>
-                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark">100%</div>
+                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark count-up" data-count-to="100" data-count-suffix="%">0%</div>
                                     <div class="text-[11px] uppercase tracking-wider text-kotlis-subtle mt-1">Zero Downtime Migration</div>
                                 </div>
                                 <div>
-                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark">5.2x</div>
+                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark count-up" data-count-to="5.2" data-count-suffix="x" data-count-decimals="1">0x</div>
                                     <div class="text-[11px] uppercase tracking-wider text-kotlis-subtle mt-1">Avg Paid Ads ROAS</div>
                                 </div>
                                 <div>
-                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark">#1</div>
+                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark count-up" data-count-to="1" data-count-prefix="#">#0</div>
                                     <div class="text-[11px] uppercase tracking-wider text-kotlis-subtle mt-1">Google & AI Indexing</div>
                                 </div>
                             </div>
@@ -627,13 +627,13 @@
                         <h2 class="text-2xl sm:text-3xl font-bold font-serif text-kotlis-dark">The People Behind the Build</h2>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left max-w-2xl mx-auto">
-                        <div class="orbit-border border border-kotlis-border p-4">
+                        <div class="tilt-card orbit-border border border-kotlis-border p-4">
                             <img src="images/team/vikas.jpeg" alt="Vikas Uniyal" class="w-full h-72 object-contain bg-kotlis-bg p-2 mb-3" loading="lazy">
                             <h3 class="font-serif font-bold text-sm text-kotlis-dark">Vikas Uniyal</h3>
                             <p class="text-[10px] uppercase tracking-wider text-kotlis-gold font-bold mt-1">Founder Â· Full Stack</p>
                             <p class="text-[11px] text-kotlis-subtle mt-2">App Development, Game Development, Website Development & Design, and CRM. Also handles Meta Ads, lead generation, AI automations & business solution promotion.</p>
                         </div>
-                        <div class="orbit-border border border-kotlis-border p-4">
+                        <div class="tilt-card orbit-border border border-kotlis-border p-4">
                             <img src="images/team/rohitkotnala.jfif" alt="Rohit Kotnala" class="w-full h-72 object-contain bg-kotlis-bg p-2 mb-3" loading="lazy">
                             <h3 class="font-serif font-bold text-sm text-kotlis-dark">Rohit Kotnala</h3>
                             <p class="text-[10px] uppercase tracking-wider text-kotlis-gold font-bold mt-1">Business Solutions Â· Client Handling</p>
@@ -651,15 +651,15 @@
                         <h2 class="text-2xl sm:text-3xl font-bold font-serif text-kotlis-dark">Latest Insights</h2>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
-                        <div class="bg-kotlis-card border border-kotlis-border p-5">
+                        <div class="tilt-card bg-kotlis-card border border-kotlis-border p-5">
                             <h3 class="font-serif font-bold text-sm text-kotlis-dark">Flutter vs Native for Startups: When Cross-Platform Wins</h3>
                             <p class="text-xs text-kotlis-subtle mt-2">Guidance on choosing between Flutter and native development for startup projects.</p>
                         </div>
-                        <div class="bg-kotlis-card border border-kotlis-border p-5">
+                        <div class="tilt-card bg-kotlis-card border border-kotlis-border p-5">
                             <h3 class="font-serif font-bold text-sm text-kotlis-dark">Website Migration Checklist (SEO-Safe Cutover)</h3>
                             <p class="text-xs text-kotlis-subtle mt-2">Redirects, analytics, and the steps that keep rankings intact during a migration.</p>
                         </div>
-                        <div class="bg-kotlis-card border border-kotlis-border p-5">
+                        <div class="tilt-card bg-kotlis-card border border-kotlis-border p-5">
                             <h3 class="font-serif font-bold text-sm text-kotlis-dark">Google Ads Setup Checklist for App & SaaS Launches</h3>
                             <p class="text-xs text-kotlis-subtle mt-2">Campaign fundamentals for app and SaaS marketing in the first 30 days.</p>
                         </div>
@@ -1947,6 +1947,27 @@
             });
         }
 
+        // Animated count-up for hero stat numbers (100%, 5.2x, #1) — runs
+        // once, the first time each number scrolls into view.
+        function initCountUp() {
+            document.querySelectorAll('.count-up').forEach(el => {
+                if (el.dataset.countInited) return;
+                el.dataset.countInited = '1';
+                const to = parseFloat(el.dataset.countTo || '0');
+                const decimals = parseInt(el.dataset.countDecimals || '0', 10);
+                const prefix = el.dataset.countPrefix || '';
+                const suffix = el.dataset.countSuffix || '';
+                const counter = { val: 0 };
+                gsap.to(counter, {
+                    val: to,
+                    duration: 1.4,
+                    ease: 'power2.out',
+                    scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none none' },
+                    onUpdate: () => { el.textContent = prefix + counter.val.toFixed(decimals) + suffix; }
+                });
+            });
+        }
+
         // Subtle parallax drift on hero images as the page scrolls
         function initHeroParallax() {
             const images = document.querySelectorAll('#page-home .lg\\:col-span-5 img');
@@ -2454,6 +2475,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             applyTheme(6); // Dark Teal on White is the site's committed default theme
             initHeroEntrance();
+            initCountUp();
+            initTiltCards(document.getElementById('page-home'));
             initHeroParallax();
             // Only the already-visible home page gets scroll-reveal tweens at load time —
             // ScrollTrigger can't measure positions inside a display:none page, which left
