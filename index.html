@@ -414,24 +414,53 @@
                 <div class="sticky top-0 h-screen overflow-hidden flex flex-col items-center justify-center px-4">
                     <span class="absolute top-10 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-kotlis-gold text-center w-full">Watch It Get Built</span>
 
-                    <!-- Stage 1: Flutter app assembling -->
+                    <!-- Stage 1: Flutter app assembling — a real app-screen mockup
+                         (header, banner, list rows, CTA) fills in piece by piece
+                         instead of plain skeleton lines, so there's always
+                         something recognizable on screen, not an empty phone. -->
                     <div id="storyStage1" class="story-stage absolute inset-0 flex flex-col items-center justify-center gap-6 px-6">
-                        <div class="relative w-40 h-72 border-2 border-kotlis-gold/60 rounded-[1.5rem] bg-kotlis-bg overflow-hidden">
-                            <div id="storyStage1Lines" class="p-4 space-y-3"></div>
+                        <div class="relative w-44 h-80 border-2 border-kotlis-gold/60 rounded-[1.5rem] bg-kotlis-bg overflow-hidden shadow-lg">
+                            <!-- App header: visible from the start, like a splash shell -->
+                            <div class="flex items-center gap-2 px-3 py-2.5 border-b border-kotlis-border bg-kotlis-card">
+                                <div class="w-5 h-5 rounded bg-kotlis-gold shrink-0"></div>
+                                <div class="h-2 w-16 rounded bg-kotlis-border"></div>
+                            </div>
+                            <div id="storyStage1Lines" class="p-3 space-y-2.5"></div>
                         </div>
                         <p class="text-kotlis-dark text-center text-sm sm:base max-w-md"><span class="text-kotlis-gold font-bold">Day 1 —</span> Your app takes shape, screen by screen.</p>
                     </div>
 
-                    <!-- Stage 2: ROAS climbing -->
-                    <div id="storyStage2" class="story-stage absolute inset-0 flex flex-col items-center justify-center gap-6 px-6 opacity-0">
-                        <div class="w-full max-w-sm flex items-end justify-center gap-3 h-40">
-                            <div class="w-8 bg-kotlis-gold/40 rounded-t" style="height:20%"></div>
-                            <div class="w-8 bg-kotlis-gold/60 rounded-t" style="height:35%"></div>
-                            <div class="w-8 bg-kotlis-gold/80 rounded-t" style="height:55%"></div>
-                            <div id="storyBar4" class="w-8 bg-kotlis-gold rounded-t transition-all duration-700" style="height:20%"></div>
-                            <div id="storyBar5" class="w-8 bg-kotlis-gold rounded-t transition-all duration-700" style="height:20%"></div>
+                    <!-- Stage 2: ROAS climbing — a mini ad-manager dashboard card
+                         with live-ticking stats sits above the growing bar chart. -->
+                    <div id="storyStage2" class="story-stage absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 opacity-0">
+                        <div class="w-full max-w-sm bg-kotlis-card border border-kotlis-border shadow-lg p-4 text-left">
+                            <div class="flex items-center gap-2 pb-2 mb-3 border-b border-kotlis-border">
+                                <i class="fa-brands fa-meta text-kotlis-gold"></i>
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle">Ads Manager · Live Campaign</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2 mb-4">
+                                <div>
+                                    <div class="text-[9px] uppercase tracking-wider text-kotlis-subtle">Impressions</div>
+                                    <div id="storyImpressions" class="text-base font-serif font-bold text-kotlis-dark">12.4K</div>
+                                </div>
+                                <div>
+                                    <div class="text-[9px] uppercase tracking-wider text-kotlis-subtle">Clicks</div>
+                                    <div id="storyClicks" class="text-base font-serif font-bold text-kotlis-dark">310</div>
+                                </div>
+                                <div>
+                                    <div class="text-[9px] uppercase tracking-wider text-kotlis-subtle">ROAS</div>
+                                    <div id="storyRoas" class="text-base font-serif font-bold text-kotlis-gold">1.0x</div>
+                                </div>
+                            </div>
+                            <div class="flex items-end justify-center gap-3 h-20">
+                                <div class="w-7 bg-kotlis-gold/40 rounded-t" style="height:20%"></div>
+                                <div class="w-7 bg-kotlis-gold/60 rounded-t" style="height:35%"></div>
+                                <div class="w-7 bg-kotlis-gold/80 rounded-t" style="height:55%"></div>
+                                <div id="storyBar4" class="w-7 bg-kotlis-gold rounded-t transition-all duration-700" style="height:20%"></div>
+                                <div id="storyBar5" class="w-7 bg-kotlis-gold rounded-t transition-all duration-700" style="height:20%"></div>
+                            </div>
                         </div>
-                        <p class="text-kotlis-dark text-center text-sm sm:base max-w-md"><span class="text-kotlis-gold font-bold">Week 2 —</span> Paid campaigns start converting. ROAS <span id="storyRoas" class="font-bold text-kotlis-gold">1.0x</span></p>
+                        <p class="text-kotlis-dark text-center text-sm sm:base max-w-md"><span class="text-kotlis-gold font-bold">Week 2 —</span> Paid campaigns start converting.</p>
                     </div>
 
                     <!-- Stage 3: SEO rank jump -->
@@ -2257,19 +2286,28 @@
             const dots = document.querySelectorAll('.storyDot');
             const linesContainer = document.getElementById('storyStage1Lines');
             const roasEl = document.getElementById('storyRoas');
+            const impressionsEl = document.getElementById('storyImpressions');
+            const clicksEl = document.getElementById('storyClicks');
             const rankEl = document.getElementById('storyRank');
             const bar4 = document.getElementById('storyBar4');
             const bar5 = document.getElementById('storyBar5');
 
-            // Build the phone-screen skeleton lines once
+            // Build the phone-screen widgets once: a banner image block, two
+            // text lines, a list row with a thumbnail, and a CTA button —
+            // recognizable app-screen pieces instead of plain skeleton lines.
             if (linesContainer && !linesContainer.dataset.built) {
                 linesContainer.dataset.built = '1';
-                const widths = ['70%', '90%', '60%', '85%', '50%'];
-                widths.forEach(w => {
-                    const line = document.createElement('div');
-                    line.className = 'story-skel-line h-3 rounded bg-kotlis-gold/0';
-                    line.style.width = w;
-                    linesContainer.appendChild(line);
+                const widgets = [
+                    { h: 'h-16', w: 'w-full', rounded: 'rounded-md' },   // banner image
+                    { h: 'h-2.5', w: 'w-5/6', rounded: 'rounded' },       // title line
+                    { h: 'h-2', w: 'w-3/5', rounded: 'rounded' },         // subtitle line
+                    { h: 'h-10', w: 'w-full', rounded: 'rounded' },       // list row
+                    { h: 'h-8', w: 'w-full', rounded: 'rounded' }         // CTA button
+                ];
+                widgets.forEach(w => {
+                    const el = document.createElement('div');
+                    el.className = `story-skel-line ${w.h} ${w.w} ${w.rounded} bg-kotlis-gold/0 border border-kotlis-gold/0 transition-colors duration-500`;
+                    linesContainer.appendChild(el);
                 });
             }
             const skelLines = linesContainer ? linesContainer.querySelectorAll('.story-skel-line') : [];
@@ -2286,12 +2324,19 @@
                 if (index === 0) {
                     const visibleCount = Math.floor(progressWithinStage * skelLines.length);
                     skelLines.forEach((line, i) => {
-                        line.classList.toggle('bg-kotlis-gold/70', i < visibleCount);
-                        line.classList.toggle('bg-kotlis-gold/0', i >= visibleCount);
+                        const on = i < visibleCount;
+                        line.classList.toggle('bg-kotlis-gold/20', on);
+                        line.classList.toggle('border-kotlis-gold/50', on);
+                        line.classList.toggle('bg-kotlis-gold/0', !on);
+                        line.classList.toggle('border-kotlis-gold/0', !on);
                     });
                 } else if (index === 1) {
                     const roas = (1 + progressWithinStage * 4.2).toFixed(1);
+                    const impressions = (12.4 + progressWithinStage * 38.6).toFixed(1);
+                    const clicks = Math.round(310 + progressWithinStage * 1890);
                     if (roasEl) roasEl.textContent = roas + 'x';
+                    if (impressionsEl) impressionsEl.textContent = impressions + 'K';
+                    if (clicksEl) clicksEl.textContent = clicks.toLocaleString();
                     if (bar4) bar4.style.height = (20 + progressWithinStage * 55) + '%';
                     if (bar5) bar5.style.height = (20 + progressWithinStage * 75) + '%';
                 } else if (index === 2) {
