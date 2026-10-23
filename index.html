@@ -71,6 +71,7 @@
             --kotlis-border: #e5e5e5;
             --kotlis-card-rgb: 255, 255, 255;
             --kotlis-fill: #111111;
+            --kotlis-dot-rgb: 0, 0, 0;
         }
         body {
             background-color: var(--kotlis-bg);
@@ -78,14 +79,21 @@
             font-family: 'Inter', sans-serif;
             transition: background-color 0.6s ease, color 0.6s ease;
         }
-        /* Subtle dot-grid texture + a slow-breathing accent gradient wash —
-           applied per-section since each section paints its own solid
-           background-color over the body. */
+        /* Subtle dot-grid texture, theme-aware (light dots on dark theme,
+           dark dots on light themes) via --kotlis-dot-rgb set in applyTheme().
+           The slow-breathing gradient wash is now scoped to .bg-wash (each
+           page's hero only) instead of every section — repainting a moving
+           gradient on every section, on every page, was the main scroll-jank
+           source; static sections just keep a plain flat background now. */
         body, section {
+            background-image: radial-gradient(rgba(var(--kotlis-dot-rgb, 0, 0, 0), 0.06) 1px, transparent 1px);
+            background-size: 26px 26px;
+        }
+        .bg-wash {
             background-image:
-                radial-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
-                radial-gradient(circle at 15% 15%, rgba(var(--kotlis-gold-rgb), 0.05), transparent 55%),
-                radial-gradient(circle at 85% 85%, rgba(var(--kotlis-gold-rgb), 0.04), transparent 55%);
+                radial-gradient(rgba(var(--kotlis-dot-rgb, 0, 0, 0), 0.06) 1px, transparent 1px),
+                radial-gradient(circle at 15% 15%, rgba(var(--kotlis-gold-rgb), 0.08), transparent 55%),
+                radial-gradient(circle at 85% 85%, rgba(var(--kotlis-gold-rgb), 0.06), transparent 55%);
             background-size: 26px 26px, 200% 200%, 200% 200%;
             background-position: 0 0, 0% 0%, 100% 100%;
             animation: gradientWash 20s ease-in-out infinite alternate;
@@ -95,7 +103,7 @@
             100% { background-position: 0 0, 100% 60%, 10% 100%; }
         }
         @media (prefers-reduced-motion: reduce) {
-            body, section { animation: none; }
+            .bg-wash { animation: none; }
         }
         .serif-title {
             font-family: 'Playfair Display', serif;
@@ -273,7 +281,7 @@
     <main class="flex-grow">
         <!-- ================= PAGE 1: HOME ================= -->
         <div id="page-home" class="page-content">
-            <section class="relative pt-16 pb-20 lg:pt-24 lg:pb-32 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border overflow-hidden">
+            <section class="bg-wash relative pt-16 pb-20 lg:pt-24 lg:pb-32 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border overflow-hidden">
                 <!-- Three.js floating 3D shape â€” decorative, sits behind the hero content -->
                 <canvas id="hero3dCanvas" class="hidden sm:block absolute inset-0 w-full h-full pointer-events-none z-0" aria-hidden="true"></canvas>
                 <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -528,7 +536,7 @@
 
         <!-- ================= PAGE 2: SERVICES INNER PAGE ================= -->
         <div id="page-services" class="page-content hidden">
-            <section class="py-16 bg-kotlis-card border-b border-kotlis-border relative overflow-hidden">
+            <section class="bg-wash py-16 bg-kotlis-card border-b border-kotlis-border relative overflow-hidden">
                 <canvas id="servicesShapeCanvas" class="hidden lg:block absolute top-0 right-0 w-[420px] h-[420px] pointer-events-none z-0" aria-hidden="true"></canvas>
                 <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
@@ -739,7 +747,7 @@
 
         <!-- ================= PAGE 3: CASE STUDIES & PORTFOLIO INNER PAGE ================= -->
         <div id="page-portfolio" class="page-content hidden">
-            <section class="py-16 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border relative overflow-hidden">
+            <section class="bg-wash py-16 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border relative overflow-hidden">
                 <canvas id="portfolioShapeCanvas" class="hidden lg:block absolute top-0 right-0 w-[420px] h-[420px] pointer-events-none z-0" aria-hidden="true"></canvas>
                 <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
@@ -1256,7 +1264,7 @@
 
         <!-- ================= PAGE 4: MIGRATION & PROTOCOL INNER PAGE ================= -->
         <div id="page-migration" class="page-content hidden">
-            <section class="py-16 bg-kotlis-card border-b border-kotlis-border relative overflow-hidden">
+            <section class="bg-wash py-16 bg-kotlis-card border-b border-kotlis-border relative overflow-hidden">
                 <canvas id="migrationShapeCanvas" class="hidden lg:block absolute top-0 right-0 w-[420px] h-[420px] pointer-events-none z-0" aria-hidden="true"></canvas>
                 <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     <div class="text-center max-w-3xl mx-auto space-y-3">
@@ -1296,7 +1304,7 @@
 
         <!-- ================= PAGE 5: PRICING & CALCULATOR INNER PAGE ================= -->
         <div id="page-pricing" class="page-content hidden">
-            <section class="py-16 bg-kotlis-card border-b border-kotlis-border relative overflow-hidden">
+            <section class="bg-wash py-16 bg-kotlis-card border-b border-kotlis-border relative overflow-hidden">
                 <canvas id="pricingShapeCanvas" class="hidden lg:block absolute top-0 right-0 w-[420px] h-[420px] pointer-events-none z-0" aria-hidden="true"></canvas>
                 <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
                     <div class="text-center max-w-2xl mx-auto space-y-3">
@@ -1410,7 +1418,7 @@
 
         <!-- ================= PAGE 6: CONTACT & AUDIT INNER PAGE ================= -->
         <div id="page-contact" class="page-content hidden">
-            <section class="py-16 bg-[var(--kotlis-bg-alt)] relative overflow-hidden">
+            <section class="bg-wash py-16 bg-[var(--kotlis-bg-alt)] relative overflow-hidden">
                 <canvas id="contactShapeCanvas" class="hidden lg:block absolute top-0 right-0 w-[420px] h-[420px] pointer-events-none z-0" aria-hidden="true"></canvas>
                 <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="bg-kotlis-card border border-kotlis-border p-8 sm:p-14 kotlis-shadow">
@@ -1557,8 +1565,8 @@
         // Light themes keep the original ink/card/fill values; the dark theme
         // flips text to near-white, cards to dark surfaces, and fills to a
         // lifted dark-grey so buttons stay visible against the black page.
-        const LIGHT_SURFACE = { dark: '#111111', subtle: '#666666', border: '#e5e5e5', cardRgb: '255, 255, 255', fill: '#111111', wire: '#111111' };
-        const DARK_SURFACE  = { dark: '#f5f5f5', subtle: '#a3a3a3', border: '#2a2a2a', cardRgb: '20, 20, 20',   fill: '#1c1c1c', wire: '#ffffff' };
+        const LIGHT_SURFACE = { dark: '#111111', subtle: '#666666', border: '#e5e5e5', cardRgb: '255, 255, 255', fill: '#111111', wire: '#111111', dotRgb: '0, 0, 0' };
+        const DARK_SURFACE  = { dark: '#f5f5f5', subtle: '#a3a3a3', border: '#2a2a2a', cardRgb: '20, 20, 20',   fill: '#1c1c1c', wire: '#ffffff', dotRgb: '255, 255, 255' };
 
         // `glow` is a brighter version of the accent, reserved for dark surfaces
         // (the deploy terminal, dark-theme fills) where the main accent itself
@@ -1594,6 +1602,7 @@
             root.setProperty('--kotlis-border', preset.border);
             root.setProperty('--kotlis-card-rgb', preset.cardRgb);
             root.setProperty('--kotlis-fill', preset.fill);
+            root.setProperty('--kotlis-dot-rgb', preset.dotRgb);
             // The tech-grid canvases read --kotlis-gold directly each frame, so
             // no extra work is needed here to re-color them.
         }
@@ -1898,6 +1907,12 @@
             const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
             let width = 0, height = 0, nodes = [], pulses = [], lastPulseTime = 0;
+            // getComputedStyle + canvas work is real per-frame cost — cache the
+            // accent color and only refresh it occasionally instead of every
+            // frame, and skip work entirely while the canvas isn't visible
+            // (tab backgrounded, or its page switched away from).
+            let cachedRgb = hexToRgbTriplet(getComputedStyle(document.documentElement).getPropertyValue('--kotlis-gold'));
+            let frameCount = 0;
 
             function resize() {
                 const rect = canvas.getBoundingClientRect();
@@ -1935,6 +1950,12 @@
             }
 
             function frame(ts) {
+                // Skip all work when backgrounded or off-screen (page switched away,
+                // or the browser tab itself isn't visible) — the loop keeps polling
+                // cheaply via rAF so it resumes instantly once visible again.
+                const visible = !document.hidden && canvas.offsetParent !== null;
+                if (!visible) { requestAnimationFrame(frame); return; }
+
                 if (!reduceMotion) {
                     nodes.forEach(n => {
                         n.x += n.vx; n.y += n.vy;
@@ -1946,9 +1967,13 @@
                     pulses = pulses.filter(p => p.t < 1);
                 }
 
-                ctx.clearRect(0, 0, width, height);
-                const rgb = hexToRgbTriplet(getComputedStyle(document.documentElement).getPropertyValue('--kotlis-gold'));
+                frameCount++;
+                if (frameCount % 60 === 0) {
+                    cachedRgb = hexToRgbTriplet(getComputedStyle(document.documentElement).getPropertyValue('--kotlis-gold'));
+                }
+                const rgb = cachedRgb;
 
+                ctx.clearRect(0, 0, width, height);
                 ctx.lineWidth = 1;
                 for (let i = 0; i < nodes.length; i++) {
                     for (let j = i + 1; j < nodes.length; j++) {
@@ -2206,7 +2231,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            applyTheme(ACTIVE_THEME);
+            applyTheme(1); // Noir Gold is the site's committed default theme
             initHeroEntrance();
             initHeroParallax();
             // Only the already-visible home page gets scroll-reveal tweens at load time —
