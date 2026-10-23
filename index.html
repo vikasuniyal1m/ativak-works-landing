@@ -25,7 +25,7 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Playfair Display for Luxury Serif Accents & Inter for UI -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;0,800;0,900;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- GSAP + ScrollTrigger for scroll-linked motion -->
@@ -37,7 +37,7 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
+                        serif: ['Poppins', 'sans-serif'],
                     },
                     colors: {
                         kotlis: {
@@ -69,7 +69,7 @@
             --kotlis-dark: #111111;
             --kotlis-subtle: #666666;
             --kotlis-border: #e5e5e5;
-            --kotlis-card-rgb: 255, 255, 255;
+            --kotlis-card-rgb: 255 255 255;
             --kotlis-fill: #111111;
             --kotlis-dot-rgb: 0, 0, 0;
         }
@@ -110,7 +110,8 @@
             .bg-wash { animation: none; }
         }
         .serif-title {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.02em;
         }
         .kotlis-shadow {
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
@@ -155,9 +156,10 @@
         }
         #cursorRing {
             width: 34px; height: 34px;
-            background: var(--kotlis-gold);
+            background: transparent;
+            border: 1.5px solid var(--kotlis-gold);
             border-radius: 50%;
-            opacity: 0.16;
+            opacity: 0.55;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -168,10 +170,12 @@
             color: #ffffff;
             box-shadow: 0 0 0 0 rgba(var(--kotlis-gold-rgb, 0,0,0), 0);
             transition: width .35s cubic-bezier(.16,1,.3,1), height .35s cubic-bezier(.16,1,.3,1),
-                        opacity .35s ease, box-shadow .35s ease;
+                        opacity .35s ease, box-shadow .35s ease, background .35s ease, border-color .35s ease;
         }
         #cursorRing.cursor-hover {
             width: 64px; height: 64px;
+            background: var(--kotlis-gold);
+            border-color: var(--kotlis-gold);
             opacity: 1;
             box-shadow: 0 6px 24px -4px rgba(0, 0, 0, 0.35);
         }
@@ -242,15 +246,23 @@
             .tilt-card {
                 --tiltX: 0deg;
                 --tiltY: 0deg;
-                transform: perspective(900px) rotateX(var(--tiltX)) rotateY(var(--tiltY)) translateZ(0);
-                transition: transform 0.15s ease-out, border-color 0.3s ease;
-                will-change: transform;
+                --tiltZ: 0px;
+                --tiltShadowX: 0px;
+                --tiltShadowY: 10px;
+                transform: perspective(900px) rotateX(var(--tiltX)) rotateY(var(--tiltY)) translateZ(var(--tiltZ));
+                transition: transform 0.15s ease-out, border-color 0.3s ease, box-shadow 0.15s ease-out;
+                will-change: transform, box-shadow;
+                box-shadow: var(--tiltShadowX) var(--tiltShadowY) 30px -12px rgba(var(--kotlis-gold-rgb), 0);
+            }
+            .tilt-card:hover {
+                box-shadow: var(--tiltShadowX) var(--tiltShadowY) 30px -12px rgba(var(--kotlis-gold-rgb), 0.35);
             }
             .tilt-icon {
-                transition: transform 0.35s cubic-bezier(.34,1.56,.64,1);
+                transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), box-shadow 0.35s ease;
             }
             .tilt-card:hover .tilt-icon {
-                transform: scale(1.12) rotate(-6deg);
+                transform: scale(1.15) rotate(-6deg) translateZ(20px);
+                box-shadow: 0 10px 24px -6px rgba(var(--kotlis-gold-rgb), 0.55);
             }
         }
         /* Hero blob: a Lusion-style morphing shape done with animated
@@ -290,17 +302,32 @@
         .cursor-droplet {
             position: fixed;
             left: 0; top: 0;
-            width: 90px; height: 90px;
+            width: 14px; height: 14px;
             border-radius: 50%;
             pointer-events: none;
             z-index: 60;
-            background: radial-gradient(circle, rgba(var(--kotlis-gold-rgb), 0.75) 0%, rgba(var(--kotlis-gold-rgb), 0.35) 45%, transparent 72%);
-            transform: translate(-50%, -50%) scale(0.3);
-            opacity: 0.9;
-            animation: dropletFade 0.9s ease-out forwards;
+            background: radial-gradient(circle, #fff8e1 0%, var(--kotlis-glow) 40%, rgba(var(--kotlis-gold-rgb), 0.9) 70%, transparent 100%);
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.95;
+            animation: emberRise 0.9s ease-out forwards;
         }
-        @keyframes dropletFade {
-            to { transform: translate(-50%, -50%) scale(1.7); opacity: 0; }
+        @keyframes emberRise {
+            to { transform: translate(calc(-50% + var(--ember-x, 0px)), calc(-50% - 60px)) scale(0.2); opacity: 0; }
+        }
+        .cursor-trail-line {
+            position: fixed;
+            left: 0; top: 0;
+            width: 1.5px; height: 14px;
+            border-radius: 2px;
+            pointer-events: none;
+            z-index: 59;
+            background: linear-gradient(to bottom, rgba(var(--kotlis-gold-rgb), 0.85), transparent);
+            transform: translate(-50%, -50%) rotate(var(--line-rot, 0deg));
+            opacity: 0.8;
+            animation: trailLineFade 0.9s ease-out forwards;
+        }
+        @keyframes trailLineFade {
+            to { transform: translate(calc(-50% + var(--ember-x, 0px)), calc(-50% - 60px)) rotate(var(--line-rot, 0deg)); opacity: 0; height: 2px; }
         }
         .click-ripple {
             position: fixed;
@@ -318,7 +345,7 @@
             to { transform: translate(-50%, -50%) scale(26); opacity: 0; }
         }
         @media (prefers-reduced-motion: reduce) {
-            .cursor-droplet, .click-ripple { display: none; }
+            .cursor-droplet, .cursor-trail-line, .click-ripple { display: none; }
         }
     </style>
 </head>
@@ -338,31 +365,20 @@
                 </div>
                 <div class="flex flex-col">
                     <span class="text-xl font-bold tracking-widest text-kotlis-dark uppercase font-serif">Ativak<span class="text-kotlis-gold">.works</span></span>
-                    <span class="text-[10px] tracking-widest uppercase text-kotlis-subtle">Mobile, Web & Growth Studio</span>
+                    <span class="text-[10px] tracking-widest uppercase text-kotlis-subtle">Code with logic, create with soul.</span>
                 </div>
             </button>
             
             <!-- Navigation Links for Pages -->
-            <nav class="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-widest text-kotlis-dark">
+            <nav class="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-widest text-kotlis-dark whitespace-nowrap">
                 <button onclick="switchPage('home')" id="nav-home" class="py-2 hover:text-kotlis-gold transition nav-link nav-active">Home</button>
                 <button onclick="switchPage('services')" id="nav-services" class="py-2 hover:text-kotlis-gold transition nav-link">Services</button>
-                <button onclick="switchPage('portfolio')" id="nav-portfolio" class="py-2 hover:text-kotlis-gold transition nav-link">Case Studies & Projects (44)</button>
+                <button onclick="switchPage('portfolio')" id="nav-portfolio" class="py-2 hover:text-kotlis-gold transition nav-link">Case Studies & Projects</button>
                 <button onclick="switchPage('migration')" id="nav-migration" class="py-2 hover:text-kotlis-gold transition nav-link">Migration & Strategy</button>
                 <button onclick="switchPage('pricing')" id="nav-pricing" class="py-2 hover:text-kotlis-gold transition nav-link">Pricing & Calculator</button>
             </nav>
 
             <div class="flex items-center space-x-4 relative">
-                <!-- Color scheme picker: ~50 accent presets, click to preview the
-                     whole site in that color instantly (same CSS-var theme system
-                     already driving ACTIVE_THEME). Pure client-side, no reload. -->
-                <button id="colorPickerBtn" onclick="toggleColorPicker()" aria-label="Choose a color theme"
-                        class="w-9 h-9 rounded-full border border-kotlis-border overflow-hidden shrink-0"
-                        style="background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red);">
-                </button>
-                <div id="colorPickerPanel" class="hidden absolute top-14 right-0 w-[320px] sm:w-[380px] bg-kotlis-card border border-kotlis-border shadow-xl p-4 z-50 max-h-[70vh] overflow-y-auto">
-                    <div class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle mb-3">Pick a color theme — click to preview</div>
-                    <div id="colorPickerGrid" class="grid grid-cols-8 sm:grid-cols-9 gap-2"></div>
-                </div>
                 <button onclick="switchPage('contact')" class="hidden sm:inline-flex items-center justify-center px-6 py-3 border border-kotlis-dark text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:bg-kotlis-fill hover:text-white transition duration-300">
                     Request Free Audit
                 </button>
@@ -470,16 +486,16 @@
                                 </div>
                                 <!-- Team: a live activity feed, commits/PRs streaming in -->
                                 <div class="relative overflow-hidden shadow-md border border-kotlis-border bg-kotlis-card h-44 flex flex-col">
-                                    <div class="flex items-center justify-between px-4 pt-3 pb-2 border-b border-kotlis-border shrink-0">
-                                        <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle">Ativak Engineering Team</span>
-                                        <span class="flex items-center gap-1.5 text-[10px] font-bold text-emerald-600">
+                                    <div class="flex items-center justify-between gap-2 px-4 pt-3 pb-2 border-b border-kotlis-border shrink-0">
+                                        <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle whitespace-nowrap">Engineering Team</span>
+                                        <span class="flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 shrink-0">
                                             <span class="relative flex w-1.5 h-1.5">
                                                 <span class="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75 animate-ping"></span>
                                                 <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
                                             </span> Online
                                         </span>
                                     </div>
-                                    <div id="teamActivityFeed" class="flex-1 overflow-hidden px-4 py-2 space-y-2.5"></div>
+                                    <div id="teamActivityFeed" class="flex-1 overflow-hidden px-4 py-2.5 space-y-2.5"></div>
                                 </div>
                             </div>
 
@@ -493,15 +509,15 @@
                                     <div class="absolute left-[50px] top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-kotlis-fill flex items-center justify-center">
                                         <i class="fa-brands fa-google-play text-kotlis-glow text-sm"></i>
                                     </div>
-                                    <div class="min-w-0">
-                                        <div class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Android · Google Play</div>
+                                    <div class="min-w-0 flex-1">
+                                        <div class="text-[9px] font-bold uppercase tracking-wide text-kotlis-gold whitespace-nowrap">Google Play</div>
                                         <div id="androidStatusText" class="text-sm font-serif font-bold text-kotlis-dark mt-1">Building…</div>
                                         <div id="androidStep" class="text-[11px] text-kotlis-subtle mt-1 font-mono truncate">./gradlew bundleRelease</div>
-                                        <span id="androidLiveBadge" class="hidden items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-600 mt-1">
-                                            <span class="relative flex w-1.5 h-1.5">
+                                        <span id="androidLiveBadge" class="hidden items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-600 mt-1 whitespace-nowrap">
+                                            <span class="relative flex w-1.5 h-1.5 shrink-0">
                                                 <span class="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75 animate-ping"></span>
                                                 <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                                            </span> Live on Play Store
+                                            </span> On Play Store
                                         </span>
                                     </div>
                                 </div>
@@ -530,7 +546,7 @@
                  A pinned, scroll-scrubbed sequence — three builds come alive as the
                  visitor scrolls, instead of a static features list. Trial section:
                  if this direction lands, the same technique extends to other pages. -->
-            <section id="buildStorySection" class="relative bg-kotlis-card" style="height: 300vh;">
+            <section id="buildStorySection" class="relative bg-white" style="height: 300vh;">
                 <div class="sticky top-0 h-screen overflow-hidden flex flex-col items-center justify-center px-4">
                     <span class="absolute top-10 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-kotlis-gold text-center w-full">Watch It Get Built</span>
 
@@ -538,73 +554,100 @@
                          build (FIRST AIDE, a verified live Google Play client), not a
                          generic mockup. The actual screenshot wipes into view top-down
                          as the visitor scrolls, like the screen is being assembled. -->
-                    <div id="storyStage1" class="story-stage absolute inset-0 flex flex-col items-center justify-center gap-6 px-6">
-                        <!-- The source screenshot is a wide 832x406 banner, not a tall
-                             phone capture — framed to its real aspect ratio (browser-chrome
-                             style, matching the hero's terminal cards) so the whole image
-                             shows cleanly instead of being cropped into a phone shape. -->
-                        <div class="relative w-full max-w-sm border border-kotlis-border rounded-lg overflow-hidden shadow-lg bg-kotlis-card">
-                            <div class="flex items-center gap-1.5 px-3 py-2 bg-kotlis-bg border-b border-kotlis-border">
-                                <span class="w-2.5 h-2.5 rounded-full bg-red-400"></span>
-                                <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
-                                <span class="w-2.5 h-2.5 rounded-full bg-green-400"></span>
-                                <span class="ml-2 text-[10px] text-kotlis-subtle font-mono truncate">first-aide.app — building</span>
+                    <div id="storyStage1" class="story-stage absolute inset-0 flex items-center justify-center px-6">
+                        <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+                            <!-- The source screenshot is a wide 832x406 banner, not a tall
+                                 phone capture — framed to its real aspect ratio (browser-chrome
+                                 style, matching the hero's terminal cards) so the whole image
+                                 shows cleanly instead of being cropped into a phone shape. -->
+                            <div class="relative w-full max-w-sm mx-auto lg:mx-0 border border-kotlis-border rounded-lg overflow-hidden shadow-lg bg-kotlis-card">
+                                <div class="flex items-center gap-1.5 px-3 py-2 bg-kotlis-bg border-b border-kotlis-border">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-red-400"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-green-400"></span>
+                                    <span class="ml-2 text-[10px] text-kotlis-subtle font-mono truncate">first-aide.app — building</span>
+                                </div>
+                                <div class="relative bg-white" style="aspect-ratio: 832 / 406;">
+                                    <img src="images/portfolio/first-aide.webp" alt="FIRST AIDE app screenshot" class="w-full h-full object-cover">
+                                    <!-- Solid mask shrinking from the right reveals the full,
+                                         uncropped image left-to-right as the visitor scrolls. -->
+                                    <div id="storyAppImageMask" class="absolute inset-y-0 right-0 bg-kotlis-card" style="width: 100%;"></div>
+                                </div>
+                                <div id="storyLiveBadge" class="opacity-0 transition-opacity duration-500 flex items-center justify-center gap-1.5 py-2 bg-kotlis-dark text-white text-[10px] font-bold uppercase tracking-wider">
+                                    <i class="fa-brands fa-google-play text-kotlis-gold"></i> Live on Google Play
+                                </div>
                             </div>
-                            <div class="relative bg-white" style="aspect-ratio: 832 / 406;">
-                                <img src="images/portfolio/first-aide.webp" alt="FIRST AIDE app screenshot" class="w-full h-full object-cover">
-                                <!-- Solid mask shrinking from the right reveals the full,
-                                     uncropped image left-to-right as the visitor scrolls. -->
-                                <div id="storyAppImageMask" class="absolute inset-y-0 right-0 bg-kotlis-card" style="width: 100%;"></div>
-                            </div>
-                            <div id="storyLiveBadge" class="opacity-0 transition-opacity duration-500 flex items-center justify-center gap-1.5 py-2 bg-kotlis-dark text-white text-[10px] font-bold uppercase tracking-wider">
-                                <i class="fa-brands fa-google-play text-kotlis-gold"></i> Live on Google Play
+                            <div class="text-center lg:text-left space-y-4">
+                                <p class="text-kotlis-dark text-lg sm:text-xl font-serif font-bold"><span class="text-kotlis-gold">Day 1 —</span> A real build: FIRST AIDE, shipped and live.</p>
+                                <ul class="space-y-2.5 text-sm text-kotlis-subtle inline-block lg:block text-left">
+                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> Flutter codebase, built cross-platform from day one</li>
+                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> Verified live on Google Play, not a mockup</li>
+                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> Clean architecture, ready to scale from launch</li>
+                                </ul>
                             </div>
                         </div>
-                        <p class="text-kotlis-dark text-center text-sm sm:base max-w-md"><span class="text-kotlis-gold font-bold">Day 1 —</span> A real build: FIRST AIDE, shipped and live.</p>
                     </div>
 
                     <!-- Stage 2: ROAS climbing — a mini ad-manager dashboard card
                          with live-ticking stats sits above the growing bar chart. -->
-                    <div id="storyStage2" class="story-stage absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 opacity-0">
-                        <div class="w-full max-w-sm bg-kotlis-card border border-kotlis-border shadow-lg p-4 text-left">
-                            <div class="flex items-center gap-2 pb-2 mb-3 border-b border-kotlis-border">
-                                <i class="fa-brands fa-meta text-kotlis-gold"></i>
-                                <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle">Ads Manager · Live Campaign</span>
+                    <div id="storyStage2" class="story-stage absolute inset-0 flex items-center justify-center px-6 opacity-0">
+                        <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+                            <div class="w-full max-w-sm mx-auto lg:mx-0 bg-kotlis-card border border-kotlis-border shadow-lg p-4 text-left">
+                                <div class="flex items-center gap-2 pb-2 mb-3 border-b border-kotlis-border">
+                                    <i class="fa-brands fa-meta text-kotlis-gold"></i>
+                                    <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle">Ads Manager · Live Campaign</span>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 mb-4">
+                                    <div>
+                                        <div class="text-[9px] uppercase tracking-wider text-kotlis-subtle">Impressions</div>
+                                        <div id="storyImpressions" class="text-base font-serif font-bold text-kotlis-dark">12.4K</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-[9px] uppercase tracking-wider text-kotlis-subtle">Clicks</div>
+                                        <div id="storyClicks" class="text-base font-serif font-bold text-kotlis-dark">310</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-[9px] uppercase tracking-wider text-kotlis-subtle">ROAS</div>
+                                        <div id="storyRoas" class="text-base font-serif font-bold text-kotlis-gold">1.0x</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-end justify-center gap-3 h-20">
+                                    <div class="w-7 rounded-t" style="height:20%; background:rgba(var(--kotlis-gold-rgb),0.4)"></div>
+                                    <div class="w-7 rounded-t" style="height:35%; background:rgba(var(--kotlis-gold-rgb),0.6)"></div>
+                                    <div class="w-7 rounded-t" style="height:55%; background:rgba(var(--kotlis-gold-rgb),0.8)"></div>
+                                    <div id="storyBar4" class="w-7 bg-kotlis-gold rounded-t transition-all duration-700" style="height:20%"></div>
+                                    <div id="storyBar5" class="w-7 bg-kotlis-gold rounded-t transition-all duration-700" style="height:20%"></div>
+                                </div>
                             </div>
-                            <div class="grid grid-cols-3 gap-2 mb-4">
-                                <div>
-                                    <div class="text-[9px] uppercase tracking-wider text-kotlis-subtle">Impressions</div>
-                                    <div id="storyImpressions" class="text-base font-serif font-bold text-kotlis-dark">12.4K</div>
-                                </div>
-                                <div>
-                                    <div class="text-[9px] uppercase tracking-wider text-kotlis-subtle">Clicks</div>
-                                    <div id="storyClicks" class="text-base font-serif font-bold text-kotlis-dark">310</div>
-                                </div>
-                                <div>
-                                    <div class="text-[9px] uppercase tracking-wider text-kotlis-subtle">ROAS</div>
-                                    <div id="storyRoas" class="text-base font-serif font-bold text-kotlis-gold">1.0x</div>
-                                </div>
-                            </div>
-                            <div class="flex items-end justify-center gap-3 h-20">
-                                <div class="w-7 rounded-t" style="height:20%; background:rgba(var(--kotlis-gold-rgb),0.4)"></div>
-                                <div class="w-7 rounded-t" style="height:35%; background:rgba(var(--kotlis-gold-rgb),0.6)"></div>
-                                <div class="w-7 rounded-t" style="height:55%; background:rgba(var(--kotlis-gold-rgb),0.8)"></div>
-                                <div id="storyBar4" class="w-7 bg-kotlis-gold rounded-t transition-all duration-700" style="height:20%"></div>
-                                <div id="storyBar5" class="w-7 bg-kotlis-gold rounded-t transition-all duration-700" style="height:20%"></div>
+                            <div class="text-center lg:text-left space-y-4">
+                                <p class="text-kotlis-dark text-lg sm:text-xl font-serif font-bold"><span class="text-kotlis-gold">Week 2 —</span> Paid campaigns start converting.</p>
+                                <ul class="space-y-2.5 text-sm text-kotlis-subtle inline-block lg:block text-left">
+                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> Meta Ads campaigns launched and optimized weekly</li>
+                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> Audience targeting refined from real click data</li>
+                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> ROAS tracked daily, budget shifted to what converts</li>
+                                </ul>
                             </div>
                         </div>
-                        <p class="text-kotlis-dark text-center text-sm sm:base max-w-md"><span class="text-kotlis-gold font-bold">Week 2 —</span> Paid campaigns start converting.</p>
                     </div>
 
                     <!-- Stage 3: SEO rank jump -->
-                    <div id="storyStage3" class="story-stage absolute inset-0 flex flex-col items-center justify-center gap-6 px-6 opacity-0">
-                        <div class="w-full max-w-sm bg-white border border-kotlis-border text-left p-4 shadow-xl">
-                            <div class="text-[10px] text-gray-400 mb-1">google.com/search</div>
-                            <div class="text-blue-700 text-sm font-semibold truncate">yourbrand.com — Official Site</div>
-                            <div class="text-emerald-700 text-[11px]">yourbrand.com</div>
-                            <div class="text-gray-500 text-[11px] mt-1">Ranked <span id="storyRank" class="font-bold text-kotlis-dark">#8</span> → climbing with every optimization pass.</div>
+                    <div id="storyStage3" class="story-stage absolute inset-0 flex items-center justify-center px-6 opacity-0">
+                        <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+                            <div class="w-full max-w-sm mx-auto lg:mx-0 bg-white border border-kotlis-border text-left p-4 shadow-xl">
+                                <div class="text-[10px] text-gray-400 mb-1">google.com/search</div>
+                                <div class="text-blue-700 text-sm font-semibold truncate">yourbrand.com — Official Site</div>
+                                <div class="text-emerald-700 text-[11px]">yourbrand.com</div>
+                                <div class="text-gray-500 text-[11px] mt-1">Ranked <span id="storyRank" class="font-bold text-kotlis-dark">#8</span> → climbing with every optimization pass.</div>
+                            </div>
+                            <div class="text-center lg:text-left space-y-4">
+                                <p class="text-kotlis-dark text-lg sm:text-xl font-serif font-bold"><span class="text-kotlis-gold">Month 1 —</span> You show up first, on Google and AI search.</p>
+                                <ul class="space-y-2.5 text-sm text-kotlis-subtle inline-block lg:block text-left">
+                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> On-page SEO + technical fixes shipped from week one</li>
+                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> Content structured for Google and AI search engines</li>
+                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> Rankings monitored and pushed up every month</li>
+                                </ul>
+                            </div>
                         </div>
-                        <p class="text-kotlis-dark text-center text-sm sm:base max-w-md"><span class="text-kotlis-gold font-bold">Month 1 —</span> You show up first, on Google and AI search.</p>
                     </div>
 
                     <!-- Progress dots -->
@@ -892,6 +935,105 @@
                                     <li class="flex items-start"><i class="fa-solid fa-check text-kotlis-gold mr-2 mt-0.5"></i> Lead Generation & Business Solutions</li>
                                 </ul>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Our Process — 4-step timeline -->
+                    <div class="mt-20 pt-16 border-t border-kotlis-border">
+                        <div class="text-center max-w-3xl mx-auto mb-14 space-y-3">
+                            <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">How We Work</span>
+                            <h2 class="text-2xl sm:text-4xl font-extrabold text-kotlis-dark serif-title">Our Process</h2>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+                            <div class="hidden lg:block absolute top-6 left-[12.5%] right-[12.5%] h-[2px] bg-kotlis-border" aria-hidden="true"></div>
+                            <div class="relative text-center lg:text-left">
+                                <div class="w-12 h-12 mx-auto lg:mx-0 rounded-full bg-kotlis-fill text-kotlis-glow font-serif font-bold flex items-center justify-center text-lg relative z-10">01</div>
+                                <h3 class="font-serif font-bold text-base text-kotlis-dark mt-4 mb-2">Discovery</h3>
+                                <p class="text-xs text-kotlis-subtle leading-relaxed">We map your goals, users, and constraints into a clear product requirements doc.</p>
+                            </div>
+                            <div class="relative text-center lg:text-left">
+                                <div class="w-12 h-12 mx-auto lg:mx-0 rounded-full bg-kotlis-fill text-kotlis-glow font-serif font-bold flex items-center justify-center text-lg relative z-10">02</div>
+                                <h3 class="font-serif font-bold text-base text-kotlis-dark mt-4 mb-2">Design</h3>
+                                <p class="text-xs text-kotlis-subtle leading-relaxed">Wireframes to polished UI, reviewed with you before a line of code is written.</p>
+                            </div>
+                            <div class="relative text-center lg:text-left">
+                                <div class="w-12 h-12 mx-auto lg:mx-0 rounded-full bg-kotlis-fill text-kotlis-glow font-serif font-bold flex items-center justify-center text-lg relative z-10">03</div>
+                                <h3 class="font-serif font-bold text-base text-kotlis-dark mt-4 mb-2">Build</h3>
+                                <p class="text-xs text-kotlis-subtle leading-relaxed">Sprints with visible progress — staging links, weekly demos, no black boxes.</p>
+                            </div>
+                            <div class="relative text-center lg:text-left">
+                                <div class="w-12 h-12 mx-auto lg:mx-0 rounded-full bg-kotlis-gold text-white font-serif font-bold flex items-center justify-center text-lg relative z-10">04</div>
+                                <h3 class="font-serif font-bold text-base text-kotlis-dark mt-4 mb-2">Launch & Grow</h3>
+                                <p class="text-xs text-kotlis-subtle leading-relaxed">Shipped to production, then handed to our growth engine — ads, SEO, and iteration.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tech Stack strip -->
+                    <div class="mt-20 pt-16 border-t border-kotlis-border text-center">
+                        <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Tools We Build With</span>
+                        <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-6 mt-8 text-kotlis-subtle">
+                            <span class="flex items-center gap-2 text-sm font-semibold hover:text-kotlis-gold transition"><i class="fa-brands fa-flutter text-lg"></i> Flutter</span>
+                            <span class="flex items-center gap-2 text-sm font-semibold hover:text-kotlis-gold transition"><i class="fa-brands fa-react text-lg"></i> React / Next.js</span>
+                            <span class="flex items-center gap-2 text-sm font-semibold hover:text-kotlis-gold transition"><i class="fa-brands fa-node-js text-lg"></i> Node.js</span>
+                            <span class="flex items-center gap-2 text-sm font-semibold hover:text-kotlis-gold transition"><i class="fa-brands fa-aws text-lg"></i> AWS</span>
+                            <span class="flex items-center gap-2 text-sm font-semibold hover:text-kotlis-gold transition"><i class="fa-brands fa-figma text-lg"></i> Figma</span>
+                            <span class="flex items-center gap-2 text-sm font-semibold hover:text-kotlis-gold transition"><i class="fa-brands fa-google text-lg"></i> Firebase</span>
+                            <span class="flex items-center gap-2 text-sm font-semibold hover:text-kotlis-gold transition"><i class="fa-brands fa-php text-lg"></i> Laravel</span>
+                            <span class="flex items-center gap-2 text-sm font-semibold hover:text-kotlis-gold transition"><i class="fa-brands fa-meta text-lg"></i> Meta Ads</span>
+                        </div>
+                    </div>
+
+                    <!-- Trust strip: client quote -->
+                    <div class="mt-20 pt-16 border-t border-kotlis-border">
+                        <div class="max-w-3xl mx-auto text-center space-y-5">
+                            <i class="fa-solid fa-quote-left text-3xl text-kotlis-gold"></i>
+                            <p class="text-lg sm:text-xl font-serif font-bold text-kotlis-dark leading-snug">"They shipped our Flutter app end-to-end and had it live on Google Play in weeks, not months — then kept optimizing the ad spend after launch."</p>
+                            <div class="flex items-center justify-center gap-3 pt-2">
+                                <div class="w-9 h-9 rounded-full bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xs font-bold">FA</div>
+                                <div class="text-left">
+                                    <div class="text-xs font-bold text-kotlis-dark">FIRST AIDE</div>
+                                    <div class="text-[10px] uppercase tracking-wider text-kotlis-subtle">Healthcare Delivery Client</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ -->
+                    <div class="mt-20 pt-16 border-t border-kotlis-border">
+                        <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+                            <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Questions</span>
+                            <h2 class="text-2xl sm:text-4xl font-extrabold text-kotlis-dark serif-title">Frequently Asked</h2>
+                        </div>
+                        <div class="max-w-3xl mx-auto divide-y divide-kotlis-border border-t border-b border-kotlis-border">
+                            <details class="group py-5">
+                                <summary class="flex items-center justify-between cursor-pointer list-none font-serif font-bold text-kotlis-dark text-sm sm:text-base">
+                                    How long does a typical project take?
+                                    <i class="fa-solid fa-plus text-kotlis-gold group-open:rotate-45 transition-transform"></i>
+                                </summary>
+                                <p class="text-xs text-kotlis-subtle mt-3 leading-relaxed">Most mobile or web builds ship in 4–8 weeks depending on scope. We send a firm timeline after the discovery call, before any contract is signed.</p>
+                            </details>
+                            <details class="group py-5">
+                                <summary class="flex items-center justify-between cursor-pointer list-none font-serif font-bold text-kotlis-dark text-sm sm:text-base">
+                                    Do you work with early-stage startups or only established businesses?
+                                    <i class="fa-solid fa-plus text-kotlis-gold group-open:rotate-45 transition-transform"></i>
+                                </summary>
+                                <p class="text-xs text-kotlis-subtle mt-3 leading-relaxed">Both. We scope engagements from a single MVP build to full product + growth retainers for scaling teams.</p>
+                            </details>
+                            <details class="group py-5">
+                                <summary class="flex items-center justify-between cursor-pointer list-none font-serif font-bold text-kotlis-dark text-sm sm:text-base">
+                                    What happens after launch — do you offer support?
+                                    <i class="fa-solid fa-plus text-kotlis-gold group-open:rotate-45 transition-transform"></i>
+                                </summary>
+                                <p class="text-xs text-kotlis-subtle mt-3 leading-relaxed">Yes — every build includes a post-launch support window, with ongoing maintenance and growth retainers available after.</p>
+                            </details>
+                            <details class="group py-5">
+                                <summary class="flex items-center justify-between cursor-pointer list-none font-serif font-bold text-kotlis-dark text-sm sm:text-base">
+                                    Can you take over an existing app or website from another team?
+                                    <i class="fa-solid fa-plus text-kotlis-gold group-open:rotate-45 transition-transform"></i>
+                                </summary>
+                                <p class="text-xs text-kotlis-subtle mt-3 leading-relaxed">Yes — we regularly audit and take over existing codebases, including zero-downtime migrations to new infrastructure.</p>
+                            </details>
                         </div>
                     </div>
 
@@ -1728,8 +1870,8 @@
         // Light themes keep the original ink/card/fill values; the dark theme
         // flips text to near-white, cards to dark surfaces, and fills to a
         // lifted dark-grey so buttons stay visible against the black page.
-        const LIGHT_SURFACE = { dark: '#111111', subtle: '#666666', border: '#e5e5e5', cardRgb: '255, 255, 255', fill: '#111111', wire: '#111111', dotRgb: '0, 0, 0' };
-        const DARK_SURFACE  = { dark: '#f5f5f5', subtle: '#a3a3a3', border: '#2a2a2a', cardRgb: '20, 20, 20',   fill: '#1c1c1c', wire: '#ffffff', dotRgb: '255, 255, 255' };
+        const LIGHT_SURFACE = { dark: '#111111', subtle: '#666666', border: '#e5e5e5', cardRgb: '255 255 255', fill: '#111111', wire: '#111111', dotRgb: '0, 0, 0' };
+        const DARK_SURFACE  = { dark: '#f5f5f5', subtle: '#a3a3a3', border: '#2a2a2a', cardRgb: '20 20 20',   fill: '#1c1c1c', wire: '#ffffff', dotRgb: '255, 255, 255' };
 
         // `glow` is a brighter version of the accent, reserved for dark surfaces
         // (the deploy terminal, dark-theme fills) where the main accent itself
@@ -1766,7 +1908,11 @@
             103: { name: 'Growth Green', hex: '#15803D', hover: '#166534', glow: '#4ADE80', ...NEUTRAL_BG, ...LIGHT_SURFACE },
             104: { name: 'Coral Creative', hex: '#E85D4A', hover: '#C24132', glow: '#FB8C78', ...NEUTRAL_BG, ...LIGHT_SURFACE },
             105: { name: 'Midnight Navy', hex: '#1E3A5F', hover: '#152A45', glow: '#60A5FA', ...NEUTRAL_BG, ...LIGHT_SURFACE },
-            106: { name: 'Modern Teal', hex: '#024950', hover: '#003135', glow: '#0fa4af', ...NEUTRAL_BG, ...LIGHT_SURFACE }
+            106: { name: 'Modern Teal', hex: '#024950', hover: '#003135', glow: '#0fa4af', ...NEUTRAL_BG, ...LIGHT_SURFACE },
+            // Ocean Breeze — primary/secondary/tertiary/background as supplied.
+            107: { name: 'Ocean Breeze', hex: '#0B3D91', hover: '#06276b', glow: '#3BA7F2', bg: '#E8F6FF', bgAlt: '#d9f0fd', ...LIGHT_SURFACE },
+            // Vangard — bold yellow + magenta, matching the ThemeForest reference.
+            108: { name: 'Vangard', hex: '#F6C90E', hover: '#d9ad00', glow: '#F6C90E', ...NEUTRAL_BG, ...LIGHT_SURFACE }
         };
 
         // ~50 additional accent presets for the color-scheme picker, generated
@@ -1804,7 +1950,7 @@
             };
         });
 
-        let ACTIVE_THEME = 2; // <-- change this number to switch the whole site's accent + background color
+        let ACTIVE_THEME = 108; // <-- change this number to switch the whole site's accent + background color
 
 
         function applyTheme(themeNumber) {
@@ -1892,11 +2038,17 @@
             const finishSwitch = () => {
                 pages.forEach(p => p.classList.add('hidden'));
                 targetPage.classList.remove('hidden');
-                window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+                window.scrollTo(0, 0);
                 if (typeof gsap !== 'undefined') {
                     gsap.fromTo(targetPage, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
                 }
                 if (typeof afterPageSwitch === 'function') afterPageSwitch(pageId);
+                // ScrollTrigger.refresh() (inside afterPageSwitch) recalculates pin
+                // spacers for the newly-visible page and can shift the scroll
+                // position it just set — force it back to the top once that
+                // recalculation has actually landed.
+                window.scrollTo(0, 0);
+                requestAnimationFrame(() => window.scrollTo(0, 0));
             };
 
             if (typeof gsap === 'undefined' || !currentPage) {
@@ -2205,6 +2357,22 @@
                 el.className = className;
                 el.style.left = x + 'px';
                 el.style.top = y + 'px';
+                if (className === 'cursor-droplet') {
+                    const emberX = Math.random() * 40 - 20;
+                    el.style.setProperty('--ember-x', emberX + 'px');
+                    // A couple of thin streak lines spawned alongside each bubble,
+                    // fanning out at slightly different angles for a "burst" feel.
+                    for (let i = 0; i < 2; i++) {
+                        const line = document.createElement('div');
+                        line.className = 'cursor-trail-line';
+                        line.style.left = x + 'px';
+                        line.style.top = y + 'px';
+                        line.style.setProperty('--ember-x', (emberX + (Math.random() * 24 - 12)) + 'px');
+                        line.style.setProperty('--line-rot', (Math.random() * 40 - 20) + 'deg');
+                        document.body.appendChild(line);
+                        setTimeout(() => line.remove(), life);
+                    }
+                }
                 document.body.appendChild(el);
                 setTimeout(() => el.remove(), life);
                 return el;
@@ -2237,12 +2405,18 @@
                     const rect = card.getBoundingClientRect();
                     const relX = (e.clientX - rect.left) / rect.width - 0.5;
                     const relY = (e.clientY - rect.top) / rect.height - 0.5;
-                    card.style.setProperty('--tiltY', `${relX * 8}deg`);
-                    card.style.setProperty('--tiltX', `${-relY * 8}deg`);
+                    card.style.setProperty('--tiltY', `${relX * 14}deg`);
+                    card.style.setProperty('--tiltX', `${-relY * 14}deg`);
+                    card.style.setProperty('--tiltZ', '14px');
+                    card.style.setProperty('--tiltShadowX', `${-relX * 30}px`);
+                    card.style.setProperty('--tiltShadowY', `${18 - relY * 20}px`);
                 });
                 card.addEventListener('mouseleave', () => {
                     card.style.setProperty('--tiltY', '0deg');
                     card.style.setProperty('--tiltX', '0deg');
+                    card.style.setProperty('--tiltZ', '0px');
+                    card.style.setProperty('--tiltShadowX', '0px');
+                    card.style.setProperty('--tiltShadowY', '10px');
                 });
             });
         }
@@ -2480,25 +2654,25 @@
             if (!feed) return;
 
             const entries = [
-                { initials: 'VU', name: 'Vikas', action: 'pushed 3 commits to main' },
+                { initials: 'VU', name: 'Vikas', action: 'pushed 3 commits' },
                 { initials: 'RK', name: 'Rohit', action: 'closed issue #128' },
-                { initials: 'CI', name: 'CI/CD', action: 'all checks passed ✓' },
+                { initials: 'CI', name: 'CI/CD', action: 'checks passed ✓' },
                 { initials: 'VU', name: 'Vikas', action: 'merged PR #42' },
-                { initials: 'RK', name: 'Rohit', action: 'opened PR — fix webhook' },
-                { initials: 'CI', name: 'CI/CD', action: 'deployed to production 🚀' }
+                { initials: 'RK', name: 'Rohit', action: 'opened PR #43' },
+                { initials: 'CI', name: 'CI/CD', action: 'deployed 🚀' }
             ];
-            const MAX_ROWS = 4;
+            const MAX_ROWS = 3;
             let i = 0;
 
             function addRow() {
                 const e = entries[i % entries.length];
                 i++;
                 const row = document.createElement('div');
-                row.className = 'activity-row flex items-center gap-2';
+                row.className = 'activity-row flex items-center gap-2.5';
                 row.innerHTML =
                     `<span class="w-6 h-6 rounded-full bg-kotlis-fill text-kotlis-glow text-[9px] font-bold flex items-center justify-center shrink-0">${e.initials}</span>` +
-                    `<span class="text-[11px] text-kotlis-dark truncate"><span class="font-bold">${e.name}</span> ${e.action}</span>` +
-                    `<span class="text-[9px] text-kotlis-subtle ml-auto shrink-0">now</span>`;
+                    `<span class="text-[11px] text-kotlis-dark leading-tight min-w-0 flex-1 truncate"><span class="font-bold">${e.name}</span> ${e.action}</span>` +
+                    `<span class="text-[9px] text-kotlis-subtle shrink-0">now</span>`;
                 feed.insertBefore(row, feed.firstChild);
                 while (feed.children.length > MAX_ROWS) feed.removeChild(feed.lastChild);
             }
@@ -2533,8 +2707,13 @@
                 statusText.textContent = s.status;
                 stepText.textContent = s.step;
                 if (index === steps.length - 1) {
+                    stepText.classList.add('hidden');
                     liveBadge.classList.remove('hidden');
                     liveBadge.classList.add('flex');
+                } else {
+                    stepText.classList.remove('hidden');
+                    liveBadge.classList.add('hidden');
+                    liveBadge.classList.remove('flex');
                 }
                 setTimeout(() => run(index + 1), 900);
             }
@@ -2595,7 +2774,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            applyTheme(2); // Deep Emerald is the site's committed default theme (matches the live deployment)
+            applyTheme(108); // Vangard — bold yellow + magenta
             initHeroEntrance();
             initCountUp();
             initTiltCards(document.getElementById('page-home'));
