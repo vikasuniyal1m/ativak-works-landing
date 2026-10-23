@@ -420,44 +420,25 @@
                 <div class="sticky top-0 h-screen overflow-hidden flex flex-col items-center justify-center px-4">
                     <span class="absolute top-10 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-kotlis-gold text-center w-full">Watch It Get Built</span>
 
-                    <!-- Stage 1: Flutter app assembling — a real app-screen mockup
-                         (header, banner, list rows, CTA) fills in piece by piece
-                         instead of plain skeleton lines, so there's always
-                         something recognizable on screen, not an empty phone. -->
+                    <!-- Stage 1: Flutter app assembling — this is a real, already-shipped
+                         build (FIRST AIDE, a verified live Google Play client), not a
+                         generic mockup. The actual screenshot wipes into view top-down
+                         as the visitor scrolls, like the screen is being assembled. -->
                     <div id="storyStage1" class="story-stage absolute inset-0 flex flex-col items-center justify-center gap-6 px-6">
                         <div class="relative w-44 h-80 border-2 border-kotlis-gold/60 rounded-[1.5rem] bg-kotlis-bg overflow-hidden shadow-lg">
                             <!-- App header: visible from the start, like a splash shell -->
-                            <div class="flex items-center gap-2 px-3 py-2.5 border-b border-kotlis-border bg-kotlis-card">
-                                <div class="w-5 h-5 rounded bg-kotlis-gold shrink-0"></div>
-                                <div class="h-2 w-16 rounded bg-kotlis-border"></div>
+                            <div class="relative z-10 flex items-center gap-2 px-3 py-2.5 border-b border-kotlis-border bg-kotlis-card">
+                                <img src="images/portfolio/first-aide.webp" alt="" class="w-5 h-5 rounded object-cover shrink-0">
+                                <span class="text-[10px] font-bold text-kotlis-dark truncate">FIRST AIDE — Healthcare</span>
                             </div>
-                            <!-- Real app-screen pieces (not generic gray boxes), each
-                                 revealed in turn via the .story-reveal opacity toggle. -->
-                            <div class="p-3 space-y-2.5">
-                                <div class="story-reveal relative w-full h-16 rounded-md bg-[rgba(var(--kotlis-gold-rgb),0.12)] border border-kotlis-gold/40 flex items-center justify-center">
-                                    <i class="fa-regular fa-image text-kotlis-gold/70"></i>
-                                </div>
-                                <div class="story-reveal h-2.5 w-5/6 rounded bg-kotlis-dark/80"></div>
-                                <div class="story-reveal flex items-center gap-0.5 text-[10px] text-kotlis-gold">
-                                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
-                                    <span class="text-kotlis-subtle ml-1">4.9 (2.1k)</span>
-                                </div>
-                                <div class="story-reveal flex items-center gap-2 p-2 rounded border border-kotlis-border">
-                                    <div class="w-6 h-6 rounded-full bg-kotlis-gold/30 flex items-center justify-center shrink-0">
-                                        <i class="fa-solid fa-bolt text-kotlis-gold text-[9px]"></i>
-                                    </div>
-                                    <div class="flex-1 space-y-1">
-                                        <div class="h-1.5 w-3/4 rounded bg-kotlis-border"></div>
-                                        <div class="h-1.5 w-1/2 rounded bg-kotlis-border"></div>
-                                    </div>
-                                    <i class="fa-solid fa-chevron-right text-kotlis-border text-[10px]"></i>
-                                </div>
-                                <div class="story-reveal h-9 w-full rounded bg-kotlis-gold flex items-center justify-center text-white text-[10px] font-bold uppercase tracking-wider gap-1.5">
-                                    <i class="fa-solid fa-rocket text-[10px]"></i> Get Started
-                                </div>
+                            <div id="storyAppImageWrap" class="absolute inset-x-0 bottom-0 top-[37px] overflow-hidden" style="clip-path: inset(100% 0 0 0);">
+                                <img src="images/portfolio/first-aide.webp" alt="FIRST AIDE app screenshot" class="w-full h-full object-cover">
+                            </div>
+                            <div id="storyLiveBadge" class="absolute bottom-2 left-2 right-2 opacity-0 transition-opacity duration-500 flex items-center justify-center gap-1.5 py-1.5 bg-kotlis-dark/90 text-white text-[9px] font-bold uppercase tracking-wider rounded z-10">
+                                <i class="fa-brands fa-google-play text-kotlis-gold"></i> Live on Google Play
                             </div>
                         </div>
-                        <p class="text-kotlis-dark text-center text-sm sm:base max-w-md"><span class="text-kotlis-gold font-bold">Day 1 —</span> Your app takes shape, screen by screen.</p>
+                        <p class="text-kotlis-dark text-center text-sm sm:base max-w-md"><span class="text-kotlis-gold font-bold">Day 1 —</span> A real build: FIRST AIDE, shipped and live.</p>
                     </div>
 
                     <!-- Stage 2: ROAS climbing — a mini ad-manager dashboard card
@@ -2324,9 +2305,8 @@
             const rankEl = document.getElementById('storyRank');
             const bar4 = document.getElementById('storyBar4');
             const bar5 = document.getElementById('storyBar5');
-            // The actual app-screen pieces (banner, title, rating, list row, CTA
-            // button) markup is static in the HTML — just reveal them in order.
-            const revealEls = stages[0] ? stages[0].querySelectorAll('.story-reveal') : [];
+            const appImageWrap = document.getElementById('storyAppImageWrap');
+            const liveBadge = document.getElementById('storyLiveBadge');
 
             function setStage(index, progressWithinStage) {
                 stages.forEach((el, i) => {
@@ -2338,10 +2318,8 @@
                     d.classList.toggle('bg-kotlis-border', i !== index);
                 });
                 if (index === 0) {
-                    const visibleCount = Math.floor(progressWithinStage * revealEls.length);
-                    revealEls.forEach((el, i) => {
-                        el.classList.toggle('is-visible', i < visibleCount);
-                    });
+                    if (appImageWrap) appImageWrap.style.clipPath = `inset(${100 - progressWithinStage * 100}% 0 0 0)`;
+                    if (liveBadge) liveBadge.style.opacity = progressWithinStage > 0.9 ? '1' : '0';
                 } else if (index === 1) {
                     const roas = (1 + progressWithinStage * 4.2).toFixed(1);
                     const impressions = (12.4 + progressWithinStage * 38.6).toFixed(1);
