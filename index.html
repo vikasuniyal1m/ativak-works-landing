@@ -163,31 +163,32 @@
         .activity-row {
             animation: activityRowIn 0.4s ease forwards;
         }
-        /* Shooting-star border: a bright point continuously orbits the card edge */
+        /* Shooting-star border: a single point travels the rectangle edge,
+           corner to corner in straight lines — not a glow/gradient sweep. */
         .orbit-border {
             position: relative;
         }
         .orbit-border::before {
             content: '';
             position: absolute;
-            inset: -2px;
-            border-radius: inherit;
-            padding: 2px;
-            background: conic-gradient(from 0deg,
-                transparent 0%,
-                transparent 85%,
-                var(--kotlis-gold) 93%,
-                #ffffff 96%,
-                var(--kotlis-gold) 99%,
-                transparent 100%);
-            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            animation: orbitSpin 4s linear infinite;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--kotlis-gold);
+            box-shadow: 0 0 8px 2px var(--kotlis-gold);
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            animation: orbitRect 5s linear infinite;
             pointer-events: none;
+            z-index: 10;
         }
-        @keyframes orbitSpin {
-            to { transform: rotate(360deg); }
+        @keyframes orbitRect {
+            0%   { top: 0%;   left: 0%; }
+            25%  { top: 0%;   left: 100%; }
+            50%  { top: 100%; left: 100%; }
+            75%  { top: 100%; left: 0%; }
+            100% { top: 0%;   left: 0%; }
         }
         @media (prefers-reduced-motion: reduce) {
             .orbit-border::before { animation: none; }
