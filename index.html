@@ -2732,6 +2732,7 @@
             const brief = document.getElementById('quoteBrief').value.trim();
             let text = 'Hi! I\'d like a quote for: ' + (services.length ? services.join(', ') : 'a project (not sure yet which service fits)');
             if (brief) text += '. Details: ' + brief;
+            if (typeof fbq === 'function') fbq('track', 'Contact');
             window.open('https://wa.me/918126666331?text=' + encodeURIComponent(text), '_blank');
         }
 
@@ -2758,6 +2759,7 @@
                 successMsg.classList.remove('hidden');
                 submitBtn.disabled = false;
                 submitBtn.innerText = 'Send Audit Request';
+                if (typeof fbq === 'function') fbq('track', 'Lead', { content_name: 'Free Audit Form' });
                 return;
             }
 
@@ -2773,6 +2775,7 @@
                     form.style.opacity = '0.4';
                     form.style.pointerEvents = 'none';
                     successMsg.classList.remove('hidden');
+                    if (typeof fbq === 'function') fbq('track', 'Lead', { content_name: 'Free Audit Form' });
                 } else {
                     errorMsg.classList.remove('hidden');
                     submitBtn.disabled = false;
