@@ -820,7 +820,7 @@
             <section class="py-16 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border text-center">
                 <div class="max-w-2xl mx-auto px-4 space-y-5">
                     <h3 class="text-kotlis-dark text-2xl sm:text-3xl font-serif font-bold">Imagine your product live like this — shipped, ranking, and converting.</h3>
-                    <a href="https://wa.me/918126666331?text=BUILD" target="_blank" class="inline-flex items-center gap-2 px-8 py-4 bg-kotlis-gold text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition">
+                    <a href="https://wa.me/918126666331?text=BUILD" target="_blank" onclick="if(typeof fbq==='function')fbq('track','Contact')" class="inline-flex items-center gap-2 px-8 py-4 bg-kotlis-gold text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition">
                         <i class="fa-brands fa-whatsapp"></i> DM "BUILD" and let's ship it
                     </a>
                 </div>
@@ -1357,7 +1357,7 @@
                                     <p class="text-xs text-kotlis-subtle mt-1 max-w-md">Tell us the issue — remote diagnosis starts within minutes, on-site dispatch scheduled same day where available.</p>
                                 </div>
                                 <div class="flex flex-col sm:flex-row gap-3 shrink-0 w-full sm:w-auto">
-                                    <a href="https://wa.me/918126666331?text=IT%20SUPPORT%20REQUEST" target="_blank" class="px-6 py-3 bg-emerald-500 text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition text-center">
+                                    <a href="https://wa.me/918126666331?text=IT%20SUPPORT%20REQUEST" target="_blank" onclick="if(typeof fbq==='function')fbq('track','Contact')" class="px-6 py-3 bg-emerald-500 text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition text-center">
                                         <i class="fa-brands fa-whatsapp mr-1"></i> Get Support Now
                                     </a>
                                     <button onclick="switchPage('contact')" class="px-6 py-3 border border-emerald-500 text-emerald-500 text-xs font-bold uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition">
@@ -2077,7 +2077,7 @@
                             <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Ativak Contact Portal</span>
                             <h2 class="text-3xl sm:text-4xl font-extrabold text-kotlis-dark serif-title mt-2">Request Free Technical Audit</h2>
                             <p class="text-xs text-kotlis-subtle mt-2">Submit your requirements directly to our core engineering team.</p>
-                            <a href="https://wa.me/918126666331" target="_blank" class="inline-flex items-center gap-2 mt-4 px-5 py-2 bg-[#25D366] text-white text-xs font-bold uppercase tracking-wider hover:opacity-90 transition">
+                            <a href="https://wa.me/918126666331" target="_blank" onclick="if(typeof fbq==='function')fbq('track','Contact')" class="inline-flex items-center gap-2 mt-4 px-5 py-2 bg-[#25D366] text-white text-xs font-bold uppercase tracking-wider hover:opacity-90 transition">
                                 <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
                             </a>
                         </div>
@@ -2203,7 +2203,7 @@
                 <div class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle mb-3">How It Works</div>
                 <div id="itModalSteps" class="space-y-4"></div>
                 <div class="flex flex-col sm:flex-row gap-3 mt-6">
-                    <a id="itModalWhatsapp" href="https://wa.me/918126666331?text=SERVICE%20INQUIRY" target="_blank" class="flex-1 text-center px-5 py-3 bg-emerald-500 text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition">
+                    <a id="itModalWhatsapp" href="https://wa.me/918126666331?text=SERVICE%20INQUIRY" target="_blank" onclick="if(typeof fbq==='function')fbq('track','Contact')" class="flex-1 text-center px-5 py-3 bg-emerald-500 text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition">
                         <i class="fa-brands fa-whatsapp mr-1"></i> Chat Now
                     </a>
                     <button onclick="closeITModal(); switchPage('contact');" class="modal-accent-border-btn flex-1 px-5 py-3 border text-xs font-bold uppercase tracking-widest transition">
@@ -2218,6 +2218,7 @@
          so booking an audit is never more than one click away regardless of scroll depth. -->
     <div id="floatingCta" class="fixed bottom-5 right-4 sm:right-6 z-40 flex flex-col items-end gap-3 opacity-0 translate-y-4 pointer-events-none transition-all duration-300">
         <a href="https://wa.me/918126666331" target="_blank" aria-label="Chat on WhatsApp"
+           onclick="if(typeof fbq==='function')fbq('track','Contact')"
            class="pointer-events-auto w-12 h-12 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-lg hover:scale-105 transition">
             <i class="fa-brands fa-whatsapp text-xl"></i>
         </a>
@@ -2737,6 +2738,23 @@
             window.open('https://wa.me/918126666331?text=' + encodeURIComponent(text), '_blank');
         }
 
+        // Fires the Meta Pixel Lead event exactly once per successful submit, then
+        // hands off to /thank-you (a dedicated noindex page used as the Meta
+        // Custom Conversion URL).
+        let leadEventFired = false;
+        function trackLeadAndRedirect() {
+            if (leadEventFired) return;
+            leadEventFired = true;
+            const eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+            if (typeof window.fbq === 'function') {
+                window.fbq('track', 'Lead',
+                    { content_name: 'Free Audit - Meta Ads, SEO & More', content_category: 'Digital Marketing' },
+                    { eventID: eventId }
+                );
+            }
+            window.location.href = '/thank-you';
+        }
+
         // Contact form submit — posts to the Formspree endpoint set in the form's action attribute
         async function handleFormSubmit(e) {
             e.preventDefault();
@@ -2744,6 +2762,12 @@
             const submitBtn = document.getElementById('contactSubmitBtn');
             const successMsg = document.getElementById('contactSuccess');
             const errorMsg = document.getElementById('contactError');
+
+            if (submitBtn.disabled) return;
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
 
             successMsg.classList.add('hidden');
             errorMsg.classList.add('hidden');
@@ -2757,10 +2781,7 @@
                 const summary = `New audit request%0A*Name:* ${encodeURIComponent(data.get('name') || '')}%0A*Email:* ${encodeURIComponent(data.get('email') || '')}%0A*Service:* ${encodeURIComponent(data.get('service') || '')}%0A*URL:* ${encodeURIComponent(data.get('project_url') || '')}%0A*Brief:* ${encodeURIComponent(data.get('brief') || '')}`;
                 window.open(`https://wa.me/918126666331?text=${summary}`, '_blank');
                 form.reset();
-                successMsg.classList.remove('hidden');
-                submitBtn.disabled = false;
-                submitBtn.innerText = 'Send Audit Request';
-                if (typeof fbq === 'function') fbq('track', 'Lead', { content_name: 'Free Audit Form' });
+                trackLeadAndRedirect();
                 return;
             }
 
@@ -2773,10 +2794,7 @@
 
                 if (response.ok) {
                     form.reset();
-                    form.style.opacity = '0.4';
-                    form.style.pointerEvents = 'none';
-                    successMsg.classList.remove('hidden');
-                    if (typeof fbq === 'function') fbq('track', 'Lead', { content_name: 'Free Audit Form' });
+                    trackLeadAndRedirect();
                 } else {
                     errorMsg.classList.remove('hidden');
                     submitBtn.disabled = false;

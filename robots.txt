@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /thank-you
 
 Sitemap: https://ativak-works-landing.vercel.app/sitemap.xml
