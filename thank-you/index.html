@@ -13,6 +13,14 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1904427194297712');
     fbq('track', 'PageView');
+    // Lead fires here, not on the form's submit handler — the WhatsApp
+    // redirect on submit was tearing the page down before the submit-time
+    // fbq call could complete, so no Lead ever reached Meta. Landing on
+    // this page is itself proof the form was submitted.
+    fbq('track', 'Lead',
+        { content_name: 'Free Audit - Meta Ads, SEO & More', content_category: 'Digital Marketing' },
+        { eventID: 'lead_thankyou_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8) }
+    );
     </script>
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1904427194297712&ev=PageView&noscript=1"

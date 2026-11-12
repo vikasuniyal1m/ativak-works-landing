@@ -2738,20 +2738,12 @@
             window.open('https://wa.me/918126666331?text=' + encodeURIComponent(text), '_blank');
         }
 
-        // Fires the Meta Pixel Lead event exactly once per successful submit, then
-        // hands off to /thank-you (a dedicated noindex page used as the Meta
-        // Custom Conversion URL).
-        let leadEventFired = false;
+        // Hands off to /thank-you on a successful submit. The Lead pixel event
+        // fires on that page's own load (not here) — firing it in this handler
+        // raced the WhatsApp-redirect navigation and the call never completed,
+        // so no Lead ever reached Meta. Landing on /thank-you is itself proof
+        // the form was submitted.
         function trackLeadAndRedirect() {
-            if (leadEventFired) return;
-            leadEventFired = true;
-            const eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-            if (typeof window.fbq === 'function') {
-                window.fbq('track', 'Lead',
-                    { content_name: 'Free Audit - Meta Ads, SEO & More', content_category: 'Digital Marketing' },
-                    { eventID: eventId }
-                );
-            }
             window.location.href = '/thank-you';
         }
 
