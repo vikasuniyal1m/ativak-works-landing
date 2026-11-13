@@ -18,6 +18,14 @@
     src="https://www.facebook.com/tr?id=1904427194297712&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
+    <!-- Microsoft Clarity: session recordings + heatmaps for visitor behavior -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "zcvr98suf2");
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ativak Works | Flutter Apps, Meta Ads, SEO & Cloud Migration Studio</title>
@@ -833,7 +841,7 @@
             <section class="py-16 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border text-center">
                 <div class="max-w-2xl mx-auto px-4 space-y-5">
                     <h3 class="text-kotlis-dark text-2xl sm:text-3xl font-serif font-bold">Imagine your product live like this — shipped, ranking, and converting.</h3>
-                    <a href="https://wa.me/918126666331?text=BUILD" target="_blank" onclick="if(typeof fbq==='function')fbq('track','Contact')" class="inline-flex items-center gap-2 px-8 py-4 bg-kotlis-gold text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition">
+                    <a href="https://wa.me/918126666331?text=BUILD" target="_blank" onclick="trackWhatsAppClick()" class="inline-flex items-center gap-2 px-8 py-4 bg-kotlis-gold text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition">
                         <i class="fa-brands fa-whatsapp"></i> DM "BUILD" and let's ship it
                     </a>
                 </div>
@@ -1370,7 +1378,7 @@
                                     <p class="text-xs text-kotlis-subtle mt-1 max-w-md">Tell us the issue — remote diagnosis starts within minutes, on-site dispatch scheduled same day where available.</p>
                                 </div>
                                 <div class="flex flex-col sm:flex-row gap-3 shrink-0 w-full sm:w-auto">
-                                    <a href="https://wa.me/918126666331?text=IT%20SUPPORT%20REQUEST" target="_blank" onclick="if(typeof fbq==='function')fbq('track','Contact')" class="px-6 py-3 bg-emerald-500 text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition text-center">
+                                    <a href="https://wa.me/918126666331?text=IT%20SUPPORT%20REQUEST" target="_blank" onclick="trackWhatsAppClick()" class="px-6 py-3 bg-emerald-500 text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition text-center">
                                         <i class="fa-brands fa-whatsapp mr-1"></i> Get Support Now
                                     </a>
                                     <button onclick="switchPage('contact')" class="px-6 py-3 border border-emerald-500 text-emerald-500 text-xs font-bold uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition">
@@ -2085,7 +2093,7 @@
                             <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Ativak Contact Portal</span>
                             <h2 class="text-3xl sm:text-4xl font-extrabold text-kotlis-dark serif-title mt-2">Request Free Technical Audit</h2>
                             <p class="text-xs text-kotlis-subtle mt-2">Submit your requirements directly to our core engineering team.</p>
-                            <a href="https://wa.me/918126666331" target="_blank" onclick="if(typeof fbq==='function')fbq('track','Contact')" class="inline-flex items-center gap-2 mt-4 px-5 py-2 bg-[#25D366] text-white text-xs font-bold uppercase tracking-wider hover:opacity-90 transition">
+                            <a href="https://wa.me/918126666331" target="_blank" onclick="trackWhatsAppClick()" class="inline-flex items-center gap-2 mt-4 px-5 py-2 bg-[#25D366] text-white text-xs font-bold uppercase tracking-wider hover:opacity-90 transition">
                                 <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
                             </a>
                         </div>
@@ -2206,7 +2214,7 @@
                 <div class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle mb-3">How It Works</div>
                 <div id="itModalSteps" class="space-y-4"></div>
                 <div class="flex flex-col sm:flex-row gap-3 mt-6">
-                    <a id="itModalWhatsapp" href="https://wa.me/918126666331?text=SERVICE%20INQUIRY" target="_blank" onclick="if(typeof fbq==='function')fbq('track','Contact')" class="flex-1 text-center px-5 py-3 bg-emerald-500 text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition">
+                    <a id="itModalWhatsapp" href="https://wa.me/918126666331?text=SERVICE%20INQUIRY" target="_blank" onclick="trackWhatsAppClick()" class="flex-1 text-center px-5 py-3 bg-emerald-500 text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition">
                         <i class="fa-brands fa-whatsapp mr-1"></i> Chat on WhatsApp
                     </a>
                     <button onclick="closeITModal(); switchPage('contact');" class="modal-accent-border-btn flex-1 px-5 py-3 border text-xs font-bold uppercase tracking-widest transition">
@@ -2221,7 +2229,7 @@
          so booking an audit is never more than one click away regardless of scroll depth. -->
     <div id="floatingCta" class="fixed bottom-5 right-4 sm:right-6 z-40 flex flex-col items-end gap-3 opacity-0 translate-y-4 pointer-events-none transition-all duration-300">
         <a href="https://wa.me/918126666331" target="_blank" aria-label="Chat on WhatsApp"
-           onclick="if(typeof fbq==='function')fbq('track','Contact')"
+           onclick="trackWhatsAppClick()"
            class="pointer-events-auto w-12 h-12 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-lg hover:scale-105 transition">
             <i class="fa-brands fa-whatsapp text-xl"></i>
         </a>
@@ -2233,6 +2241,18 @@
 
     <!-- Interactive Logic Script -->
     <script>
+        // Tags this Clarity session with its traffic source (utm_source, e.g.
+        // "facebook"/"instagram" from a Meta Ads link) so recordings can be
+        // filtered down to just ad traffic instead of all visitors.
+        (function tagTrafficSource() {
+            if (typeof clarity !== 'function') return;
+            const params = new URLSearchParams(window.location.search);
+            const utmSource = params.get('utm_source');
+            const utmCampaign = params.get('utm_campaign');
+            if (utmSource) clarity('set', 'utm_source', utmSource);
+            if (utmCampaign) clarity('set', 'utm_campaign', utmCampaign);
+        })();
+
         // Show the floating CTA once the visitor has scrolled past the hero,
         // and hide it again near the footer so it never covers the contact form.
         (function initFloatingCta() {
@@ -2420,6 +2440,8 @@
             const currentPage = Array.from(pages).find(p => !p.classList.contains('hidden'));
             const targetPage = document.getElementById(`page-${pageId}`);
             if (!targetPage || targetPage === currentPage) return;
+
+            if (typeof clarity === 'function') clarity('event', 'view_page_' + pageId);
 
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => link.classList.remove('nav-active'));
@@ -2730,13 +2752,22 @@
             }
         }
 
+        // Fires on every WhatsApp CTA across the site (hero, services, IT
+        // support modal, contact page) — tags the click in both Meta (for ad
+        // optimization) and Clarity (so a session recording can be filtered
+        // to "did they actually click WhatsApp").
+        function trackWhatsAppClick() {
+            if (typeof fbq === 'function') fbq('track', 'Contact');
+            if (typeof clarity === 'function') clarity('event', 'whatsapp_click');
+        }
+
         // No-pricing quote flow: reads the checked services + optional brief
         // and opens WhatsApp with them pre-filled — final pricing is always a
         // direct conversation, never a fixed number on the page.
         function getCustomQuote() {
             const services = Array.from(document.querySelectorAll('.quote-service-check:checked')).map(c => c.value);
             let text = 'Hi! I\'d like a quote for: ' + (services.length ? services.join(', ') : 'a project (not sure yet which service fits)');
-            if (typeof fbq === 'function') fbq('track', 'Contact');
+            trackWhatsAppClick();
             window.open('https://wa.me/918126666331?text=' + encodeURIComponent(text), '_blank');
         }
 
@@ -2780,6 +2811,7 @@
                     content_category: 'Digital Marketing'
                 }, { eventID: eventId });
             }
+            if (typeof clarity === 'function') clarity('event', 'lead_submit');
 
             // Background copy of the submission (Formspree → email/sheet), fire-and-forget —
             // never blocks the WhatsApp handoff below, even if the endpoint is slow or down.
