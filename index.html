@@ -140,7 +140,7 @@
             color: var(--kotlis-gold);
             border-bottom: 2px solid var(--kotlis-gold);
         }
-        /* Header "Request Free Audit" CTA: filled gold + diagonal shine sweep
+        /* Header "Get Free Audit" CTA: filled gold + diagonal shine sweep
            on hover, so the site's single most-repeated action reads as a
            premium, deliberate button rather than a plain bordered rectangle. */
         .audit-cta {
@@ -507,7 +507,7 @@
                 <button onclick="switchPage('services')" id="nav-services" class="py-2 hover:text-kotlis-gold transition nav-link">Services</button>
                 <button onclick="switchPage('portfolio')" id="nav-portfolio" class="py-2 hover:text-kotlis-gold transition nav-link">Case Studies & Projects</button>
                 <button onclick="switchPage('migration')" id="nav-migration" class="py-2 hover:text-kotlis-gold transition nav-link">Migration & Strategy</button>
-                <button onclick="switchPage('pricing')" id="nav-pricing" class="py-2 hover:text-kotlis-gold transition nav-link">Pricing & Calculator</button>
+                <button onclick="switchPage('pricing')" id="nav-pricing" class="py-2 hover:text-kotlis-gold transition nav-link">Pricing</button>
                 <button onclick="goToITSupport()" class="py-2 flex items-center gap-1.5 text-emerald-600 hover:text-emerald-500 transition">
                     <i class="fa-solid fa-headset"></i> IT Support
                 </button>
@@ -517,7 +517,7 @@
                 <button onclick="switchPage('contact')" class="audit-cta relative hidden sm:inline-flex items-center justify-center gap-2 px-4 lg:px-5 xl:px-6 py-3 text-white text-xs font-bold uppercase tracking-wide overflow-hidden transition duration-300 hover:-translate-y-0.5 whitespace-nowrap">
                     <span class="audit-cta-shine absolute inset-0 pointer-events-none"></span>
                     <i class="fa-solid fa-bolt relative z-10 text-[11px]"></i>
-                    <span class="relative z-10">Request Free Audit</span>
+                    <span class="relative z-10">Get Free Audit</span>
                 </button>
                 <button id="mobileMenuBtn" class="lg:hidden relative z-50 text-kotlis-dark text-xl w-11 h-11 flex items-center justify-center focus:outline-none" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileMenu">
                     <i class="fa-solid fa-bars icon-bars"></i>
@@ -590,7 +590,7 @@
                             </p>
                             <div class="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                                 <button onclick="switchPage('contact')" class="px-8 py-4 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition duration-300 text-center">
-                                    Get Custom Estimate
+                                    Get Free Audit
                                 </button>
                                 <button onclick="switchPage('portfolio')" class="px-8 py-4 border border-kotlis-border bg-kotlis-card text-kotlis-dark text-xs font-bold uppercase tracking-widest hover:border-kotlis-dark transition duration-300 text-center">
                                     Explore Case Studies
@@ -752,7 +752,7 @@
                             <div class="w-full max-w-sm mx-auto lg:mx-0 bg-kotlis-card border border-kotlis-border shadow-lg p-4 text-left">
                                 <div class="flex items-center gap-2 pb-2 mb-3 border-b border-kotlis-border">
                                     <i class="fa-brands fa-meta text-kotlis-gold"></i>
-                                    <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle">Ads Manager · Live Campaign</span>
+                                    <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle">Ads Manager · Example</span>
                                 </div>
                                 <div class="grid grid-cols-3 gap-2 mb-4">
                                     <div>
@@ -791,9 +791,9 @@
                     <div id="storyStage3" class="story-stage absolute inset-0 flex items-center justify-center px-6 opacity-0">
                         <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
                             <div class="w-full max-w-sm mx-auto lg:mx-0 bg-white border border-kotlis-border text-left p-4 shadow-xl">
-                                <div class="text-[10px] text-gray-400 mb-1">google.com/search</div>
-                                <div class="text-blue-700 text-sm font-semibold truncate">yourbrand.com — Official Site</div>
-                                <div class="text-emerald-700 text-[11px]">yourbrand.com</div>
+                                <div class="text-[10px] text-gray-400 mb-1">google.com/search <span class="text-kotlis-gold font-bold uppercase">· Example</span></div>
+                                <div class="text-blue-700 text-sm font-semibold truncate">example.com — Official Site</div>
+                                <div class="text-emerald-700 text-[11px]">example.com</div>
                                 <div class="text-gray-500 text-[11px] mt-1">Ranked <span id="storyRank" class="font-bold text-kotlis-dark">#8</span> → climbing with every optimization pass.</div>
                             </div>
                             <div class="text-center lg:text-left space-y-4">
@@ -1373,7 +1373,7 @@
                         <h4 class="font-serif font-bold text-2xl text-kotlis-dark">Not Sure Which Service Fits Your Product?</h4>
                         <p class="text-xs text-kotlis-subtle max-w-xl mx-auto">Tell us what you're building — we'll scope the right mix of mobile, web, growth, or migration work and send a free audit back within 24 hours.</p>
                         <button onclick="switchPage('contact')" class="px-8 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">
-                            Request Free Audit
+                            Get Free Audit
                         </button>
                     </div>
                 </div>
@@ -1890,7 +1890,7 @@
                                 <img src="images/portfolio/qa-healthcare-placeholder.jpg" alt="Healthcare App QA" class="w-full h-40 object-cover mb-3" loading="lazy">
                                 <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">QA & Testing • 05/05</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Healthcare App QA</h3>
-                                <p class="text-xs text-kotlis-subtle mt-2">HIPAA compliance data privacy auditing and automated patient journey stress testing.</p>
+                                <p class="text-xs text-kotlis-subtle mt-2">Patient data privacy auditing and automated patient journey stress testing.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
@@ -1902,7 +1902,7 @@
                         <h4 class="font-serif font-bold text-2xl text-kotlis-dark">Want a Build Like These, Shipped for Your Business?</h4>
                         <p class="text-xs text-kotlis-subtle max-w-xl mx-auto">44 shipped products and counting. Let's talk about what you're trying to launch next.</p>
                         <button onclick="switchPage('contact')" class="px-8 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">
-                            Request Free Audit
+                            Get Free Audit
                         </button>
                     </div>
                 </div>
@@ -1943,7 +1943,7 @@
                         <h4 class="font-serif font-bold text-2xl text-kotlis-dark">Planning a Complex Server or App Migration?</h4>
                         <p class="text-xs text-kotlis-subtle max-w-xl mx-auto">Speak directly with our technical infrastructure team for a free migration risk review.</p>
                         <button onclick="switchPage('contact')" class="px-8 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">
-                            Schedule Technical Audit
+                            Get Free Audit
                         </button>
                     </div>
                 </div>
@@ -2005,7 +2005,7 @@
 
                             <div class="pt-6 border-t border-kotlis-border flex flex-col sm:flex-row gap-3">
                                 <button onclick="getCustomQuote()" class="flex-1 px-6 py-3 bg-emerald-500 text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition">
-                                    <i class="fa-brands fa-whatsapp mr-1"></i> Discuss on WhatsApp
+                                    <i class="fa-brands fa-whatsapp mr-1"></i> Chat on WhatsApp
                                 </button>
                                 <button onclick="switchPage('contact')" class="flex-1 px-6 py-3 border border-kotlis-dark text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:bg-kotlis-fill hover:text-white transition">
                                     Fill the Contact Form
@@ -2059,7 +2059,7 @@
                         <h4 class="font-serif font-bold text-2xl text-kotlis-dark">Not Sure What You Need Yet?</h4>
                         <p class="text-xs text-kotlis-subtle max-w-xl mx-auto">That's fine — most projects start as a conversation. Tell us roughly what you're building and we'll help scope it, free of charge.</p>
                         <button onclick="switchPage('contact')" class="px-8 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">
-                            Request Free Audit
+                            Get Free Audit
                         </button>
                     </div>
                 </div>
@@ -2204,7 +2204,7 @@
                 <div id="itModalSteps" class="space-y-4"></div>
                 <div class="flex flex-col sm:flex-row gap-3 mt-6">
                     <a id="itModalWhatsapp" href="https://wa.me/918126666331?text=SERVICE%20INQUIRY" target="_blank" onclick="if(typeof fbq==='function')fbq('track','Contact')" class="flex-1 text-center px-5 py-3 bg-emerald-500 text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition">
-                        <i class="fa-brands fa-whatsapp mr-1"></i> Chat Now
+                        <i class="fa-brands fa-whatsapp mr-1"></i> Chat on WhatsApp
                     </a>
                     <button onclick="closeITModal(); switchPage('contact');" class="modal-accent-border-btn flex-1 px-5 py-3 border text-xs font-bold uppercase tracking-widest transition">
                         Book This Service
