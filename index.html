@@ -70,14 +70,18 @@
          stylesheet — icons just pop in slightly after text/layout. -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-    <!-- GSAP + ScrollTrigger for scroll-linked motion — deferred since
-         animations aren't needed for first paint. The main inline script
-         below (which calls gsap.registerPlugin) is deferred too, so deferred
-         scripts still execute in document order: GSAP, then ScrollTrigger,
-         then the inline script — same order as before, just off the
-         render-blocking path. -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+    <!-- GSAP + ScrollTrigger for scroll-linked motion. These were briefly
+         marked defer to get them off the render-blocking path, paired with
+         defer on the inline script below (which calls gsap.registerPlugin)
+         so document order would be preserved. In production that broke:
+         defer on an inline script (no src) isn't reliably honored, so the
+         inline script's own `DOMContentLoaded` listener sometimes attached
+         after that event had already fired — silently skipping the entire
+         init block (custom cursor, hero entrance, theme color, scroll
+         reveals all never ran). Back to synchronous loading; correctness
+         over the small LCP gain. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <!-- Tailwind's theme (kotlis.* color tokens, font families) now lives in
          .build/tailwind.config.js, the source of truth for tailwind-build.css. -->
     <style>
@@ -2227,9 +2231,8 @@
         </button>
     </div>
 
-    <!-- Interactive Logic Script — deferred to stay in document order with
-         the deferred GSAP scripts above (this calls gsap.registerPlugin). -->
-    <script defer>
+    <!-- Interactive Logic Script -->
+    <script>
         // Show the floating CTA once the visitor has scrolled past the hero,
         // and hide it again near the footer so it never covers the contact form.
         (function initFloatingCta() {
