@@ -1998,11 +1998,6 @@
                                 </div>
                             </div>
 
-                            <div>
-                                <label for="quoteBrief" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Anything Else We Should Know? (optional)</label>
-                                <textarea id="quoteBrief" rows="3" class="w-full p-3 border border-kotlis-border bg-kotlis-card text-xs text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="Rough timeline, budget range, or anything specific about the project..."></textarea>
-                            </div>
-
                             <div class="pt-6 border-t border-kotlis-border flex flex-col sm:flex-row gap-3">
                                 <button onclick="getCustomQuote()" class="flex-1 px-6 py-3 bg-emerald-500 text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition">
                                     <i class="fa-brands fa-whatsapp mr-1"></i> Chat on WhatsApp
@@ -2098,7 +2093,9 @@
                             </div>
                         </div>
 
-                        <!-- Replace YOUR_FORM_ID below with your real Formspree form id (formspree.io) -->
+                        <!-- Only 2 required fields: Name + WhatsApp number. Service is optional.
+                             Replace YOUR_FORM_ID below with a real Formspree form id (formspree.io)
+                             to also get a copy of every submission by email. -->
                         <form id="ativakContactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="handleFormSubmit(event)" class="space-y-6">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
@@ -2106,40 +2103,33 @@
                                     <input id="contactName" name="name" type="text" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="John Doe">
                                 </div>
                                 <div>
-                                    <label for="contactEmail" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Email Address</label>
-                                    <input id="contactEmail" name="email" type="email" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="john@company.com">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div>
-                                    <label for="contactService" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Primary Service Needed</label>
-                                    <select id="contactService" name="service" class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition">
-                                        <option>Flutter Mobile App Development</option>
-                                        <option>Meta & Google Ads Strategy</option>
-                                        <option>SEO & AI Search Indexing</option>
-                                        <option>Zero-Downtime Migration</option>
-                                        <option>Custom Web Application</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="contactUrl" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Website / Project URL</label>
-                                    <input id="contactUrl" name="project_url" type="text" class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="https://example.com">
+                                    <label for="contactWhatsapp" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">WhatsApp Number</label>
+                                    <input id="contactWhatsapp" name="whatsapp" type="tel" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="+91 98765 43210">
                                 </div>
                             </div>
 
                             <div>
-                                <label for="contactBrief" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Project Brief & Details</label>
-                                <textarea id="contactBrief" name="brief" rows="4" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="Tell us about your app features, paid budget, or hosting server setup..."></textarea>
+                                <label for="contactService" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Service Needed (optional)</label>
+                                <select id="contactService" name="service" class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition">
+                                    <option value="">Not sure yet</option>
+                                    <option>Flutter Mobile App Development</option>
+                                    <option>Meta & Google Ads Strategy</option>
+                                    <option>SEO & AI Search Indexing</option>
+                                    <option>Zero-Downtime Migration</option>
+                                    <option>Custom Web Application</option>
+                                </select>
                             </div>
 
                             <button id="contactSubmitBtn" type="submit" class="w-full py-4 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition duration-300">
-                                Send Audit Request
+                                Get Free Audit
                             </button>
                         </form>
 
                         <div id="contactSuccess" class="hidden mt-6 p-4 border border-kotlis-gold bg-kotlis-gold/10 text-kotlis-dark text-center text-xs font-bold uppercase tracking-wider">
-                            <i class="fa-solid fa-check mr-2 text-kotlis-gold"></i> Request received! A consultant will reach out within 24 hours.
+                            <i class="fa-solid fa-check mr-2 text-kotlis-gold"></i> Opening WhatsApp…
+                        </div>
+                        <div id="contactFallback" class="hidden mt-6 p-4 border border-kotlis-gold bg-kotlis-gold/10 text-kotlis-dark text-center text-xs font-bold uppercase tracking-wider">
+                            Popup blocked — <a id="contactFallbackLink" href="#" target="_blank" class="underline">tap here to open WhatsApp</a>.
                         </div>
                         <div id="contactError" class="hidden mt-6 p-4 border border-red-400 bg-red-50 text-red-700 text-center text-xs font-bold uppercase tracking-wider">
                             <i class="fa-solid fa-triangle-exclamation mr-2"></i> Something went wrong. Please email us directly or try again.
@@ -2731,28 +2721,25 @@
         // direct conversation, never a fixed number on the page.
         function getCustomQuote() {
             const services = Array.from(document.querySelectorAll('.quote-service-check:checked')).map(c => c.value);
-            const brief = document.getElementById('quoteBrief').value.trim();
             let text = 'Hi! I\'d like a quote for: ' + (services.length ? services.join(', ') : 'a project (not sure yet which service fits)');
-            if (brief) text += '. Details: ' + brief;
             if (typeof fbq === 'function') fbq('track', 'Contact');
             window.open('https://wa.me/918126666331?text=' + encodeURIComponent(text), '_blank');
         }
 
-        // Hands off to /thank-you on a successful submit. The Lead pixel event
-        // fires on that page's own load (not here) — firing it in this handler
-        // raced the WhatsApp-redirect navigation and the call never completed,
-        // so no Lead ever reached Meta. Landing on /thank-you is itself proof
-        // the form was submitted.
-        function trackLeadAndRedirect() {
-            window.location.href = '/thank-you';
-        }
-
-        // Contact form submit — posts to the Formspree endpoint set in the form's action attribute
-        async function handleFormSubmit(e) {
+        // Contact form submit: fires the Lead pixel event right here (not on
+        // /thank-you's load) so it's tied to an actual successful submit, not
+        // just a page view. A unique eventID is attached so Meta de-dupes it
+        // against any browser + Conversions API copy of the same event,
+        // and firing it before window.open (rather than after, or relying on
+        // a post-redirect page load) means it isn't racing a navigation that
+        // could tear the page down before the beacon goes out.
+        function handleFormSubmit(e) {
             e.preventDefault();
             const form = document.getElementById('ativakContactForm');
             const submitBtn = document.getElementById('contactSubmitBtn');
             const successMsg = document.getElementById('contactSuccess');
+            const fallbackMsg = document.getElementById('contactFallback');
+            const fallbackLink = document.getElementById('contactFallbackLink');
             const errorMsg = document.getElementById('contactError');
 
             if (submitBtn.disabled) return;
@@ -2762,40 +2749,49 @@
             }
 
             successMsg.classList.add('hidden');
+            fallbackMsg.classList.add('hidden');
             errorMsg.classList.add('hidden');
             submitBtn.disabled = true;
-            submitBtn.innerText = 'Sending...';
+            submitBtn.innerText = 'Opening WhatsApp…';
 
-            // The Formspree endpoint still has a placeholder ID until it's configured
-            // with a real form — route to WhatsApp instead of silently failing.
-            if (form.action.includes('YOUR_FORM_ID')) {
-                const data = new FormData(form);
-                const summary = `New audit request%0A*Name:* ${encodeURIComponent(data.get('name') || '')}%0A*Email:* ${encodeURIComponent(data.get('email') || '')}%0A*Service:* ${encodeURIComponent(data.get('service') || '')}%0A*URL:* ${encodeURIComponent(data.get('project_url') || '')}%0A*Brief:* ${encodeURIComponent(data.get('brief') || '')}`;
-                window.open(`https://wa.me/918126666331?text=${summary}`, '_blank');
-                form.reset();
-                trackLeadAndRedirect();
-                return;
+            const data = new FormData(form);
+            const name = (data.get('name') || '').trim();
+            const whatsapp = (data.get('whatsapp') || '').trim();
+            const service = (data.get('service') || '').trim();
+
+            const eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+            if (typeof fbq === 'function') {
+                fbq('track', 'Lead', {
+                    content_name: 'Free Audit - Meta Ads, SEO & More',
+                    content_category: 'Digital Marketing'
+                }, { eventID: eventId });
             }
 
-            try {
-                const response = await fetch(form.action, {
+            // Background copy of the submission (Formspree → email/sheet), fire-and-forget —
+            // never blocks the WhatsApp handoff below, even if the endpoint is slow or down.
+            if (!form.action.includes('YOUR_FORM_ID')) {
+                fetch(form.action, {
                     method: 'POST',
-                    body: new FormData(form),
+                    body: data,
                     headers: { 'Accept': 'application/json' }
-                });
+                }).catch(() => {});
+            }
 
-                if (response.ok) {
-                    form.reset();
-                    trackLeadAndRedirect();
-                } else {
-                    errorMsg.classList.remove('hidden');
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = 'Send Audit Request';
-                }
-            } catch (err) {
-                errorMsg.classList.remove('hidden');
+            let waText = `Hi! I'd like a free audit.\n*Name:* ${name}\n*WhatsApp:* ${whatsapp}`;
+            if (service) waText += `\n*Service:* ${service}`;
+            const waUrl = 'https://wa.me/918126666331?text=' + encodeURIComponent(waText);
+
+            const waWindow = window.open(waUrl, '_blank');
+            form.reset();
+
+            if (!waWindow || waWindow.closed) {
+                fallbackLink.href = waUrl;
+                fallbackMsg.classList.remove('hidden');
                 submitBtn.disabled = false;
-                submitBtn.innerText = 'Send Audit Request';
+                submitBtn.innerText = 'Get Free Audit';
+            } else {
+                successMsg.classList.remove('hidden');
+                setTimeout(() => { window.location.href = '/thank-you'; }, 600);
             }
         }
 

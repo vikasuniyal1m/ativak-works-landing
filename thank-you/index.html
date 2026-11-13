@@ -13,14 +13,10 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1904427194297712');
     fbq('track', 'PageView');
-    // Lead fires here, not on the form's submit handler — the WhatsApp
-    // redirect on submit was tearing the page down before the submit-time
-    // fbq call could complete, so no Lead ever reached Meta. Landing on
-    // this page is itself proof the form was submitted.
-    fbq('track', 'Lead',
-        { content_name: 'Free Audit - Meta Ads, SEO & More', content_category: 'Digital Marketing' },
-        { eventID: 'lead_thankyou_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8) }
-    );
+    // Lead is fired by the contact form's own submit handler (index.html),
+    // tied to an actual successful submit with a unique eventID. Landing on
+    // this page is a side effect of that submit, not a separate conversion —
+    // firing Lead again here would double-count the same person.
     </script>
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1904427194297712&ev=PageView&noscript=1"
@@ -44,8 +40,8 @@
         <div class="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-6">
             <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
         </div>
-        <h1 class="font-serif font-bold text-2xl mb-3">Thanks! Hum 12 ghanton mein aapse WhatsApp par contact karenge.</h1>
-        <p class="text-gray-500 mb-8">Aapka audit request mil gaya hai. Hamari team jald hi aapse sampark karegi.</p>
+        <h1 class="font-serif font-bold text-2xl mb-3">Aapki request mil gayi.</h1>
+        <p class="text-gray-500 mb-8">Hum WhatsApp par reply karenge — 24 ghanton ke andar.</p>
         <a href="https://wa.me/918126666331" target="_blank" class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 rounded-full transition">
             <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
         </a>
