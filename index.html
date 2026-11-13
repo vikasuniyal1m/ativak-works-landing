@@ -56,9 +56,14 @@
          stylesheet — icons just pop in slightly after text/layout. -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-    <!-- GSAP + ScrollTrigger for scroll-linked motion -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- GSAP + ScrollTrigger for scroll-linked motion — deferred since
+         animations aren't needed for first paint. The main inline script
+         below (which calls gsap.registerPlugin) is deferred too, so deferred
+         scripts still execute in document order: GSAP, then ScrollTrigger,
+         then the inline script — same order as before, just off the
+         render-blocking path. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -2229,8 +2234,9 @@
         </button>
     </div>
 
-    <!-- Interactive Logic Script -->
-    <script>
+    <!-- Interactive Logic Script — deferred to stay in document order with
+         the deferred GSAP scripts above (this calls gsap.registerPlugin). -->
+    <script defer>
         // Show the floating CTA once the visitor has scrolled past the hero,
         // and hide it again near the footer so it never covers the contact form.
         (function initFloatingCta() {
