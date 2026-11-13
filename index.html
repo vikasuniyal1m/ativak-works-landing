@@ -49,8 +49,15 @@
     <link rel="preconnect" href="https://connect.facebook.net">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Playfair Display for Luxury Serif Accents & Inter for UI -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;0,800;0,900;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Inter (body/UI text) swaps in once loaded — it's small, low-shift-impact
+         copy text, so a brief swap is an acceptable trade for not blocking render. -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Poppins (headings, incl. the LCP h1) uses display=optional instead of
+         swap: the Lighthouse CLS report flagged the hero h1 as the layout-shift
+         culprit specifically because Poppins was swapping in late and resizing
+         it. optional means the browser either has it in time for first paint or
+         sticks with the fallback for this load — no later swap, no shift. -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;0,800;0,900;1,600&display=optional" rel="stylesheet">
     <!-- FontAwesome Icons: not needed for first paint, so it's loaded with the
          print-media swap trick instead of blocking render like a normal
          stylesheet — icons just pop in slightly after text/layout. -->
@@ -3424,24 +3431,43 @@
             setTimeout(() => tick(0), 1400);
         }
 
+        // Schedules fn for the browser's next idle slot (falls back to a
+        // macrotask when requestIdleCallback isn't available, e.g. Safari).
+        function runWhenIdle(fn) {
+            if ('requestIdleCallback' in window) requestIdleCallback(fn, { timeout: 1500 });
+            else setTimeout(fn, 1);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            // Only what the visible hero needs right away runs synchronously here.
+            // Everything else (below-the-fold motion, cursor/canvas decoration,
+            // scroll-reveal setup) used to run in this same tick as one long task,
+            // which is exactly what Lighthouse's Total Blocking Time penalizes —
+            // splitting it across idle callbacks breaks it into smaller chunks the
+            // main thread can interleave with painting/input instead of one burst.
             applyTheme(108); // Vangard — bold yellow + magenta
             initHeroEntrance();
             initCountUp();
-            initTiltCards(document.getElementById('page-home'));
             initHeroParallax();
-            // Only the already-visible home page gets scroll-reveal tweens at load time —
-            // ScrollTrigger can't measure positions inside a display:none page, which left
-            // hidden pages' text/buttons stuck invisible. Each inner page gets its reveal
-            // tweens lazily, the first time it's actually switched to (see afterPageSwitch).
-            initRevealAnimations(document.getElementById('page-home'));
-            initCustomCursor();
-            initMagneticButtons();
-            initTechGrid('hero3dCanvas', { nodeCount: 34, maxLinkDist: 150 });
-            initHeroBlob();
-            initCursorWater();
-            initAllDeployTerminals();
-            initBuildStoryScroll();
+
+            runWhenIdle(() => {
+                initTiltCards(document.getElementById('page-home'));
+                // Only the already-visible home page gets scroll-reveal tweens at load time —
+                // ScrollTrigger can't measure positions inside a display:none page, which left
+                // hidden pages' text/buttons stuck invisible. Each inner page gets its reveal
+                // tweens lazily, the first time it's actually switched to (see afterPageSwitch).
+                initRevealAnimations(document.getElementById('page-home'));
+                initCustomCursor();
+                initMagneticButtons();
+            });
+
+            runWhenIdle(() => {
+                initTechGrid('hero3dCanvas', { nodeCount: 34, maxLinkDist: 150 });
+                initHeroBlob();
+                initCursorWater();
+                initAllDeployTerminals();
+                initBuildStoryScroll();
+            });
         });
 
         // Scroll-scrubbed "Watch It Get Built" sequence on the home page:
