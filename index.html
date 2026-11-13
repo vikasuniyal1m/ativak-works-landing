@@ -3431,43 +3431,24 @@
             setTimeout(() => tick(0), 1400);
         }
 
-        // Schedules fn for the browser's next idle slot (falls back to a
-        // macrotask when requestIdleCallback isn't available, e.g. Safari).
-        function runWhenIdle(fn) {
-            if ('requestIdleCallback' in window) requestIdleCallback(fn, { timeout: 1500 });
-            else setTimeout(fn, 1);
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
-            // Only what the visible hero needs right away runs synchronously here.
-            // Everything else (below-the-fold motion, cursor/canvas decoration,
-            // scroll-reveal setup) used to run in this same tick as one long task,
-            // which is exactly what Lighthouse's Total Blocking Time penalizes —
-            // splitting it across idle callbacks breaks it into smaller chunks the
-            // main thread can interleave with painting/input instead of one burst.
             applyTheme(108); // Vangard — bold yellow + magenta
             initHeroEntrance();
             initCountUp();
+            initTiltCards(document.getElementById('page-home'));
             initHeroParallax();
-
-            runWhenIdle(() => {
-                initTiltCards(document.getElementById('page-home'));
-                // Only the already-visible home page gets scroll-reveal tweens at load time —
-                // ScrollTrigger can't measure positions inside a display:none page, which left
-                // hidden pages' text/buttons stuck invisible. Each inner page gets its reveal
-                // tweens lazily, the first time it's actually switched to (see afterPageSwitch).
-                initRevealAnimations(document.getElementById('page-home'));
-                initCustomCursor();
-                initMagneticButtons();
-            });
-
-            runWhenIdle(() => {
-                initTechGrid('hero3dCanvas', { nodeCount: 34, maxLinkDist: 150 });
-                initHeroBlob();
-                initCursorWater();
-                initAllDeployTerminals();
-                initBuildStoryScroll();
-            });
+            // Only the already-visible home page gets scroll-reveal tweens at load time —
+            // ScrollTrigger can't measure positions inside a display:none page, which left
+            // hidden pages' text/buttons stuck invisible. Each inner page gets its reveal
+            // tweens lazily, the first time it's actually switched to (see afterPageSwitch).
+            initRevealAnimations(document.getElementById('page-home'));
+            initCustomCursor();
+            initMagneticButtons();
+            initTechGrid('hero3dCanvas', { nodeCount: 34, maxLinkDist: 150 });
+            initHeroBlob();
+            initCursorWater();
+            initAllDeployTerminals();
+            initBuildStoryScroll();
         });
 
         // Scroll-scrubbed "Watch It Get Built" sequence on the home page:
