@@ -2153,9 +2153,9 @@
                         </div>
 
                         <!-- Only 2 required fields: Name + WhatsApp number. Service is optional.
-                             Replace YOUR_FORM_ID below with a real Formspree form id (formspree.io)
-                             to also get a copy of every submission by email. -->
-                        <form id="ativakContactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                             Every submission logs to Google Sheets (LEAD_SHEET_URL below) — the
+                             single source of truth for leads, so there's nowhere else to check. -->
+                        <form id="ativakContactForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
                                     <label for="contactName" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Your Name</label>
@@ -2872,16 +2872,6 @@
                 headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify({ name, whatsapp, service, utm_source: utm.utm_source, utm_campaign: utm.utm_campaign })
             }).catch(() => {});
-
-            // Background copy of the submission (Formspree → email/sheet), fire-and-forget —
-            // never blocks the WhatsApp handoff below, even if the endpoint is slow or down.
-            if (!form.action.includes('YOUR_FORM_ID')) {
-                fetch(form.action, {
-                    method: 'POST',
-                    body: data,
-                    headers: { 'Accept': 'application/json' }
-                }).catch(() => {});
-            }
 
             let waText = `Hi! I'd like a free audit.\n*Name:* ${name}\n*WhatsApp:* ${whatsapp}`;
             if (service) waText += `\n*Service:* ${service}`;
