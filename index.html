@@ -42,13 +42,20 @@
     <!-- Preconnect to the third-party origins the page depends on, so the
          connection (DNS + TLS) is already warm when each request actually
          fires — the biggest single lever on slow mobile networks. -->
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://connect.facebook.net">
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind, prebuilt + purged at deploy time (tailwind-build.css) instead
+         of the Play CDN script. The CDN script has to download, scan the whole
+         DOM, and inject a <style> tag at runtime before any of its classes
+         apply — on this page that was both the single biggest render-blocking
+         JS cost (Tailwind's own JS execution was ~500-600ms of main-thread
+         time) and the CLS source (the page briefly rendered unstyled, then
+         snapped into its real layout once the CDN script finished). A static
+         stylesheet applies with the rest of the CSS, before first paint, like
+         any other stylesheet — no JS execution, no snap-in. -->
+    <link rel="stylesheet" href="/tailwind-build.css">
     <!-- Inter (body/UI text) swaps in once loaded — it's small, low-shift-impact
          copy text, so a brief swap is an acceptable trade for not blocking render. -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -71,31 +78,8 @@
          render-blocking path. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Poppins', 'sans-serif'],
-                    },
-                    colors: {
-                        kotlis: {
-                            gold: 'var(--kotlis-gold)',
-                            goldHover: 'var(--kotlis-gold-hover)',
-                            glow: 'var(--kotlis-glow)',
-                            bg: 'var(--kotlis-bg)',
-                            card: 'rgb(var(--kotlis-card-rgb) / <alpha-value>)',
-                            dark: 'var(--kotlis-dark)',
-                            subtle: 'var(--kotlis-subtle)',
-                            border: 'var(--kotlis-border)',
-                            fill: 'var(--kotlis-fill)'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Tailwind's theme (kotlis.* color tokens, font families) now lives in
+         .build/tailwind.config.js, the source of truth for tailwind-build.css. -->
     <style>
         /* Accent color lives here as CSS variables — change ACTIVE_THEME in the
            script below (1, 2, 3...) and every gold-tinted element updates together. */
@@ -103,10 +87,12 @@
             --kotlis-gold: #c5a47e;
             --kotlis-gold-hover: #b08b5c;
             --kotlis-gold-rgb: 197, 164, 126;
+            --kotlis-gold-rgb-sp: 197 164 126;
             --kotlis-glow: #34d399;
             --kotlis-bg: #f7fbf9;
             --kotlis-bg-alt: #eaf4f0;
             --kotlis-dark: #111111;
+            --kotlis-dark-rgb: 17 17 17;
             --kotlis-subtle: #666666;
             --kotlis-border: #e5e5e5;
             --kotlis-card-rgb: 255 255 255;
@@ -748,7 +734,7 @@
                                     <span class="ml-2 text-[10px] text-kotlis-subtle font-mono truncate">first-aide.app — building</span>
                                 </div>
                                 <div class="relative bg-white" style="aspect-ratio: 832 / 406;">
-                                    <img src="images/portfolio/first-aide.webp" alt="FIRST AIDE app screenshot" class="w-full h-full object-cover">
+                                    <img src="images/portfolio/first-aide.webp" alt="FIRST AIDE app screenshot" width="764" height="372" fetchpriority="high" class="w-full h-full object-cover">
                                     <!-- Solid mask shrinking from the right reveals the full,
                                          uncropped image left-to-right as the visitor scrolls. -->
                                     <div id="storyAppImageMask" class="absolute inset-y-0 right-0 bg-kotlis-card" style="width: 100%;"></div>
@@ -2361,6 +2347,7 @@
             const root = document.documentElement.style;
             root.setProperty('--kotlis-gold', preset.hex);
             root.setProperty('--kotlis-gold-rgb', hexToRgbTriplet(preset.hex));
+            root.setProperty('--kotlis-gold-rgb-sp', hexToRgbTriplet(preset.hex).replace(/,/g, ''));
             root.setProperty('--kotlis-gold-hover', preset.hover);
             root.setProperty('--kotlis-glow', preset.glow);
             root.setProperty('--kotlis-bg', preset.bg);
