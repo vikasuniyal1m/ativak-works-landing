@@ -2241,16 +2241,27 @@
 
     <!-- Interactive Logic Script -->
     <script>
+        // Google Apps Script web app that appends each lead to a Google Sheet.
+        const LEAD_SHEET_URL = 'https://script.google.com/macros/s/AKfycbw4lc2MA6dCsZkg6C6LxxPIifEM9dBfe1Bry-7Ee6vBouVKFY0glUvoUF3HAjziRywVFw/exec';
+
+        // Shared UTM reader — used both to tag this Clarity session with its
+        // traffic source and to log it alongside each lead in the Sheet.
+        function getUtmParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                utm_source: params.get('utm_source') || '',
+                utm_campaign: params.get('utm_campaign') || ''
+            };
+        }
+
         // Tags this Clarity session with its traffic source (utm_source, e.g.
         // "facebook"/"instagram" from a Meta Ads link) so recordings can be
         // filtered down to just ad traffic instead of all visitors.
         (function tagTrafficSource() {
             if (typeof clarity !== 'function') return;
-            const params = new URLSearchParams(window.location.search);
-            const utmSource = params.get('utm_source');
-            const utmCampaign = params.get('utm_campaign');
-            if (utmSource) clarity('set', 'utm_source', utmSource);
-            if (utmCampaign) clarity('set', 'utm_campaign', utmCampaign);
+            const utm = getUtmParams();
+            if (utm.utm_source) clarity('set', 'utm_source', utm.utm_source);
+            if (utm.utm_campaign) clarity('set', 'utm_campaign', utm.utm_campaign);
         })();
 
         // Show the floating CTA once the visitor has scrolled past the hero,
@@ -2812,6 +2823,17 @@
                 }, { eventID: eventId });
             }
             if (typeof clarity === 'function') clarity('event', 'lead_submit');
+
+            // Every submission is logged to a Google Sheet (via Apps Script
+            // web app) so no lead is ever missed even if nobody's watching
+            // WhatsApp right that second — fire-and-forget, never blocks the
+            // WhatsApp handoff below.
+            const utm = getUtmParams();
+            fetch(LEAD_SHEET_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify({ name, whatsapp, service, utm_source: utm.utm_source, utm_campaign: utm.utm_campaign })
+            }).catch(() => {});
 
             // Background copy of the submission (Formspree → email/sheet), fire-and-forget —
             // never blocks the WhatsApp handoff below, even if the endpoint is slow or down.
