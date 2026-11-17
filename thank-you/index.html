@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Public site config must load before the Meta Pixel init below. -->
+    <script src="/config.js"></script>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -11,7 +13,7 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1904427194297712');
+    fbq('init', window.ATIVAK_CONFIG.META_PIXEL_ID);
     fbq('track', 'PageView');
     // Lead is fired by the contact form's own submit handler (index.html),
     // tied to an actual successful submit with a unique eventID. Landing on
@@ -55,12 +57,13 @@
         </div>
         <h1 class="font-serif font-bold text-2xl mb-3">Aapki request mil gayi.</h1>
         <p class="text-gray-500 mb-8">Hum WhatsApp par reply karenge — 24 ghanton ke andar.</p>
-        <a href="https://wa.me/918126666331" target="_blank" class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 rounded-full transition">
+        <a href="https://wa.me/918126666331" target="_blank" onclick="trackWhatsAppClick()" class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 rounded-full transition">
             <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
         </a>
         <div class="mt-8">
             <a href="/" class="text-xs font-bold uppercase tracking-widest text-amber-600 hover:opacity-80">&larr; Back to Home</a>
         </div>
     </div>
+    <script src="/shared.js"></script>
 </body>
 </html>

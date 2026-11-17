@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Public site config must load before the Meta Pixel init below. -->
+    <script src="config.js"></script>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', window.ATIVAK_CONFIG.META_PIXEL_ID);
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none" alt=""
+    src="https://www.facebook.com/tr?id=1904427194297712&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    <script>
+    if (window.ATIVAK_CONFIG && window.ATIVAK_CONFIG.GA4_ID) {
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.ATIVAK_CONFIG.GA4_ID;
+            document.head.appendChild(s);
+        })();
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', window.ATIVAK_CONFIG.GA4_ID);
+    }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Support & Technical Services | Ativak Works</title>
+    <meta name="description" content="Hands-on hardware, network, and security support from Ativak Works — remote or on-site.">
+    <meta name="robots" content="noindex">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="IT Support & Technical Services | Ativak Works">
+    <meta property="og:description" content="Hands-on hardware, network, and security support from Ativak Works — remote or on-site.">
+    <meta property="og:url" content="https://ativak-works-landing.vercel.app/it-support.html">
+    <!-- [ADD REAL: create 1200x630 OG image at images/og-image.png] — file does not exist yet. -->
+    <meta property="og:image" content="https://ativak-works-landing.vercel.app/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="IT Support & Technical Services | Ativak Works">
+    <meta name="twitter:description" content="Hands-on hardware, network, and security support from Ativak Works — remote or on-site.">
+    <meta name="twitter:image" content="https://ativak-works-landing.vercel.app/images/og-image.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --kotlis-dark: #1a1a1a; --kotlis-subtle: #6b6b6b; --kotlis-border: #e5e5e5;
+            --kotlis-bg: #ffffff; --kotlis-bg-alt: #f7f7f5; --kotlis-card: #ffffff;
+            --kotlis-fill: #1a1a1a; --kotlis-glow: #ffffff; --kotlis-gold: #c9a227;
+        }
+        body { font-family: 'Inter', system-ui, sans-serif; color: var(--kotlis-dark); background: var(--kotlis-bg); }
+        .serif-title { font-family: Georgia, 'Times New Roman', serif; }
+        .font-serif { font-family: Georgia, 'Times New Roman', serif; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header (minimal, matches homepage style) -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-kotlis-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center space-x-3 group text-left">
+                <div class="w-10 h-10 bg-kotlis-fill flex items-center justify-center text-white font-serif font-bold text-xl">A</div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-bold tracking-widest uppercase font-serif">Ativak<span style="color:var(--kotlis-gold)">.works</span></span>
+                    <span class="text-[10px] tracking-widest uppercase text-kotlis-subtle hidden sm:block">Code with logic, create with soul.</span>
+                </div>
+            </a>
+            <a href="index.html" class="text-xs font-bold uppercase tracking-widest hover:text-kotlis-gold transition">&larr; Back to Ativak Works</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="py-16 bg-white border-b border-kotlis-border relative overflow-hidden">
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="relative border border-emerald-500/40 bg-gradient-to-b from-[rgba(52,211,153,0.07)] via-transparent to-transparent p-6 sm:p-10 overflow-hidden">
+                    <div class="relative z-10 text-center max-w-3xl mx-auto mb-14 space-y-4">
+                        <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/40 text-emerald-500 text-[10px] font-bold uppercase tracking-widest rounded-full">
+                            Global &amp; Local IT Solutions
+                        </span>
+                        <h1 class="text-3xl sm:text-5xl font-extrabold serif-title">IT Support &amp; Technical Services</h1>
+                        <p class="text-kotlis-subtle text-sm sm:text-base">Hands-on hardware, network, and security support — remote or on-site, for clients anywhere in the world.</p>
+                    </div>
+
+                    <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="bg-[var(--kotlis-bg-alt)] border border-kotlis-border overflow-hidden flex flex-col hover:border-emerald-500 transition duration-300">
+                            <div class="relative h-40 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=800&h=600&q=80&auto=format&fit=crop" alt="Technician repairing a circuit board under a magnifier lamp" width="800" height="600" class="w-full h-full object-cover" loading="lazy">
+                            </div>
+                            <div class="p-6 flex flex-col flex-1">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Hardware &amp; OS</span>
+                                <h3 class="text-lg font-serif font-bold mt-2 mb-3">Remote &amp; On-Site System Installation</h3>
+                                <p class="text-kotlis-subtle text-xs leading-relaxed mb-4 flex-1">Full hardware troubleshooting, fresh OS installs, and complete system diagnostics — handled remotely or by a technician at your desk.</p>
+                                <a href="index.html#contact-form" class="mt-auto text-xs font-bold uppercase tracking-widest hover:text-emerald-500 transition flex items-center"><span>Book Service</span> <i class="fa-solid fa-arrow-right ml-2"></i></a>
+                            </div>
+                        </div>
+                        <div class="bg-[var(--kotlis-bg-alt)] border border-kotlis-border overflow-hidden flex flex-col hover:border-emerald-500 transition duration-300">
+                            <div class="relative h-40 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&q=80&auto=format&fit=crop" alt="Close-up of a computer motherboard during hardware maintenance" width="800" height="600" class="w-full h-full object-cover" loading="lazy">
+                            </div>
+                            <div class="p-6 flex flex-col flex-1">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Performance Tuning</span>
+                                <h3 class="text-lg font-serif font-bold mt-2 mb-3">Windows Updates &amp; Maintenance</h3>
+                                <p class="text-kotlis-subtle text-xs leading-relaxed mb-4 flex-1">Security patch updates, driver installations, disk cleanup, and OS performance tuning to keep every machine running smoothly.</p>
+                                <a href="index.html#contact-form" class="mt-auto text-xs font-bold uppercase tracking-widest hover:text-emerald-500 transition flex items-center"><span>Get Support</span> <i class="fa-solid fa-arrow-right ml-2"></i></a>
+                            </div>
+                        </div>
+                        <div class="bg-[var(--kotlis-bg-alt)] border border-kotlis-border overflow-hidden flex flex-col hover:border-emerald-500 transition duration-300">
+                            <div class="relative h-40 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1616763355548-1b606f439f86?w=800&h=600&q=80&auto=format&fit=crop" alt="Office workstation with monitor, keyboard, and peripheral devices set up" width="800" height="600" class="w-full h-full object-cover" loading="lazy">
+                            </div>
+                            <div class="p-6 flex flex-col flex-1">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Peripheral Setup</span>
+                                <h3 class="text-lg font-serif font-bold mt-2 mb-3">Printer &amp; Peripheral Setup</h3>
+                                <p class="text-kotlis-subtle text-xs leading-relaxed mb-4 flex-1">Wireless network printing, scanner configuration, and seamless device syncing across every workstation in the office.</p>
+                                <a href="index.html#contact-form" class="mt-auto text-xs font-bold uppercase tracking-widest hover:text-emerald-500 transition flex items-center"><span>Book Service</span> <i class="fa-solid fa-arrow-right ml-2"></i></a>
+                            </div>
+                        </div>
+                        <div class="bg-[var(--kotlis-bg-alt)] border border-kotlis-border overflow-hidden flex flex-col hover:border-emerald-500 transition duration-300">
+                            <div class="relative h-40 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&h=600&q=80&auto=format&fit=crop" alt="Grid of IP CCTV security cameras mounted on a wall" width="800" height="600" class="w-full h-full object-cover" loading="lazy">
+                            </div>
+                            <div class="p-6 flex flex-col flex-1">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Physical Security</span>
+                                <h3 class="text-lg font-serif font-bold mt-2 mb-3">CCTV &amp; Physical Security</h3>
+                                <p class="text-kotlis-subtle text-xs leading-relaxed mb-4 flex-1">IP camera installations, DVR/NVR configuration, and local or remote surveillance setup for homes and offices.</p>
+                                <a href="index.html#contact-form" class="mt-auto text-xs font-bold uppercase tracking-widest hover:text-emerald-500 transition flex items-center"><span>Get Support</span> <i class="fa-solid fa-arrow-right ml-2"></i></a>
+                            </div>
+                        </div>
+                        <div class="bg-[var(--kotlis-bg-alt)] border border-kotlis-border overflow-hidden flex flex-col hover:border-emerald-500 transition duration-300">
+                            <div class="relative h-40 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1550439062-609e1531270e?w=800&h=600&q=80&auto=format&fit=crop" alt="Remote IT support desk with multiple monitors, viewed from above" width="800" height="600" class="w-full h-full object-cover" loading="lazy">
+                            </div>
+                            <div class="p-6 flex flex-col flex-1">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Support Desk</span>
+                                <h3 class="text-lg font-serif font-bold mt-2 mb-3">Global &amp; Local IT Support Desk</h3>
+                                <p class="text-kotlis-subtle text-xs leading-relaxed mb-4 flex-1">Dedicated remote desktop support for international clients, plus on-demand local technicians for same-day assistance.</p>
+                                <a href="index.html#contact-form" class="mt-auto text-xs font-bold uppercase tracking-widest hover:text-emerald-500 transition flex items-center"><span>Book Service</span> <i class="fa-solid fa-arrow-right ml-2"></i></a>
+                            </div>
+                        </div>
+                        <div class="bg-[var(--kotlis-bg-alt)] border border-kotlis-border overflow-hidden flex flex-col hover:border-emerald-500 transition duration-300">
+                            <div class="relative h-40 overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=600&q=80&auto=format&fit=crop" alt="Server rack with structured network cabling" width="800" height="600" class="w-full h-full object-cover" loading="lazy">
+                            </div>
+                            <div class="p-6 flex flex-col flex-1">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Connectivity</span>
+                                <h3 class="text-lg font-serif font-bold mt-2 mb-3">Network &amp; Wi-Fi Infrastructure</h3>
+                                <p class="text-kotlis-subtle text-xs leading-relaxed mb-4 flex-1">Router and access-point placement, structured cabling, and Wi-Fi coverage tuning for reliable office-wide connectivity.</p>
+                                <a href="index.html#contact-form" class="mt-auto text-xs font-bold uppercase tracking-widest hover:text-emerald-500 transition flex items-center"><span>Get Support</span> <i class="fa-solid fa-arrow-right ml-2"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative z-10 mt-14 bg-white border border-emerald-500/40 p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+                        <div class="text-center sm:text-left">
+                            <h4 class="font-serif font-bold text-xl">Need a Technician Right Now?</h4>
+                            <p class="text-xs text-kotlis-subtle mt-1 max-w-md">Tell us the issue — remote diagnosis starts within minutes, on-site dispatch scheduled same day where available.</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3 shrink-0 w-full sm:w-auto">
+                            <a href="https://wa.me/918126666331?text=IT%20SUPPORT%20REQUEST" target="_blank" onclick="trackWhatsAppClick()" class="px-6 py-3 bg-emerald-500 text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition text-center">
+                                <i class="fa-brands fa-whatsapp mr-1"></i> Get Support Now
+                            </a>
+                            <a href="index.html#contact-form" class="px-6 py-3 border border-emerald-500 text-emerald-500 text-xs font-bold uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition text-center">
+                                Book a Service
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cloud Migration -->
+                <div class="mt-20 pt-16 border-t border-kotlis-border space-y-12">
+                    <div class="text-center max-w-3xl mx-auto space-y-3">
+                        <span class="text-xs font-bold uppercase tracking-widest" style="color:var(--kotlis-gold)">Cloud Infrastructure</span>
+                        <h2 class="text-3xl sm:text-5xl font-extrabold serif-title">Cloud Migration & Infrastructure</h2>
+                        <p class="text-kotlis-subtle text-sm">How Ativak Works plans server, app, and domain transitions to minimize downtime and protect your search rankings.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="bg-[var(--kotlis-bg-alt)] border border-kotlis-border p-8 relative">
+                            <div class="text-4xl font-serif font-bold mb-4" style="color:var(--kotlis-gold)">01</div>
+                            <h3 class="text-xl font-bold font-serif mb-2">Audit & Mirror Staging</h3>
+                            <p class="text-xs text-kotlis-subtle leading-relaxed">We extract full database dumps, media assets, and API routes into an isolated sandboxed staging server to verify fidelity before touching anything live.</p>
+                        </div>
+                        <div class="bg-[var(--kotlis-bg-alt)] border border-kotlis-border p-8 relative">
+                            <div class="text-4xl font-serif font-bold mb-4" style="color:var(--kotlis-gold)">02</div>
+                            <h3 class="text-xl font-bold font-serif mb-2">Dual Sync & SSL Prep</h3>
+                            <p class="text-xs text-kotlis-subtle leading-relaxed">Database sync keeps incoming web traffic active while we prepare the new hosting infrastructure and SSL certificates.</p>
+                        </div>
+                        <div class="bg-[var(--kotlis-bg-alt)] border border-kotlis-border p-8 relative">
+                            <div class="text-4xl font-serif font-bold mb-4" style="color:var(--kotlis-gold)">03</div>
+                            <h3 class="text-xl font-bold font-serif mb-2">Planned DNS Cutover</h3>
+                            <p class="text-xs text-kotlis-subtle leading-relaxed">Low-TTL DNS propagation switches live domain routing on a scheduled window, with a rollback plan ready — we don't promise zero downtime, we plan to minimize it.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-[var(--kotlis-bg-alt)] border border-kotlis-border p-8 text-center space-y-4 max-w-4xl mx-auto">
+                        <h4 class="font-serif font-bold text-2xl">Planning a Server or App Migration?</h4>
+                        <p class="text-xs text-kotlis-subtle max-w-xl mx-auto">Speak directly with our technical team for a free migration risk review.</p>
+                        <a href="index.html#contact-form" class="inline-block px-8 py-3 bg-black text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition">
+                            Get a Free Review
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-black text-white py-12 border-t border-kotlis-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/70">
+            <span>&copy; 2026 Ativak Works. All rights reserved.</span>
+            <div class="flex items-center gap-6">
+                <a href="index.html" class="hover:text-white transition">Back to Ativak Works</a>
+                <a href="privacy-policy.html" class="hover:text-white transition">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+    <script src="shared.js"></script>
+</body>
+</html>

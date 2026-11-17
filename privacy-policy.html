@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Public site config must load before the Meta Pixel init below. -->
+    <script src="config.js"></script>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -11,7 +13,7 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1904427194297712');
+    fbq('init', window.ATIVAK_CONFIG.META_PIXEL_ID);
     fbq('track', 'PageView');
     </script>
     <noscript><img height="1" width="1" style="display:none"
@@ -22,6 +24,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy | Ativak Works</title>
     <meta name="description" content="Privacy Policy for Ativak Works Studio — how we collect, use, and protect your personal information.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Privacy Policy | Ativak Works">
+    <meta property="og:description" content="Privacy Policy for Ativak Works Studio — how we collect, use, and protect your personal information.">
+    <meta property="og:url" content="https://ativak-works-landing.vercel.app/privacy-policy.html">
+    <!-- [ADD REAL: create 1200x630 OG image at images/og-image.png] — file does not exist yet. -->
+    <meta property="og:image" content="https://ativak-works-landing.vercel.app/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Privacy Policy | Ativak Works">
+    <meta name="twitter:description" content="Privacy Policy for Ativak Works Studio — how we collect, use, and protect your personal information.">
+    <meta name="twitter:image" content="https://ativak-works-landing.vercel.app/images/og-image.png">
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="/tailwind-build.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;0,800;0,900;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -57,7 +69,12 @@
             <li>Cookies and similar technologies, as described in Section 5.</li>
         </ul>
         <p class="font-semibold mt-4 mb-1">c) Advertising and measurement data</p>
-        <p class="mb-4">Our Meta Pixel and related tools record actions you take on the Website, such as viewing a page, clicking a button, or submitting a form. This helps us measure and improve our Meta and Google advertising.</p>
+        <p class="mb-4">Our Meta Pixel and related tools record actions you take on the Website, such as viewing a page, clicking a button, or submitting a form. This helps us measure and improve our Meta and Google advertising. Specifically, we use:</p>
+        <ul class="list-disc pl-6 space-y-1 mb-4">
+            <li><strong>Meta Pixel and Meta Conversions API:</strong> when you submit our lead form, we send Meta a record of that event — your name, email and WhatsApp number are one-way hashed (never sent in readable form) before leaving our server, together with your approximate IP address and browser type — so Meta can match it to the ad that brought you here.</li>
+            <li><strong>Google Analytics 4 (GA4):</strong> once enabled, GA4 records page views and the same "lead submitted" / "WhatsApp clicked" events described above, to help us understand which pages and campaigns work.</li>
+            <li><strong>Microsoft Clarity:</strong> records anonymised session recordings and heatmaps of how visitors use the Website, to help us find and fix confusing pages.</li>
+        </ul>
 
         <h2 class="font-serif font-bold text-xl mt-10 mb-3">2. How We Use Your Information</h2>
         <ul class="list-disc pl-6 space-y-1 mb-4">
@@ -87,8 +104,8 @@
         <p class="mb-3">We use the following:</p>
         <ul class="list-disc pl-6 space-y-1 mb-4">
             <li><strong>Essential cookies:</strong> needed for the Website to function.</li>
-            <li><strong>Analytics cookies:</strong> help us understand how visitors use the Website.</li>
-            <li><strong>Advertising cookies and pixels:</strong> including the Meta Pixel, which helps us measure ad performance and reach people who may be interested in our services.</li>
+            <li><strong>Analytics cookies:</strong> help us understand how visitors use the Website, including Google Analytics 4 (GA4) and Microsoft Clarity session recordings/heatmaps.</li>
+            <li><strong>Advertising cookies and pixels:</strong> including the Meta Pixel and server-side Meta Conversions API, which help us measure ad performance and reach people who may be interested in our services.</li>
         </ul>
         <p class="mb-4">You can control cookies through your browser settings. Blocking some cookies may affect how the Website works.</p>
 
@@ -119,7 +136,7 @@
         <h2 class="font-serif font-bold text-xl mt-10 mb-3">11. Contact Us</h2>
         <p class="mb-1">Ativak Works Studio</p>
         <p class="mb-1">Grievance Officer: VIKAS UNIYAL</p>
-        <p class="mb-1">Email: VIKASUNIYAL1M@GMAIL.COM</p>
+        <p class="mb-1">Email: [ADD REAL: email]</p>
         <p class="mb-1">WhatsApp: <a href="https://wa.me/918126666331" class="text-amber-600 underline">+91 8126666331</a></p>
         <p class="mb-8">Address: Chandigarh, India</p>
 

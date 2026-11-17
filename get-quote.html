@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Public site config must load before the Meta Pixel / GA4 init below,
+         since both read their IDs from window.ATIVAK_CONFIG. -->
+    <script src="config.js"></script>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', window.ATIVAK_CONFIG.META_PIXEL_ID);
+    fbq('track', 'PageView');
+    fbq('track', 'ViewContent');
+    </script>
+    <noscript><img height="1" width="1" style="display:none" alt=""
+    src="https://www.facebook.com/tr?id=1904427194297712&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    <!-- GA4 (gtag.js) — only loads/fires once a real Measurement ID exists
+         in window.ATIVAK_CONFIG.GA4_ID (config.js); currently empty, so this
+         is a no-op. -->
+    <script>
+    if (window.ATIVAK_CONFIG && window.ATIVAK_CONFIG.GA4_ID) {
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.ATIVAK_CONFIG.GA4_ID;
+            document.head.appendChild(s);
+        })();
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', window.ATIVAK_CONFIG.GA4_ID);
+    }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get a Free Project Blueprint | Ativak Works</title>
+    <meta name="description" content="Tell us what you're building — we'll scope it and get back to you within 24 hours. Flutter apps, websites, e-commerce stores, and the ads that bring customers.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Get a Free Project Blueprint | Ativak Works">
+    <meta property="og:description" content="Tell us what you're building — we'll scope it and get back to you within 24 hours.">
+    <meta property="og:url" content="https://ativak-works-landing.vercel.app/get-quote.html">
+    <!-- [ADD REAL: create 1200x630 OG image at images/og-image.png] — file does not exist yet. -->
+    <meta property="og:image" content="https://ativak-works-landing.vercel.app/images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Get a Free Project Blueprint | Ativak Works">
+    <meta name="twitter:description" content="Tell us what you're building — we'll scope it and get back to you within 24 hours.">
+    <meta name="twitter:image" content="https://ativak-works-landing.vercel.app/images/og-image.png">
+    <link rel="icon" href="data:,">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <!-- Reuses the same prebuilt Tailwind stylesheet + color tokens as index.html
+         so this page matches the site's design system exactly, without pulling
+         in index.html's GSAP/Three.js/custom-cursor weight — this page's only
+         job is a fast-loading form. -->
+    <link rel="stylesheet" href="/tailwind-build.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --kotlis-gold: #c5a47e;
+            --kotlis-bg: #f7fbf9;
+            --kotlis-bg-alt: #eaf4f0;
+            --kotlis-dark: #111111;
+            --kotlis-subtle: #666666;
+            --kotlis-border: #e5e5e5;
+            --kotlis-fill: #111111;
+        }
+        body { background-color: var(--kotlis-bg); color: var(--kotlis-dark); font-family: 'Inter', sans-serif; }
+        .serif-title { font-family: 'Poppins', serif; }
+        .bg-kotlis-card { background-color: #fff; }
+        .text-kotlis-dark { color: var(--kotlis-dark); }
+        .text-kotlis-subtle { color: var(--kotlis-subtle); }
+        .text-kotlis-gold { color: var(--kotlis-gold); }
+        .border-kotlis-border { border-color: var(--kotlis-border); }
+        .bg-kotlis-fill { background-color: var(--kotlis-fill); }
+        .hp-field-wrap { position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden; }
+        .field-error { color: #dc2626; font-size: 11px; font-weight: 600; margin-top: 6px; display: none; }
+        .field-error.visible { display: block; }
+        /* Mobile-only sticky bottom CTA bar, hidden on desktop entirely. */
+        #stickyMobileCta { display: none; }
+        @media (max-width: 767px) {
+            #stickyMobileCta {
+                display: flex;
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                z-index: 50;
+                padding: 10px 16px;
+                background: #fff;
+                border-top: 1px solid var(--kotlis-border);
+                box-shadow: 0 -4px 12px rgba(0,0,0,0.06);
+            }
+            body { padding-bottom: 64px; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header: logo only, no nav — single-goal landing page -->
+    <header class="border-b border-kotlis-border bg-kotlis-card">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center">
+            <a href="/" class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-kotlis-fill flex items-center justify-center text-white font-bold text-sm">A</div>
+                <span class="text-lg font-bold tracking-widest text-kotlis-dark uppercase serif-title">Ativak<span class="text-kotlis-gold">.works</span></span>
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- HERO (same copy as homepage hero) -->
+        <section class="py-14 sm:py-20 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6">
+                <h1 class="text-4xl sm:text-6xl font-extrabold text-kotlis-dark serif-title leading-[0.98] tracking-tight">
+                    We build your <span class="italic font-normal text-kotlis-gold">app or website</span> — and bring its first customers.
+                </h1>
+                <p class="text-kotlis-subtle text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
+                    A small senior team from Chandigarh that designs, builds and launches Flutter apps and custom websites for founders and growing businesses — then runs the ads that fill them. Fixed scope. Weekly demos. No ghosting.
+                </p>
+                <a href="#get-quote-form" class="inline-block px-8 py-4 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">
+                    Get a Free Project Blueprint
+                </a>
+            </div>
+        </section>
+
+        <!-- CLIENT STRIP (condensed, 8 logos) -->
+        <section class="py-10 bg-kotlis-card border-b border-kotlis-border">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Live projects we've shipped</span>
+                <div class="grid grid-cols-4 sm:grid-cols-8 gap-3">
+                    <a href="https://play.google.com/store/apps/details?id=com.firstaide.healthapplication" target="_blank" class="flex flex-col items-center gap-1 p-2 border border-kotlis-border hover:border-kotlis-gold transition">
+                        <img src="images/portfolio/first-aide.webp" alt="FIRST AIDE" class="w-8 h-8 object-cover rounded" loading="lazy">
+                    </a>
+                    <a href="https://play.google.com/store/apps/details?id=com.fosproduction.ecommerceapp" target="_blank" class="flex flex-col items-center gap-1 p-2 border border-kotlis-border hover:border-kotlis-gold transition">
+                        <img src="images/portfolio/fos-ecommerce.webp" alt="FOS Production" class="w-8 h-8 object-cover rounded" loading="lazy">
+                    </a>
+                    <a href="https://apps.apple.com/us/app/fos-messenger/id6757640264" target="_blank" class="flex flex-col items-center gap-1 p-2 border border-kotlis-border hover:border-kotlis-gold transition">
+                        <img src="images/portfolio/fos-messenger.webp" alt="FOS Messenger" class="w-8 h-8 object-cover rounded" loading="lazy">
+                    </a>
+                    <a href="https://bookmytask.com/" target="_blank" class="flex flex-col items-center gap-1 p-2 border border-kotlis-border hover:border-kotlis-gold transition">
+                        <img src="images/portfolio/bookmytask-logo.svg" alt="BookMyTask" class="w-8 h-8 object-contain" loading="lazy">
+                    </a>
+                    <a href="https://amaysingshop.com" target="_blank" class="flex flex-col items-center gap-1 p-2 border border-kotlis-border hover:border-kotlis-gold transition">
+                        <img src="images/portfolio/amaysing-shop.jpg" alt="Amaysing Shop" class="w-8 h-8 object-cover rounded" loading="lazy">
+                    </a>
+                    <a href="https://mugafi.com" target="_blank" class="flex flex-col items-center gap-1 p-2 border border-kotlis-border hover:border-kotlis-gold transition">
+                        <img src="images/portfolio/mugafi.jpg" alt="Mugafi" class="w-8 h-8 object-cover rounded" loading="lazy">
+                    </a>
+                    <a href="https://mawahib.ai" target="_blank" class="flex flex-col items-center gap-1 p-2 border border-kotlis-border hover:border-kotlis-gold transition">
+                        <img src="images/portfolio/mawahib.jpg" alt="Mawahib AI" class="w-8 h-8 object-cover rounded" loading="lazy">
+                    </a>
+                    <a href="https://www.crossbridge.estate" target="_blank" class="flex flex-col items-center gap-1 p-2 border border-kotlis-border hover:border-kotlis-gold transition">
+                        <img src="images/portfolio/crossbridge.jpg" alt="Crossbridge Estate" class="w-8 h-8 object-cover rounded" loading="lazy">
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONDENSED CASE STUDIES -->
+        <section class="py-14 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 space-y-8">
+                <h2 class="text-2xl sm:text-3xl font-bold serif-title text-center">Real Builds, Real Results</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div class="bg-kotlis-card border border-kotlis-border p-5">
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Healthcare</span>
+                        <h3 class="font-bold text-base mt-1 mb-2">FIRST AIDE</h3>
+                        <p class="text-xs text-kotlis-subtle mb-3"><strong>Result:</strong> Live on Google Play — Flutter app with synced web storefront.</p>
+                        <a href="https://play.google.com/store/apps/details?id=com.firstaide.healthapplication" target="_blank" class="text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold">View Live →</a>
+                    </div>
+                    <div class="bg-kotlis-card border border-kotlis-border p-5">
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Home Services Marketplace</span>
+                        <h3 class="font-bold text-base mt-1 mb-2">BookMyTask</h3>
+                        <p class="text-xs text-kotlis-subtle mb-3"><strong>Result:</strong> Live on Google Play & App Store, iOS + Android marketplace.</p>
+                        <a href="https://bookmytask.com/" target="_blank" class="text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold">View Live →</a>
+                    </div>
+                    <div class="bg-kotlis-card border border-kotlis-border p-5">
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Media & Creative Learning</span>
+                        <h3 class="font-bold text-base mt-1 mb-2">Mugafi</h3>
+                        <p class="text-xs text-kotlis-subtle mb-3"><strong>Result:</strong> Custom website with course delivery and mentor-matching flows.</p>
+                        <a href="https://mugafi.com" target="_blank" class="text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold">View Live →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROCESS -->
+        <section class="py-14 bg-kotlis-card border-b border-kotlis-border">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 space-y-8">
+                <h2 class="text-2xl sm:text-3xl font-bold serif-title text-center">Our Process</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="text-center sm:text-left">
+                        <div class="w-10 h-10 mx-auto sm:mx-0 rounded-full bg-kotlis-fill text-white font-bold flex items-center justify-center text-sm">01</div>
+                        <h3 class="font-bold text-sm mt-3 mb-1">Free 30-Min Blueprint Call</h3>
+                        <p class="text-xs text-kotlis-subtle">No cost, no obligation.</p>
+                    </div>
+                    <div class="text-center sm:text-left">
+                        <div class="w-10 h-10 mx-auto sm:mx-0 rounded-full bg-kotlis-fill text-white font-bold flex items-center justify-center text-sm">02</div>
+                        <h3 class="font-bold text-sm mt-3 mb-1">Design — Week 1-2</h3>
+                        <p class="text-xs text-kotlis-subtle">Reviewed with you before code is written.</p>
+                    </div>
+                    <div class="text-center sm:text-left">
+                        <div class="w-10 h-10 mx-auto sm:mx-0 rounded-full bg-kotlis-fill text-white font-bold flex items-center justify-center text-sm">03</div>
+                        <h3 class="font-bold text-sm mt-3 mb-1">Build With Weekly Demos</h3>
+                        <p class="text-xs text-kotlis-subtle">Staging links, no black boxes.</p>
+                    </div>
+                    <div class="text-center sm:text-left">
+                        <div class="w-10 h-10 mx-auto sm:mx-0 rounded-full bg-kotlis-gold text-white font-bold flex items-center justify-center text-sm">04</div>
+                        <h3 class="font-bold text-sm mt-3 mb-1">Launch + Growth</h3>
+                        <p class="text-xs text-kotlis-subtle">Handed to our growth engine after launch.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIAL -->
+        <section class="py-14 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border">
+            <div class="max-w-2xl mx-auto px-4 sm:px-6 text-center space-y-4">
+                <i class="fa-solid fa-quote-left text-2xl text-kotlis-gold"></i>
+                <p class="text-base font-bold serif-title leading-snug">"They shipped our Flutter app end-to-end and had it live on Google Play in weeks, not months — then kept optimizing the ad spend after launch."</p>
+                <div class="text-xs font-bold uppercase tracking-wider text-kotlis-subtle">FIRST AIDE — Healthcare Delivery Client</div>
+            </div>
+        </section>
+
+        <!-- QUALIFYING LEAD FORM -->
+        <section id="get-quote-form" class="py-16 bg-kotlis-card">
+            <div class="max-w-2xl mx-auto px-4 sm:px-6">
+                <div class="bg-[var(--kotlis-bg-alt)] border border-kotlis-border p-6 sm:p-10">
+                    <div class="text-center mb-8">
+                        <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Get Started</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold serif-title mt-2">Get Your Free Project Blueprint</h2>
+                        <p class="text-xs text-kotlis-subtle mt-2">Tell us what you're building — we'll scope it and get back to you within 24 hours.</p>
+                    </div>
+
+                    <form id="ativakContactForm" novalidate class="space-y-6">
+                        <div class="hp-field-wrap" aria-hidden="true">
+                            <label for="contactWebsite">Website</label>
+                            <input id="contactWebsite" name="website" type="text" tabindex="-1" autocomplete="off">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label for="contactName" class="block text-xs font-bold uppercase tracking-wider mb-2">Your Name *</label>
+                                <input id="contactName" name="name" type="text" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm focus:outline-none focus:border-kotlis-dark" placeholder="John Doe">
+                                <p class="field-error" data-error-for="name">Please enter your name.</p>
+                            </div>
+                            <div>
+                                <label for="contactWhatsapp" class="block text-xs font-bold uppercase tracking-wider mb-2">WhatsApp Number *</label>
+                                <div class="flex gap-2">
+                                    <select id="contactCountryCode" name="countryCode" class="w-24 px-2 py-3 bg-kotlis-bg border border-kotlis-border text-sm focus:outline-none focus:border-kotlis-dark">
+                                        <option value="+91" selected>🇮🇳 +91</option>
+                                        <option value="+1">🇺🇸 +1</option>
+                                        <option value="+44">🇬🇧 +44</option>
+                                        <option value="+971">🇦🇪 +971</option>
+                                        <option value="+61">🇦🇺 +61</option>
+                                        <option value="+65">🇸🇬 +65</option>
+                                    </select>
+                                    <input id="contactWhatsapp" name="whatsapp" type="tel" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm focus:outline-none focus:border-kotlis-dark" placeholder="98765 43210">
+                                </div>
+                                <p class="field-error" data-error-for="whatsapp">Please enter your WhatsApp number.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label for="contactEmail" class="block text-xs font-bold uppercase tracking-wider mb-2">Email *</label>
+                                <input id="contactEmail" name="email" type="email" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm focus:outline-none focus:border-kotlis-dark" placeholder="you@company.com">
+                                <p class="field-error" data-error-for="email">Please enter a valid email.</p>
+                            </div>
+                            <div>
+                                <label for="contactCompany" class="block text-xs font-bold uppercase tracking-wider mb-2">Company / Business Name</label>
+                                <input id="contactCompany" name="company" type="text" class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm focus:outline-none focus:border-kotlis-dark" placeholder="Optional">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="contactNeed" class="block text-xs font-bold uppercase tracking-wider mb-2">What do you need? *</label>
+                            <select id="contactNeed" name="need" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm focus:outline-none focus:border-kotlis-dark">
+                                <option value="">Select one</option>
+                                <option value="mobile_app">Mobile App</option>
+                                <option value="website">Website</option>
+                                <option value="ecommerce">E-commerce Store</option>
+                                <option value="ads_growth">Ads & Growth</option>
+                                <option value="not_sure">Not sure yet</option>
+                            </select>
+                            <p class="field-error" data-error-for="need">Please tell us what you need.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label for="contactBudget" class="block text-xs font-bold uppercase tracking-wider mb-2">Budget Range? *</label>
+                                <select id="contactBudget" name="budget" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm focus:outline-none focus:border-kotlis-dark">
+                                    <option value="">Select a range</option>
+                                </select>
+                                <p class="field-error" data-error-for="budget">Please select a budget range.</p>
+                            </div>
+                            <div>
+                                <label for="contactTimeline" class="block text-xs font-bold uppercase tracking-wider mb-2">When do you want to start? *</label>
+                                <select id="contactTimeline" name="timeline" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm focus:outline-none focus:border-kotlis-dark">
+                                    <option value="">Select one</option>
+                                    <option value="immediately">Immediately</option>
+                                    <option value="1_3_months">In 1–3 months</option>
+                                    <option value="just_exploring">Just exploring</option>
+                                </select>
+                                <p class="field-error" data-error-for="timeline">Please let us know your timeline.</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="contactDescription" class="block text-xs font-bold uppercase tracking-wider mb-2">Short Project Description</label>
+                            <textarea id="contactDescription" name="description" rows="3" class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm focus:outline-none focus:border-kotlis-dark" placeholder="Optional — a sentence or two is enough"></textarea>
+                        </div>
+
+                        <input type="hidden" name="utm_source" value="">
+                        <input type="hidden" name="utm_campaign" value="">
+                        <input type="hidden" name="utm_content" value="">
+
+                        <button id="contactSubmitBtn" type="submit" class="w-full py-4 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">
+                            Get Free Blueprint
+                        </button>
+                    </form>
+
+                    <div id="contactThankYou" class="hidden mt-6 p-6 border border-kotlis-gold bg-kotlis-gold/10 text-center space-y-4">
+                        <p class="text-sm font-bold"><i class="fa-solid fa-check mr-2 text-kotlis-gold"></i><span id="contactThankYouMsg"></span></p>
+                        <a id="contactWhatsappNowLink" href="#" target="_blank" onclick="trackWhatsAppClick()" class="inline-flex items-center gap-2 px-5 py-3 bg-[#25D366] text-white text-xs font-bold uppercase tracking-wider hover:opacity-90 transition">
+                            <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp Now
+                        </a>
+                    </div>
+                    <div id="contactError" class="hidden mt-6 p-4 border border-red-400 bg-red-50 text-red-700 text-center text-xs font-bold uppercase tracking-wider">
+                        <i class="fa-solid fa-triangle-exclamation mr-2"></i> Something went wrong. Please email us directly at <a href="mailto:[ADD REAL: email]" class="underline">[ADD REAL: email]</a> or <a id="contactErrorWhatsappLink" href="#" target="_blank" class="underline">chat on WhatsApp</a>.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ (4 of the homepage's 6) -->
+        <section class="py-14 bg-[var(--kotlis-bg-alt)] border-t border-kotlis-border">
+            <div class="max-w-2xl mx-auto px-4 sm:px-6 space-y-6">
+                <h2 class="text-2xl font-bold serif-title text-center">Frequently Asked</h2>
+                <div class="divide-y divide-kotlis-border border-t border-b border-kotlis-border">
+                    <details class="group py-4">
+                        <summary class="flex items-center justify-between cursor-pointer list-none font-bold text-sm">
+                            How much does an app/website cost?
+                            <i class="fa-solid fa-plus text-kotlis-gold group-open:rotate-45 transition-transform"></i>
+                        </summary>
+                        <p class="text-xs text-kotlis-subtle mt-3">It depends on scope. Projects begin from ₹[ADD REAL: starting price] — we give a firm, fixed quote after a free scoping call.</p>
+                    </details>
+                    <details class="group py-4">
+                        <summary class="flex items-center justify-between cursor-pointer list-none font-bold text-sm">
+                            How long does it take?
+                            <i class="fa-solid fa-plus text-kotlis-gold group-open:rotate-45 transition-transform"></i>
+                        </summary>
+                        <p class="text-xs text-kotlis-subtle mt-3">Most mobile or web builds ship in [ADD REAL: X–Y weeks] depending on scope.</p>
+                    </details>
+                    <details class="group py-4">
+                        <summary class="flex items-center justify-between cursor-pointer list-none font-bold text-sm">
+                            Do you sign an NDA?
+                            <i class="fa-solid fa-plus text-kotlis-gold group-open:rotate-45 transition-transform"></i>
+                        </summary>
+                        <p class="text-xs text-kotlis-subtle mt-3">[ADD REAL: NDA policy]</p>
+                    </details>
+                    <details class="group py-4">
+                        <summary class="flex items-center justify-between cursor-pointer list-none font-bold text-sm">
+                            Do you give support after launch?
+                            <i class="fa-solid fa-plus text-kotlis-gold group-open:rotate-45 transition-transform"></i>
+                        </summary>
+                        <p class="text-xs text-kotlis-subtle mt-3">Yes — every build includes a post-launch support window of [ADD REAL: duration].</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Minimal footer -->
+    <footer class="bg-kotlis-fill text-white py-8">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-300">
+            <span class="font-bold uppercase tracking-widest text-white">Ativak<span class="text-kotlis-gold">.works</span></span>
+            <span>[ADD REAL: email] · [ADD REAL: WhatsApp number/link]</span>
+            <span>&copy; 2026 Ativak Works.</span>
+        </div>
+    </footer>
+
+    <!-- Sticky bottom bar, mobile only -->
+    <div id="stickyMobileCta">
+        <a href="#get-quote-form" class="w-full text-center py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest">
+            Get Free Blueprint
+        </a>
+    </div>
+
+    <!-- config.js already loaded in <head>. -->
+    <script src="shared.js"></script>
+    <script>
+        (function initAtivakLeadForm(formId) {
+            const form = document.getElementById(formId);
+            if (!form) return;
+            fillUtmHiddenFields(form);
+
+            const countryCodeSelect = form.querySelector('[name="countryCode"]');
+            const budgetSelect = form.querySelector('[name="budget"]');
+            if (countryCodeSelect && budgetSelect) {
+                populateBudgetOptions(budgetSelect, countryCodeSelect.value);
+                countryCodeSelect.addEventListener('change', () => {
+                    populateBudgetOptions(budgetSelect, countryCodeSelect.value);
+                });
+            }
+
+            const NEED_LABELS = {
+                mobile_app: 'a Mobile App', website: 'a Website', ecommerce: 'an E-commerce Store',
+                ads_growth: 'Ads & Growth help', not_sure: 'help scoping a project'
+            };
+            const BUDGET_LABELS = {};
+            Object.values(ATIVAK_BUDGET_RANGES).flat().forEach(r => { BUDGET_LABELS[r.value] = r.label; });
+
+            function showError(fieldName, show) {
+                const el = form.querySelector(`[data-error-for="${fieldName}"]`);
+                if (el) el.classList.toggle('visible', !!show);
+            }
+
+            function validate(data) {
+                let valid = true;
+                [['name', data.name], ['whatsapp', data.whatsapp], ['need', data.need],
+                 ['budget', data.budget], ['timeline', data.timeline]].forEach(([field, val]) => {
+                    const ok = !!(val && val.trim());
+                    showError(field, !ok);
+                    if (!ok) valid = false;
+                });
+                const emailOk = !!(data.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email));
+                showError('email', !emailOk);
+                if (!emailOk) valid = false;
+                return valid;
+            }
+
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const submitBtn = document.getElementById('contactSubmitBtn');
+                const thankYou = document.getElementById('contactThankYou');
+                const errorMsg = document.getElementById('contactError');
+                if (submitBtn.disabled) return;
+
+                if (isHoneypotTripped(form, 'website')) return;
+
+                const data = Object.fromEntries(new FormData(form).entries());
+                thankYou.classList.add('hidden');
+                errorMsg.classList.add('hidden');
+
+                if (!validate(data)) return;
+
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Submitting…';
+
+                const name = data.name.trim();
+                const fullWhatsapp = (data.countryCode || '+91') + ' ' + data.whatsapp.trim();
+                const needLabel = NEED_LABELS[data.need] || data.need;
+                const budgetLabel = BUDGET_LABELS[data.budget] || data.budget;
+
+                const utm = getUtmParams();
+                const payload = {
+                    name, whatsapp: fullWhatsapp, email: data.email.trim(),
+                    company: (data.company || '').trim(), need: data.need, budget: data.budget,
+                    timeline: data.timeline, description: (data.description || '').trim(),
+                    utm_source: utm.utm_source, utm_campaign: utm.utm_campaign, utm_content: utm.utm_content
+                };
+
+                const eventId = generateLeadEventId();
+                trackLeadConversion(eventId, {
+                    name, email: data.email.trim(), whatsapp: fullWhatsapp,
+                    service: data.need, budget: data.budget, startTime: data.timeline
+                });
+
+                const result = await submitLeadToWebhook(payload);
+                const waText = `Hi, I'm ${name}. I need ${needLabel}, budget ${budgetLabel}.`;
+                const waUrl = 'https://wa.me/[ADD REAL: number]?text=' + encodeURIComponent(waText);
+                document.getElementById('contactWhatsappNowLink').href = waUrl;
+
+                if (result.ok) {
+                    document.getElementById('contactThankYouMsg').textContent =
+                        `Thanks ${name}! We'll WhatsApp you within 24 hours.`;
+                    thankYou.classList.remove('hidden');
+                    form.classList.add('hidden');
+                } else {
+                    document.getElementById('contactErrorWhatsappLink').href = waUrl;
+                    errorMsg.classList.remove('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'Get Free Blueprint';
+                }
+            });
+        })('ativakContactForm');
+    </script>
+</body>
+</html>

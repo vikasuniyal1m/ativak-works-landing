@@ -1,0 +1,7 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#111111"/>
+  <circle cx="256" cy="200" r="100" fill="none" stroke="#c5a47e" stroke-width="10"/>
+  <text x="256" y="232" font-family="Georgia, 'Times New Roman', serif" font-size="110" font-weight="700" fill="#c5a47e" text-anchor="middle">A</text>
+  <text x="256" y="400" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700" letter-spacing="2" fill="#ffffff" text-anchor="middle">ATIVAK</text>
+  <text x="256" y="446" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="600" letter-spacing="6" fill="#c5a47e" text-anchor="middle">WORKS</text>
+</svg>

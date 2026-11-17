@@ -1,6 +1,12 @@
 ﻿<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
+    <!-- Public site config must load before the Meta Pixel / GA4 init below,
+         since both now read their IDs from window.ATIVAK_CONFIG instead of a
+         hardcoded literal. shared.js (UTM/webhook/tracking helpers) is loaded
+         later, right before the main script that calls them — nothing in
+         <head> needs it. -->
+    <script src="config.js"></script>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -11,13 +17,30 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1904427194297712');
+    fbq('init', window.ATIVAK_CONFIG.META_PIXEL_ID);
     fbq('track', 'PageView');
     </script>
     <noscript><img height="1" width="1" style="display:none" alt=""
     src="https://www.facebook.com/tr?id=1904427194297712&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
+    <!-- GA4 (gtag.js) — only loads/fires when a real Measurement ID has been
+         added to window.ATIVAK_CONFIG.GA4_ID in config.js. No real property
+         exists yet, so this is a no-op until that id is filled in. -->
+    <script>
+    if (window.ATIVAK_CONFIG && window.ATIVAK_CONFIG.GA4_ID) {
+        (function () {
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.ATIVAK_CONFIG.GA4_ID;
+            document.head.appendChild(s);
+        })();
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', window.ATIVAK_CONFIG.GA4_ID);
+    }
+    </script>
     <!-- Microsoft Clarity: session recordings + heatmaps for visitor behavior -->
     <script type="text/javascript">
         (function(c,l,a,r,i,t,y){
@@ -28,14 +51,19 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ativak Works | Flutter Apps, Meta Ads, SEO & Cloud Migration Studio</title>
-    <meta name="description" content="Ativak Works builds Flutter mobile apps, custom web platforms, Meta & Google Ads campaigns, SEO/AI indexing, and zero-downtime cloud migrations.">
+    <title>Ativak Works | Flutter App & Website Development Studio — Chandigarh, India</title>
+    <meta name="description" content="Ativak Works is a Chandigarh-based studio that designs, builds and launches Flutter mobile apps and custom websites for founders and growing businesses, then runs the ads that bring their first customers.">
     <link rel="canonical" href="https://ativak-works-landing.vercel.app/">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Ativak Works | Flutter Apps, Meta Ads, SEO & Cloud Migration Studio">
-    <meta property="og:description" content="Flutter app development, Meta & Google Ads, SEO/AI indexing, and zero-downtime cloud migrations.">
+    <meta property="og:title" content="Ativak Works | Flutter App & Website Development Studio — Chandigarh, India">
+    <meta property="og:description" content="We design, build and launch Flutter apps and custom websites, then run the ads that bring the first customers.">
     <meta property="og:url" content="https://ativak-works-landing.vercel.app/">
+    <!-- [ADD REAL: create 1200x630 OG image at images/og-image.png] — file does not exist yet. -->
+    <meta property="og:image" content="https://ativak-works-landing.vercel.app/images/og-image.png">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ativak Works | Flutter App & Website Development Studio — Chandigarh, India">
+    <meta name="twitter:description" content="We design, build and launch Flutter apps and custom websites, then run the ads that bring the first customers.">
+    <meta name="twitter:image" content="https://ativak-works-landing.vercel.app/images/og-image.png">
     <link rel="icon" href="data:,">
     <script type="application/ld+json">
     {
@@ -43,17 +71,24 @@
       "@type": "ProfessionalService",
       "name": "Ativak Works",
       "url": "https://ativak-works-landing.vercel.app",
-      "description": "Flutter app development, Meta & Google Ads, SEO and AI search indexing, custom web applications, and zero-downtime cloud migrations.",
+      "logo": "https://ativak-works-landing.vercel.app/images/ativak-logo.svg",
+      "description": "Flutter app development, custom web applications, Meta & Google Ads, SEO, and cloud migration & IT support.",
       "areaServed": "IN",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Chandigarh",
+        "addressCountry": "IN"
+      },
+      "email": "[ADD REAL: email]",
       "telephone": "+91-8126666331",
       "sameAs": [],
+      "_comment_sameAs": "[ADD REAL: social profile URLs]",
       "makesOffer": [
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Flutter iOS & Android App Development" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Custom Full-Stack Web App Development" } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Meta & Google Ads Management" } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "SEO & AI Search Optimization" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Zero Downtime Cloud Migration" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Custom Full-Stack Web App Development" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "IT Support & Technical Services" } }
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cloud Migration & IT Support" } }
       ]
     }
     </script>
@@ -80,7 +115,7 @@
         {
           "@type": "Question",
           "name": "Can you take over an existing app or website from another team?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes — we regularly audit and take over existing codebases, including zero-downtime migrations to new infrastructure." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes — we regularly audit and take over existing codebases, including migrating from existing codebases to new infrastructure." }
         }
       ]
     }
@@ -199,7 +234,7 @@
             color: var(--kotlis-gold);
             border-bottom: 2px solid var(--kotlis-gold);
         }
-        /* Header "Get Free Audit" CTA: filled gold + diagonal shine sweep
+        /* Header "Get Free Blueprint" CTA: filled gold + diagonal shine sweep
            on hover, so the site's single most-repeated action reads as a
            premium, deliberate button rather than a plain bordered rectangle. */
         .audit-cta {
@@ -536,6 +571,40 @@
         @media (prefers-reduced-motion: reduce) {
             .cursor-droplet, .cursor-trail-line, .click-ripple { display: none; }
         }
+        /* Honeypot field: positioned off-screen (not display:none/type=hidden)
+           so a bot that scans for "visible-looking" inputs to auto-fill still
+           finds and fills it, while real visitors never see or tab into it. */
+        .hp-field-wrap {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        .field-error {
+            color: #dc2626;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 6px;
+            display: none;
+        }
+        .field-error.visible { display: block; }
+        .ativak-radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border: 1px solid var(--kotlis-border);
+            background: var(--kotlis-bg);
+            font-size: 11px;
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+        .ativak-radio-group input:checked + span,
+        .ativak-radio-group label:has(input:checked) {
+            border-color: var(--kotlis-gold);
+        }
     </style>
 </head>
 <body class="selection:bg-kotlis-gold selection:text-white font-sans antialiased overflow-x-hidden min-h-screen flex flex-col justify-between">
@@ -562,21 +631,18 @@
                  extra IT Support item has room — tablets fall back to the
                  hamburger menu instead of a cramped nav bar. -->
             <nav class="hidden lg:flex items-center ml-6 space-x-5 xl:space-x-7 text-xs font-semibold uppercase tracking-wide text-kotlis-dark whitespace-nowrap">
-                <button onclick="switchPage('home')" id="nav-home" class="py-2 hover:text-kotlis-gold transition nav-link nav-active">Home</button>
+                <button onclick="switchPage('portfolio')" id="nav-portfolio" class="py-2 hover:text-kotlis-gold transition nav-link">Work</button>
                 <button onclick="switchPage('services')" id="nav-services" class="py-2 hover:text-kotlis-gold transition nav-link">Services</button>
-                <button onclick="switchPage('portfolio')" id="nav-portfolio" class="py-2 hover:text-kotlis-gold transition nav-link">Case Studies & Projects</button>
-                <button onclick="switchPage('migration')" id="nav-migration" class="py-2 hover:text-kotlis-gold transition nav-link">Migration & Strategy</button>
+                <button onclick="switchPage('services')" id="nav-migration" class="py-2 hover:text-kotlis-gold transition nav-link">Process</button>
                 <button onclick="switchPage('pricing')" id="nav-pricing" class="py-2 hover:text-kotlis-gold transition nav-link">Pricing</button>
-                <button onclick="goToITSupport()" class="py-2 flex items-center gap-1.5 text-emerald-600 hover:text-emerald-500 transition">
-                    <i class="fa-solid fa-headset"></i> IT Support
-                </button>
+                <button onclick="switchPage('services')" class="py-2 hover:text-kotlis-gold transition nav-link">FAQ</button>
             </nav>
 
             <div class="flex items-center space-x-4 relative">
                 <button onclick="switchPage('contact')" class="audit-cta relative hidden sm:inline-flex items-center justify-center gap-2 px-4 lg:px-5 xl:px-6 py-3 text-white text-xs font-bold uppercase tracking-wide overflow-hidden transition duration-300 hover:-translate-y-0.5 whitespace-nowrap">
                     <span class="audit-cta-shine absolute inset-0 pointer-events-none"></span>
                     <i class="fa-solid fa-bolt relative z-10 text-[11px]"></i>
-                    <span class="relative z-10">Get Free Audit</span>
+                    <span class="relative z-10">Get Free Blueprint</span>
                 </button>
                 <button id="mobileMenuBtn" class="lg:hidden relative z-50 text-kotlis-dark text-xl w-11 h-11 flex items-center justify-center focus:outline-none" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileMenu">
                     <i class="fa-solid fa-bars icon-bars"></i>
@@ -597,20 +663,17 @@
                 <i class="fa-solid fa-layer-group"></i> Services Detail
             </button>
             <button onclick="switchPage('portfolio'); toggleMobileMenu();" id="mobile-nav-portfolio" class="mobile-nav-link nav-link w-full text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark">
-                <i class="fa-solid fa-folder-open"></i> Case Studies & Apps
+                <i class="fa-solid fa-folder-open"></i> Work
             </button>
-            <button onclick="switchPage('migration'); toggleMobileMenu();" id="mobile-nav-migration" class="mobile-nav-link nav-link w-full text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark">
-                <i class="fa-solid fa-right-left"></i> Migration & Protocol
+            <button onclick="switchPage('services'); toggleMobileMenu();" id="mobile-nav-migration" class="mobile-nav-link nav-link w-full text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark">
+                <i class="fa-solid fa-right-left"></i> Process
             </button>
             <button onclick="switchPage('pricing'); toggleMobileMenu();" id="mobile-nav-pricing" class="mobile-nav-link nav-link w-full text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark">
-                <i class="fa-solid fa-tags"></i> Pricing Tiers
-            </button>
-            <button onclick="goToITSupport(); toggleMobileMenu();" class="mobile-nav-link w-full text-left text-xs font-bold uppercase tracking-widest text-emerald-600 hover:!bg-emerald-50 hover:!border-l-emerald-500 hover:!text-emerald-600">
-                <i class="fa-solid fa-headset"></i> IT Support
+                <i class="fa-solid fa-tags"></i> Pricing
             </button>
             <button onclick="switchPage('contact'); toggleMobileMenu();" class="audit-cta relative block w-full text-center py-4 px-5 text-white text-xs font-bold uppercase tracking-widest overflow-hidden">
                 <span class="audit-cta-shine absolute inset-0 pointer-events-none"></span>
-                <span class="relative z-10"><i class="fa-solid fa-bolt mr-2"></i> Request Audit</span>
+                <span class="relative z-10"><i class="fa-solid fa-bolt mr-2"></i> Get Free Blueprint</span>
             </button>
         </div>
     </header>
@@ -637,266 +700,283 @@
                 <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:pl-28 lg:pr-8">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                         <div class="lg:col-span-7 space-y-6">
-                            <div class="flex items-center justify-between text-xs font-bold uppercase tracking-widest text-kotlis-gold border-b border-kotlis-dark/10 pb-3">
-                                <span class="flex items-center gap-2"><span class="w-8 h-[1px] bg-kotlis-gold"></span> Ativak Works Official Studio Showcase</span>
-                                <span class="hidden sm:inline text-kotlis-subtle font-mono tracking-normal">N°. 01 / 2026</span>
+                            <div class="flex items-center text-xs font-bold uppercase tracking-widest text-kotlis-gold border-b border-kotlis-dark/10 pb-3">
+                                <span class="flex items-center gap-2"><span class="w-8 h-[1px] bg-kotlis-gold"></span> Flutter Apps · Custom Websites · Launch Growth</span>
                             </div>
                             <h1 class="text-5xl sm:text-7xl lg:text-8xl font-extrabold text-kotlis-dark serif-title leading-[0.95] tracking-tight">
-                                Crafting <span class="italic font-normal text-kotlis-gold">Flutter Apps,</span> Scalable Web, Meta Ads & SEO engines.
+                                We build your <span class="italic font-normal text-kotlis-gold">app or website</span> — and bring its first customers.
                             </h1>
                             <p class="text-kotlis-subtle text-base sm:text-lg leading-relaxed max-w-2xl">
-                                Ativak Works engineers cross-platform iOS & Android mobile apps, custom web applications, zero-downtime cloud migrations, and high-ROAS performance campaigns.
+                                A small senior team from Chandigarh that designs, builds and launches Flutter apps and custom websites for founders and growing businesses — then runs the ads that fill them. Fixed scope. Weekly demos. No ghosting.
                             </p>
                             <div class="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                                 <button onclick="switchPage('contact')" class="px-8 py-4 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition duration-300 text-center">
-                                    Get Free Audit
+                                    Get a Free Project Blueprint
                                 </button>
                                 <button onclick="switchPage('portfolio')" class="px-8 py-4 border border-kotlis-border bg-kotlis-card text-kotlis-dark text-xs font-bold uppercase tracking-widest hover:border-kotlis-dark transition duration-300 text-center">
-                                    Explore Case Studies
+                                    See Live Projects
                                 </button>
                             </div>
+                            <p class="text-[11px] uppercase tracking-wider text-kotlis-subtle">[ADD REAL: 40+] projects live · Apps on App Store & Google Play · Clients in India & UAE</p>
                             <!-- Fact-strip, magazine spec-sheet style: thick black rule,
                                  huge numerals, tiny tracked labels, thin dividers between. -->
                             <div class="pt-8 mt-2 border-t-2 border-kotlis-dark grid grid-cols-3 divide-x divide-kotlis-border">
                                 <div class="pr-4 sm:pr-6">
-                                    <div class="text-3xl sm:text-4xl font-serif font-bold text-kotlis-dark count-up" data-count-to="100" data-count-suffix="%">0%</div>
-                                    <div class="text-[10px] uppercase tracking-wider text-kotlis-subtle mt-1">Zero Downtime Migration</div>
+                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark">[ADD REAL: 40+]</div>
+                                    <div class="text-[10px] uppercase tracking-wider text-kotlis-subtle mt-1">Projects Shipped</div>
                                 </div>
                                 <div class="px-4 sm:px-6">
-                                    <div class="text-3xl sm:text-4xl font-serif font-bold text-kotlis-dark count-up" data-count-to="5.2" data-count-suffix="x" data-count-decimals="1">0x</div>
-                                    <div class="text-[10px] uppercase tracking-wider text-kotlis-subtle mt-1">Avg Paid Ads ROAS</div>
+                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark">[ADD REAL: 12]</div>
+                                    <div class="text-[10px] uppercase tracking-wider text-kotlis-subtle mt-1">Apps Live on Stores</div>
                                 </div>
                                 <div class="pl-4 sm:pl-6">
-                                    <div class="text-3xl sm:text-4xl font-serif font-bold text-kotlis-dark count-up" data-count-to="1" data-count-prefix="#">#0</div>
-                                    <div class="text-[10px] uppercase tracking-wider text-kotlis-subtle mt-1">Google & AI Indexing</div>
+                                    <div class="text-2xl sm:text-3xl font-serif font-bold text-kotlis-dark">[ADD REAL: X]+</div>
+                                    <div class="text-[10px] uppercase tracking-wider text-kotlis-subtle mt-1">Years Building</div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Hero Visual Grid -->
-                        <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4 relative">
-                            <div class="space-y-4">
-                                <!-- Live build/deploy terminal — typed code, a build/deploy progress bar, then a LIVE badge, looping -->
-                                <div class="relative overflow-hidden shadow-md border border-kotlis-border bg-[#0d1117] p-0 h-64 flex flex-col">
-                                    <div class="flex items-center gap-1.5 px-3 py-2 bg-[#161b22] border-b border-white/10 shrink-0">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></span>
-                                        <span class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></span>
-                                        <span class="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></span>
-                                        <span class="ml-2 text-[10px] text-gray-400 font-mono">ativak-works — web</span>
-                                    </div>
-                                    <div id="deployTerminal" class="flex-1 overflow-hidden px-4 py-3 font-mono text-[11px] leading-relaxed text-[#9fe6b0]"></div>
-                                    <div class="px-4 pb-3 shrink-0">
-                                        <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-                                            <div id="deployBar" class="h-full bg-kotlis-glow rounded-full" style="width:0%"></div>
-                                        </div>
-                                        <div class="flex items-center justify-between mt-2">
-                                            <span id="deployStatusText" class="text-[10px] font-mono text-gray-400">Building…</span>
-                                            <span id="deployLiveBadge" class="hidden items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#27c93f]">
-                                                <span class="relative flex w-1.5 h-1.5">
-                                    <span class="absolute inline-flex h-full w-full rounded-full bg-[#27c93f] opacity-75 animate-ping"></span>
-                                    <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#27c93f]"></span>
-                                </span> Live
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Team: a live activity feed, commits/PRs streaming in -->
-                                <div class="relative overflow-hidden shadow-md border border-kotlis-border bg-kotlis-card h-44 flex flex-col">
-                                    <div class="flex items-center justify-between gap-2 px-4 pt-3 pb-2 border-b border-kotlis-border shrink-0">
-                                        <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle whitespace-nowrap">Engineering Team</span>
-                                        <span class="flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 shrink-0">
-                                            <span class="relative flex w-1.5 h-1.5">
-                                                <span class="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75 animate-ping"></span>
-                                                <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                                            </span> Online
-                                        </span>
-                                    </div>
-                                    <div id="teamActivityFeed" class="flex-1 overflow-hidden px-4 py-2.5 space-y-2.5"></div>
-                                </div>
-                            </div>
-
-                            <div class="space-y-4 pt-0 sm:pt-8">
-                                <!-- Android: circular build-progress ring, Play Store style -->
-                                <div class="relative overflow-hidden shadow-md border border-kotlis-border bg-kotlis-card h-44 flex items-center gap-4 px-5">
-                                    <svg width="76" height="76" viewBox="0 0 76 76" class="shrink-0 -rotate-90">
-                                        <circle cx="38" cy="38" r="32" fill="none" stroke="currentColor" stroke-width="6" class="text-kotlis-border"></circle>
-                                        <circle id="androidRing" cx="38" cy="38" r="32" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" class="text-kotlis-gold" stroke-dasharray="201" stroke-dashoffset="201"></circle>
-                                    </svg>
-                                    <div class="absolute left-[50px] top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-kotlis-fill flex items-center justify-center">
-                                        <i class="fa-brands fa-google-play text-kotlis-glow text-sm"></i>
-                                    </div>
-                                    <div class="min-w-0 flex-1">
-                                        <div class="text-[9px] font-bold uppercase tracking-wide text-kotlis-gold whitespace-nowrap">Google Play</div>
-                                        <div id="androidStatusText" class="text-sm font-serif font-bold text-kotlis-dark mt-1">Building…</div>
-                                        <div id="androidStep" class="text-[11px] text-kotlis-subtle mt-1 font-mono truncate">./gradlew bundleRelease</div>
-                                        <span id="androidLiveBadge" class="hidden items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-600 mt-1 whitespace-nowrap">
-                                            <span class="relative flex w-1.5 h-1.5 shrink-0">
-                                                <span class="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75 animate-ping"></span>
-                                                <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                                            </span> On Play Store
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- iOS: light App Store Connect-style checklist card -->
-                                <div class="relative overflow-hidden shadow-md border border-kotlis-border bg-kotlis-card h-64 flex flex-col">
-                                    <div class="flex items-center gap-2 px-5 pt-4 pb-3 border-b border-kotlis-border">
-                                        <i class="fa-brands fa-apple text-kotlis-dark"></i>
-                                        <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle">App Store Connect</span>
-                                    </div>
-                                    <div id="iosChecklist" class="flex-1 px-5 py-4 space-y-3"></div>
-                                    <div id="iosLiveBadge" class="hidden items-center gap-2 px-5 py-3 border-t border-kotlis-border text-xs font-bold uppercase tracking-wider text-emerald-600">
-                                        <span class="relative flex w-1.5 h-1.5">
-                                            <span class="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75 animate-ping"></span>
-                                            <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                                        </span> Live on the App Store
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ========= Scroll Storytelling Trial: "Watch It Get Built" =========
-                 A pinned, scroll-scrubbed sequence — three builds come alive as the
-                 visitor scrolls, instead of a static features list. Trial section:
-                 if this direction lands, the same technique extends to other pages. -->
-            <section id="buildStorySection" class="relative bg-white" style="height: 300vh;">
-                <div class="sticky top-0 h-screen overflow-hidden flex flex-col items-center justify-center px-4">
-                    <span class="absolute top-10 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-kotlis-gold text-center w-full">Watch It Get Built</span>
-
-                    <!-- Stage 1: Flutter app assembling — this is a real, already-shipped
-                         build (FIRST AIDE, a verified live Google Play client), not a
-                         generic mockup. The actual screenshot wipes into view top-down
-                         as the visitor scrolls, like the screen is being assembled. -->
-                    <div id="storyStage1" class="story-stage absolute inset-0 flex items-center justify-center px-6">
-                        <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-                            <!-- The source screenshot is a wide 832x406 banner, not a tall
-                                 phone capture — framed to its real aspect ratio (browser-chrome
-                                 style, matching the hero's terminal cards) so the whole image
-                                 shows cleanly instead of being cropped into a phone shape. -->
-                            <div class="relative w-full max-w-sm mx-auto lg:mx-0 border border-kotlis-border rounded-lg overflow-hidden shadow-lg bg-kotlis-card">
+                        <!-- Hero Visual: real, verified shipped work (no mockups/animations) -->
+                        <div class="lg:col-span-5 relative">
+                            <div class="relative w-full max-w-sm mx-auto border border-kotlis-border rounded-lg overflow-hidden shadow-lg bg-kotlis-card">
                                 <div class="flex items-center gap-1.5 px-3 py-2 bg-kotlis-bg border-b border-kotlis-border">
                                     <span class="w-2.5 h-2.5 rounded-full bg-red-400"></span>
                                     <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
                                     <span class="w-2.5 h-2.5 rounded-full bg-green-400"></span>
-                                    <span class="ml-2 text-[10px] text-kotlis-subtle font-mono truncate">first-aide.app — building</span>
+                                    <span class="ml-2 text-[10px] text-kotlis-subtle font-mono truncate">FIRST AIDE — live on Google Play</span>
                                 </div>
                                 <div class="relative bg-white" style="aspect-ratio: 832 / 406;">
                                     <img src="images/portfolio/first-aide.webp" alt="FIRST AIDE app screenshot" width="764" height="372" fetchpriority="high" class="w-full h-full object-cover">
-                                    <!-- Solid mask shrinking from the right reveals the full,
-                                         uncropped image left-to-right as the visitor scrolls. -->
-                                    <div id="storyAppImageMask" class="absolute inset-y-0 right-0 bg-kotlis-card" style="width: 100%;"></div>
                                 </div>
-                                <div id="storyLiveBadge" class="opacity-0 transition-opacity duration-500 flex items-center justify-center gap-1.5 py-2 bg-kotlis-dark text-white text-[10px] font-bold uppercase tracking-wider">
+                                <div class="flex items-center justify-center gap-1.5 py-2 bg-kotlis-dark text-white text-[10px] font-bold uppercase tracking-wider">
                                     <i class="fa-brands fa-google-play text-kotlis-gold"></i> Live on Google Play
                                 </div>
                             </div>
-                            <div class="text-center lg:text-left space-y-4">
-                                <p class="text-kotlis-dark text-lg sm:text-xl font-serif font-bold"><span class="text-kotlis-gold">Day 1 —</span> A real build: FIRST AIDE, shipped and live.</p>
-                                <ul class="space-y-2.5 text-sm text-kotlis-subtle inline-block lg:block text-left">
-                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> Flutter codebase, built cross-platform from day one</li>
-                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> Verified live on Google Play, not a mockup</li>
-                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> Clean architecture, ready to scale from launch</li>
-                                </ul>
-                            </div>
                         </div>
-                    </div>
-
-                    <!-- Stage 2: ROAS climbing — a mini ad-manager dashboard card
-                         with live-ticking stats sits above the growing bar chart. -->
-                    <div id="storyStage2" class="story-stage absolute inset-0 flex items-center justify-center px-6 opacity-0">
-                        <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-                            <div class="w-full max-w-sm mx-auto lg:mx-0 bg-kotlis-card border border-kotlis-border shadow-lg p-4 text-left">
-                                <div class="flex items-center gap-2 pb-2 mb-3 border-b border-kotlis-border">
-                                    <i class="fa-brands fa-meta text-kotlis-gold"></i>
-                                    <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-subtle">Ads Manager · Example</span>
-                                </div>
-                                <div class="grid grid-cols-3 gap-2 mb-4">
-                                    <div>
-                                        <div class="text-[9px] uppercase tracking-wider text-kotlis-subtle">Impressions</div>
-                                        <div id="storyImpressions" class="text-base font-serif font-bold text-kotlis-dark">12.4K</div>
-                                    </div>
-                                    <div>
-                                        <div class="text-[9px] uppercase tracking-wider text-kotlis-subtle">Clicks</div>
-                                        <div id="storyClicks" class="text-base font-serif font-bold text-kotlis-dark">310</div>
-                                    </div>
-                                    <div>
-                                        <div class="text-[9px] uppercase tracking-wider text-kotlis-subtle">ROAS</div>
-                                        <div id="storyRoas" class="text-base font-serif font-bold text-kotlis-gold">1.0x</div>
-                                    </div>
-                                </div>
-                                <div class="flex items-end justify-center gap-3 h-20">
-                                    <div class="w-7 rounded-t" style="height:20%; background:rgba(var(--kotlis-gold-rgb),0.4)"></div>
-                                    <div class="w-7 rounded-t" style="height:35%; background:rgba(var(--kotlis-gold-rgb),0.6)"></div>
-                                    <div class="w-7 rounded-t" style="height:55%; background:rgba(var(--kotlis-gold-rgb),0.8)"></div>
-                                    <div id="storyBar4" class="w-7 bg-kotlis-gold rounded-t transition-all duration-700" style="height:20%"></div>
-                                    <div id="storyBar5" class="w-7 bg-kotlis-gold rounded-t transition-all duration-700" style="height:20%"></div>
-                                </div>
-                            </div>
-                            <div class="text-center lg:text-left space-y-4">
-                                <p class="text-kotlis-dark text-lg sm:text-xl font-serif font-bold"><span class="text-kotlis-gold">Week 2 —</span> Paid campaigns start converting.</p>
-                                <ul class="space-y-2.5 text-sm text-kotlis-subtle inline-block lg:block text-left">
-                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> Meta Ads campaigns launched and optimized weekly</li>
-                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> Audience targeting refined from real click data</li>
-                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> ROAS tracked daily, budget shifted to what converts</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Stage 3: SEO rank jump -->
-                    <div id="storyStage3" class="story-stage absolute inset-0 flex items-center justify-center px-6 opacity-0">
-                        <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-                            <div class="w-full max-w-sm mx-auto lg:mx-0 bg-white border border-kotlis-border text-left p-4 shadow-xl">
-                                <div class="text-[10px] text-gray-400 mb-1">google.com/search <span class="text-kotlis-gold font-bold uppercase">· Example</span></div>
-                                <div class="text-blue-700 text-sm font-semibold truncate">example.com — Official Site</div>
-                                <div class="text-emerald-700 text-[11px]">example.com</div>
-                                <div class="text-gray-500 text-[11px] mt-1">Ranked <span id="storyRank" class="font-bold text-kotlis-dark">#8</span> → climbing with every optimization pass.</div>
-                            </div>
-                            <div class="text-center lg:text-left space-y-4">
-                                <p class="text-kotlis-dark text-lg sm:text-xl font-serif font-bold"><span class="text-kotlis-gold">Month 1 —</span> You show up first, on Google and AI search.</p>
-                                <ul class="space-y-2.5 text-sm text-kotlis-subtle inline-block lg:block text-left">
-                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> On-page SEO + technical fixes shipped from week one</li>
-                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> Content structured for Google and AI search engines</li>
-                                    <li class="flex items-start gap-2"><i class="fa-solid fa-check text-kotlis-gold mt-1"></i> Rankings monitored and pushed up every month</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Progress dots -->
-                    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-2">
-                        <span class="storyDot w-2 h-2 rounded-full bg-kotlis-gold"></span>
-                        <span class="storyDot w-2 h-2 rounded-full bg-kotlis-border"></span>
-                        <span class="storyDot w-2 h-2 rounded-full bg-kotlis-border"></span>
                     </div>
                 </div>
             </section>
 
-            <!-- Emotional hook + low-friction CTA, right after the story -->
+            <!-- CLIENT STRIP -->
+            <section class="py-14 bg-kotlis-card border-b border-kotlis-border">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+                    <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Live projects we've shipped</span>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                        <a href="https://play.google.com/store/apps/details?id=com.firstaide.healthapplication" target="_blank" class="flex flex-col items-center gap-2 p-4 border border-kotlis-border hover:border-kotlis-gold transition">
+                            <img src="images/portfolio/first-aide.webp" alt="FIRST AIDE" class="w-10 h-10 object-cover rounded">
+                            <span class="text-[11px] font-bold text-kotlis-dark">FIRST AIDE</span>
+                        </a>
+                        <a href="https://play.google.com/store/apps/details?id=com.fosproduction.ecommerceapp" target="_blank" class="flex flex-col items-center gap-2 p-4 border border-kotlis-border hover:border-kotlis-gold transition">
+                            <img src="images/portfolio/fos-ecommerce.webp" alt="FOS Production" class="w-10 h-10 object-cover rounded">
+                            <span class="text-[11px] font-bold text-kotlis-dark">FOS Production</span>
+                        </a>
+                        <a href="https://apps.apple.com/us/app/fos-messenger/id6757640264" target="_blank" class="flex flex-col items-center gap-2 p-4 border border-kotlis-border hover:border-kotlis-gold transition">
+                            <img src="images/portfolio/fos-messenger.webp" alt="FOS Messenger" class="w-10 h-10 object-cover rounded">
+                            <span class="text-[11px] font-bold text-kotlis-dark">FOS Messenger</span>
+                        </a>
+                        <a href="https://bookmytask.com/" target="_blank" class="flex flex-col items-center gap-2 p-4 border border-kotlis-border hover:border-kotlis-gold transition">
+                            <img src="images/portfolio/bookmytask-logo.svg" alt="BookMyTask" class="w-10 h-10 object-contain">
+                            <span class="text-[11px] font-bold text-kotlis-dark">BookMyTask</span>
+                        </a>
+                        <a href="https://amaysingshop.com" target="_blank" class="flex flex-col items-center gap-2 p-4 border border-kotlis-border hover:border-kotlis-gold transition">
+                            <img src="images/portfolio/amaysing-shop.jpg" alt="Amaysing Shop" class="w-10 h-10 object-cover rounded">
+                            <span class="text-[11px] font-bold text-kotlis-dark">Amaysing Shop</span>
+                        </a>
+                        <a href="https://mugafi.com" target="_blank" class="flex flex-col items-center gap-2 p-4 border border-kotlis-border hover:border-kotlis-gold transition">
+                            <img src="images/portfolio/mugafi.jpg" alt="Mugafi" class="w-10 h-10 object-cover rounded">
+                            <span class="text-[11px] font-bold text-kotlis-dark">Mugafi</span>
+                        </a>
+                        <a href="https://mawahib.ai" target="_blank" class="flex flex-col items-center gap-2 p-4 border border-kotlis-border hover:border-kotlis-gold transition">
+                            <img src="images/portfolio/mawahib.jpg" alt="Mawahib AI" class="w-10 h-10 object-cover rounded">
+                            <span class="text-[11px] font-bold text-kotlis-dark">Mawahib AI</span>
+                        </a>
+                        <a href="https://www.crossbridge.estate" target="_blank" class="flex flex-col items-center gap-2 p-4 border border-kotlis-border hover:border-kotlis-gold transition">
+                            <img src="images/portfolio/crossbridge.jpg" alt="Crossbridge Estate" class="w-10 h-10 object-cover rounded">
+                            <span class="text-[11px] font-bold text-kotlis-dark">Crossbridge Estate</span>
+                        </a>
+                        <a href="https://www.yogkulam.org" target="_blank" class="flex flex-col items-center gap-2 p-4 border border-kotlis-border hover:border-kotlis-gold transition">
+                            <img src="images/portfolio/yogkulam.jpg" alt="Yogkulam" class="w-10 h-10 object-cover rounded">
+                            <span class="text-[11px] font-bold text-kotlis-dark">Yogkulam</span>
+                        </a>
+                        <a href="https://polatglobal.com" target="_blank" class="flex flex-col items-center gap-2 p-4 border border-kotlis-border hover:border-kotlis-gold transition">
+                            <img src="images/portfolio/polat-global.jpg" alt="Polat Global" class="w-10 h-10 object-cover rounded">
+                            <span class="text-[11px] font-bold text-kotlis-dark">Polat Global</span>
+                        </a>
+                    </div>
+                    <button onclick="switchPage('portfolio')" class="text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold transition">See all projects <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                </div>
+            </section>
+
+            <!-- WHO IT'S FOR -->
+            <section class="py-20 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-10">
+                    <div class="space-y-3">
+                        <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Who It's For</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold font-serif text-kotlis-dark">Built for Founders and Growing Businesses</h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                        <div class="tilt-card bg-kotlis-card border border-kotlis-border p-8">
+                            <div class="tilt-icon w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6"><i class="fa-solid fa-rocket"></i></div>
+                            <h3 class="font-serif font-bold text-lg text-kotlis-dark mb-2">Startup Founders</h3>
+                            <p class="text-xs text-kotlis-subtle leading-relaxed">Launch your MVP app in weeks, not months.</p>
+                        </div>
+                        <div class="tilt-card bg-kotlis-card border border-kotlis-border p-8">
+                            <div class="tilt-icon w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6"><i class="fa-solid fa-calendar-check"></i></div>
+                            <h3 class="font-serif font-bold text-lg text-kotlis-dark mb-2">Businesses & Clinics</h3>
+                            <p class="text-xs text-kotlis-subtle leading-relaxed">Booking apps and websites that bring real enquiries.</p>
+                        </div>
+                        <div class="tilt-card bg-kotlis-card border border-kotlis-border p-8">
+                            <div class="tilt-icon w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6"><i class="fa-solid fa-cart-shopping"></i></div>
+                            <h3 class="font-serif font-bold text-lg text-kotlis-dark mb-2">D2C & E-commerce</h3>
+                            <p class="text-xs text-kotlis-subtle leading-relaxed">Custom stores + ads that actually sell.</p>
+                        </div>
+                    </div>
+                    <p class="text-sm font-bold text-kotlis-dark">Projects start from ₹[ADD REAL: starting price].</p>
+                </div>
+            </section>
+
+            <!-- SERVICES (homepage summary — 3 cards) -->
+            <section class="py-20 bg-kotlis-card border-b border-kotlis-border">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Services</span>
+                    <h2 class="text-3xl font-bold font-serif text-kotlis-dark">Everything Needed to Build and Launch</h2>
+                    <p class="text-kotlis-subtle text-sm max-w-2xl mx-auto">From native cross-platform mobile apps to full websites and the ads that bring customers.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left pt-6">
+                        <div class="tilt-card bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                            <div>
+                                <div class="tilt-icon w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                                <h3 class="text-xl font-serif font-bold text-kotlis-dark mt-2 mb-4">Mobile Apps (Flutter)</h3>
+                                <ul class="space-y-2 text-xs text-kotlis-dark border-t border-kotlis-border pt-4">
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> iOS App Store & Google Play Publishing</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Single Flutter codebase, both platforms</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Payments, APIs, and offline support</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Post-launch support window included</li>
+                                </ul>
+                                <p class="text-xs text-kotlis-subtle mt-4">Timeline: [ADD REAL: X–Y weeks]</p>
+                                <p class="text-xs font-bold text-kotlis-dark mt-1">Starting from ₹[ADD REAL: price]</p>
+                            </div>
+                            <button onclick="switchPage('contact')" class="mt-6 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">Get Blueprint</button>
+                        </div>
+                        <div class="tilt-card bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                            <div>
+                                <div class="tilt-icon w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6"><i class="fa-solid fa-code"></i></div>
+                                <h3 class="text-xl font-serif font-bold text-kotlis-dark mt-2 mb-4">Websites & Web Apps</h3>
+                                <ul class="space-y-2 text-xs text-kotlis-dark border-t border-kotlis-border pt-4">
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Custom React/Next.js or WordPress builds</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Fast, responsive, mobile-first design</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Lead capture & booking integrations</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> E-commerce & Shopify builds</li>
+                                </ul>
+                                <p class="text-xs text-kotlis-subtle mt-4">Timeline: [ADD REAL: X–Y weeks]</p>
+                                <p class="text-xs font-bold text-kotlis-dark mt-1">Starting from ₹[ADD REAL: price]</p>
+                            </div>
+                            <button onclick="switchPage('contact')" class="mt-6 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">Get Blueprint</button>
+                        </div>
+                        <div class="tilt-card bg-kotlis-bg border border-kotlis-border p-8 flex flex-col justify-between hover:border-kotlis-gold transition duration-300">
+                            <div>
+                                <div class="tilt-icon w-12 h-12 bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xl font-bold mb-6"><i class="fa-brands fa-meta"></i></div>
+                                <h3 class="text-xl font-serif font-bold text-kotlis-dark mt-2 mb-4">Launch Growth</h3>
+                                <ul class="space-y-2 text-xs text-kotlis-dark border-t border-kotlis-border pt-4">
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Meta & Google Ads campaign setup</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> SEO & AI search optimization</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Lead routing & WhatsApp/CRM automation</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Weekly reporting on what's converting</li>
+                                </ul>
+                                <p class="text-xs text-kotlis-subtle mt-4">Timeline: [ADD REAL: X–Y weeks]</p>
+                                <p class="text-xs font-bold text-kotlis-dark mt-1">Starting from ₹[ADD REAL: price]/month</p>
+                            </div>
+                            <button onclick="switchPage('contact')" class="mt-6 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">Get Blueprint</button>
+                        </div>
+                    </div>
+                    <div class="pt-6">
+                        <button onclick="switchPage('services')" class="px-8 py-3 border border-kotlis-border text-kotlis-dark text-xs font-bold uppercase tracking-widest hover:border-kotlis-dark transition">Explore Full Service Details <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CASE STUDIES -->
+            <section class="py-20 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Case Studies</span>
+                    <h2 class="text-3xl font-bold font-serif text-kotlis-dark">Real Builds, Real Results</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left pt-6">
+                        <div class="bg-kotlis-card border border-kotlis-border overflow-hidden flex flex-col">
+                            <img src="images/portfolio/first-aide.webp" alt="FIRST AIDE screenshot" class="w-full h-40 object-cover">
+                            <div class="p-6 flex flex-col flex-1">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Healthcare</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2 mb-2">FIRST AIDE</h3>
+                                <p class="text-xs text-kotlis-subtle mb-2"><strong>Problem:</strong> Needed a mobile app for digital prescriptions, tele-consultation, and online pharmacy ordering.</p>
+                                <p class="text-xs text-kotlis-subtle mb-2"><strong>What we built:</strong> Flutter cross-platform app with a synchronized web storefront.</p>
+                                <p class="text-xs text-kotlis-subtle mb-4"><strong>Result:</strong> Live on Google Play.</p>
+                                <a href="https://play.google.com/store/apps/details?id=com.firstaide.healthapplication" target="_blank" class="mt-auto text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold transition">View Live <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            </div>
+                        </div>
+                        <div class="bg-kotlis-card border border-kotlis-border overflow-hidden flex flex-col">
+                            <img src="images/portfolio/bookmytask-logo.svg" alt="BookMyTask logo" class="w-full h-40 object-contain bg-kotlis-bg p-6">
+                            <div class="p-6 flex flex-col flex-1">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Home Services Marketplace</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2 mb-2">BookMyTask</h3>
+                                <p class="text-xs text-kotlis-subtle mb-2"><strong>Problem:</strong> Connect users with verified home-service professionals (cleaning, electrical, plumbing, and more).</p>
+                                <p class="text-xs text-kotlis-subtle mb-2"><strong>What we built:</strong> Flutter marketplace app (iOS + Android) with a companion website.</p>
+                                <p class="text-xs text-kotlis-subtle mb-4"><strong>Result:</strong> Live on Google Play & App Store.</p>
+                                <a href="https://bookmytask.com/" target="_blank" class="mt-auto text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold transition">View Live <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            </div>
+                        </div>
+                        <div class="bg-kotlis-card border border-kotlis-border overflow-hidden flex flex-col">
+                            <img src="images/portfolio/mugafi.jpg" alt="Mugafi screenshot" class="w-full h-40 object-cover">
+                            <div class="p-6 flex flex-col flex-1">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Media & Creative Learning</span>
+                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2 mb-2">Mugafi</h3>
+                                <p class="text-xs text-kotlis-subtle mb-2"><strong>Problem:</strong> Needed a web platform for streaming courses and mentor connections.</p>
+                                <p class="text-xs text-kotlis-subtle mb-2"><strong>What we built:</strong> Custom website with course delivery and mentor-matching flows.</p>
+                                <p class="text-xs text-kotlis-subtle mb-4"><strong>Result:</strong> [ADD REAL: metric]</p>
+                                <a href="https://mugafi.com" target="_blank" class="mt-auto text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold transition">View Live <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PROCESS -->
+            <section class="py-20 bg-kotlis-card border-b border-kotlis-border">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-14 space-y-3">
+                        <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">How We Work</span>
+                        <h2 class="text-2xl sm:text-4xl font-extrabold text-kotlis-dark serif-title">Our Process</h2>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+                        <div class="hidden lg:block absolute top-6 left-[12.5%] right-[12.5%] h-[2px] bg-kotlis-border" aria-hidden="true"></div>
+                        <div class="relative text-center lg:text-left">
+                            <div class="w-12 h-12 mx-auto lg:mx-0 rounded-full bg-kotlis-fill text-kotlis-glow font-serif font-bold flex items-center justify-center text-lg relative z-10">01</div>
+                            <h3 class="font-serif font-bold text-base text-kotlis-dark mt-4 mb-2">Free 30-Min Blueprint Call</h3>
+                            <p class="text-xs text-kotlis-subtle leading-relaxed">We map your goals, users, and constraints into a clear scope — no cost, no obligation.</p>
+                        </div>
+                        <div class="relative text-center lg:text-left">
+                            <div class="w-12 h-12 mx-auto lg:mx-0 rounded-full bg-kotlis-fill text-kotlis-glow font-serif font-bold flex items-center justify-center text-lg relative z-10">02</div>
+                            <h3 class="font-serif font-bold text-base text-kotlis-dark mt-4 mb-2">Design — Week 1-2</h3>
+                            <p class="text-xs text-kotlis-subtle leading-relaxed">Wireframes to polished UI, reviewed with you before a line of code is written.</p>
+                        </div>
+                        <div class="relative text-center lg:text-left">
+                            <div class="w-12 h-12 mx-auto lg:mx-0 rounded-full bg-kotlis-fill text-kotlis-glow font-serif font-bold flex items-center justify-center text-lg relative z-10">03</div>
+                            <h3 class="font-serif font-bold text-base text-kotlis-dark mt-4 mb-2">Build With Weekly Demos</h3>
+                            <p class="text-xs text-kotlis-subtle leading-relaxed">Sprints with visible progress — staging links, weekly demos, no black boxes.</p>
+                        </div>
+                        <div class="relative text-center lg:text-left">
+                            <div class="w-12 h-12 mx-auto lg:mx-0 rounded-full bg-kotlis-gold text-white font-serif font-bold flex items-center justify-center text-lg relative z-10">04</div>
+                            <h3 class="font-serif font-bold text-base text-kotlis-dark mt-4 mb-2">Launch + Growth</h3>
+                            <p class="text-xs text-kotlis-subtle leading-relaxed">Shipped to production, then handed to our growth engine — ads, SEO, and iteration.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Low-friction CTA strip -->
             <section class="py-16 bg-[var(--kotlis-bg-alt)] border-b border-kotlis-border text-center">
                 <div class="max-w-2xl mx-auto px-4 space-y-5">
-                    <h3 class="text-kotlis-dark text-2xl sm:text-3xl font-serif font-bold">Imagine your product live like this — shipped, ranking, and converting.</h3>
+                    <h3 class="text-kotlis-dark text-2xl sm:text-3xl font-serif font-bold">Ready to see your product live?</h3>
                     <a href="https://wa.me/918126666331?text=BUILD" target="_blank" onclick="trackWhatsAppClick()" class="inline-flex items-center gap-2 px-8 py-4 bg-kotlis-gold text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition">
                         <i class="fa-brands fa-whatsapp"></i> DM "BUILD" and let's ship it
                     </a>
-                </div>
-            </section>
-
-            <!-- Section Teasers on Home Page -->
-            <section class="py-20 bg-kotlis-card border-b border-kotlis-border">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-                    <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Core Capabilities</span>
-                    <h2 class="text-3xl font-bold font-serif text-kotlis-dark">Everything Needed to Scale Modern Digital Products</h2>
-                    <p class="text-kotlis-subtle text-sm max-w-2xl mx-auto">From native cross-platform mobile experiences to multi-channel advertising engines and cloud server migrations.</p>
-                    <div class="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <button onclick="switchPage('services')" class="px-8 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">Explore All Services <i class="fa-solid fa-arrow-right ml-2"></i></button>
-                        <button onclick="goToITSupport()" class="px-8 py-3 border border-emerald-500 text-emerald-500 text-xs font-bold uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition">
-                            <i class="fa-solid fa-headset mr-2"></i> Need IT Support?
-                        </button>
-                    </div>
                 </div>
             </section>
 
@@ -921,41 +1001,20 @@
                             <img src="images/team/vikas.jpeg" alt="Vikas Uniyal" class="w-full h-72 object-contain bg-kotlis-bg p-2 mb-3" loading="lazy">
                             <h3 class="font-serif font-bold text-sm text-kotlis-dark">Vikas Uniyal</h3>
                             <p class="text-[10px] uppercase tracking-wider text-kotlis-gold font-bold mt-1">Founder · Full Stack</p>
-                            <p class="text-[11px] text-kotlis-subtle mt-2">App Development, Game Development, Website Development & Design, and CRM. Also handles Meta Ads, lead generation, AI automations & business solution promotion.</p>
+                            <p class="text-[11px] text-kotlis-subtle mt-2">App Development, Website Development & Design, and CRM. Also handles Meta Ads, lead generation, AI automations & business solution promotion.</p>
+                            <a href="[ADD REAL: LinkedIn URL]" target="_blank" class="inline-flex items-center gap-1.5 text-[11px] text-kotlis-subtle hover:text-kotlis-gold mt-2 transition"><i class="fa-brands fa-linkedin"></i> [ADD REAL: LinkedIn URL]</a>
                         </div>
                         <div class="tilt-card orbit-border border border-kotlis-border p-4">
                             <img src="images/team/rohitkotnala.jfif" alt="Rohit Kotnala" class="w-full h-72 object-contain bg-kotlis-bg p-2 mb-3" loading="lazy">
                             <h3 class="font-serif font-bold text-sm text-kotlis-dark">Rohit Kotnala</h3>
                             <p class="text-[10px] uppercase tracking-wider text-kotlis-gold font-bold mt-1">Business Solutions · Client Handling</p>
                             <p class="text-[11px] text-kotlis-subtle mt-2">Finds leads, brings in business, and handles client solutions end-to-end. Also handles Meta Ads, lead generation, and AI automations.</p>
+                            <a href="[ADD REAL: LinkedIn URL]" target="_blank" class="inline-flex items-center gap-1.5 text-[11px] text-kotlis-subtle hover:text-kotlis-gold mt-2 transition"><i class="fa-brands fa-linkedin"></i> [ADD REAL: LinkedIn URL]</a>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Blog Teaser Strip -->
-            <section class="py-16 bg-[var(--kotlis-bg-alt)]">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-10">
-                    <div class="space-y-3">
-                        <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">From the Blog</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold font-serif text-kotlis-dark">Latest Insights</h2>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
-                        <div class="tilt-card bg-kotlis-card border border-kotlis-border p-5">
-                            <h3 class="font-serif font-bold text-sm text-kotlis-dark">Flutter vs Native for Startups: When Cross-Platform Wins</h3>
-                            <p class="text-xs text-kotlis-subtle mt-2">Guidance on choosing between Flutter and native development for startup projects.</p>
-                        </div>
-                        <div class="tilt-card bg-kotlis-card border border-kotlis-border p-5">
-                            <h3 class="font-serif font-bold text-sm text-kotlis-dark">Website Migration Checklist (SEO-Safe Cutover)</h3>
-                            <p class="text-xs text-kotlis-subtle mt-2">Redirects, analytics, and the steps that keep rankings intact during a migration.</p>
-                        </div>
-                        <div class="tilt-card bg-kotlis-card border border-kotlis-border p-5">
-                            <h3 class="font-serif font-bold text-sm text-kotlis-dark">Google Ads Setup Checklist for App & SaaS Launches</h3>
-                            <p class="text-xs text-kotlis-subtle mt-2">Campaign fundamentals for app and SaaS marketing in the first 30 days.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </div>
 
         <!-- ================= PAGE 2: SERVICES INNER PAGE ================= -->
@@ -1026,7 +1085,7 @@
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Search Engine Indexing</span>
                                 <h3 class="text-2xl font-serif font-bold text-kotlis-dark mt-2 mb-4">SEO & AI Search Optimization</h3>
                                 <p class="text-kotlis-subtle text-xs leading-relaxed mb-6">
-                                    Rank on Page 1 of Google and index your platform directly into AI models like ChatGPT, Gemini, and Perplexity using semantic schema structured data.
+                                    Improve your search ranking and help your platform get indexed by AI models like ChatGPT, Gemini, and Perplexity using semantic schema structured data.
                                 </p>
                                 <ul class="space-y-2 text-xs text-kotlis-dark border-t border-kotlis-border pt-4">
                                     <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> JSON-LD Structured Schema Markup</li>
@@ -1047,20 +1106,19 @@
                                     <i class="fa-solid fa-server"></i>
                                 </div>
                                 <span class="text-[10px] font-bold uppercase tracking-widest text-kotlis-gold">Cloud Infrastructure</span>
-                                <h3 class="text-2xl font-serif font-bold text-kotlis-dark mt-2 mb-4">Zero Downtime Cloud Migration</h3>
+                                <h3 class="text-2xl font-serif font-bold text-kotlis-dark mt-2 mb-4">Cloud Migration & Infrastructure</h3>
                                 <p class="text-kotlis-subtle text-xs leading-relaxed mb-6">
-                                    Migrate databases, full-stack web applications, and DNS infrastructure seamlessly without interrupting client traffic or SEO domain authority.
+                                    Migrate databases, full-stack web applications, and DNS infrastructure with a planned cutover that minimizes disruption to traffic or SEO rankings.
                                 </p>
                                 <ul class="space-y-2 text-xs text-kotlis-dark border-t border-kotlis-border pt-4">
                                     <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Database Replication & Sync</li>
                                     <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> AWS, Vercel & Docker Deployments</li>
-                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Zero Rank Drop SEO Safeguard</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> SEO-Safe Cutover Planning</li>
                                 </ul>
                             </div>
-                            <button onclick="openITModal('migrationService')" class="mt-4 text-left text-[11px] font-semibold text-kotlis-subtle hover:text-kotlis-gold underline underline-offset-2 decoration-dotted w-fit transition">How it works</button>
-                            <button onclick="switchPage('migration')" class="mt-4 text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold transition flex items-center">
-                                <span>View Migration Protocol</span> <i class="fa-solid fa-arrow-right ml-2"></i>
-                            </button>
+                            <a href="it-support.html" class="mt-4 text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-kotlis-gold transition flex items-center">
+                                <span>View Cloud Migration & IT Support</span> <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </a>
                         </div>
 
                         <!-- Service 5 -->
@@ -1076,7 +1134,7 @@
                                 </p>
                                 <ul class="space-y-2 text-xs text-kotlis-dark border-t border-kotlis-border pt-4">
                                     <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> React / Next.js Server Components</li>
-                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Tailored Editorial & Serif Typography</li>
+                                    <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Custom Layout & Typography</li>
                                     <li class="flex items-center"><i class="fa-solid fa-check text-kotlis-gold mr-2"></i> Custom Lead Capture Integrations</li>
                                 </ul>
                             </div>
@@ -1210,16 +1268,44 @@
                         </div>
                     </div>
 
-                    <!-- Trust strip: client quote -->
+                    <!-- Trust strip: client quotes -->
                     <div class="mt-20 pt-16 border-t border-kotlis-border">
-                        <div class="max-w-3xl mx-auto text-center space-y-5">
-                            <i class="fa-solid fa-quote-left text-3xl text-kotlis-gold"></i>
-                            <p class="text-lg sm:text-xl font-serif font-bold text-kotlis-dark leading-snug">"They shipped our Flutter app end-to-end and had it live on Google Play in weeks, not months — then kept optimizing the ad spend after launch."</p>
-                            <div class="flex items-center justify-center gap-3 pt-2">
-                                <div class="w-9 h-9 rounded-full bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xs font-bold">FA</div>
-                                <div class="text-left">
-                                    <div class="text-xs font-bold text-kotlis-dark">FIRST AIDE</div>
-                                    <div class="text-[10px] uppercase tracking-wider text-kotlis-subtle">Healthcare Delivery Client</div>
+                        <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+                            <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">What Clients Say</span>
+                            <h2 class="text-2xl sm:text-4xl font-extrabold text-kotlis-dark serif-title">Testimonials</h2>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div class="bg-kotlis-bg border border-kotlis-border p-6 flex flex-col gap-4">
+                                <i class="fa-solid fa-quote-left text-2xl text-kotlis-gold"></i>
+                                <p class="text-sm font-serif font-bold text-kotlis-dark leading-snug flex-1">"They shipped our Flutter app end-to-end and had it live on Google Play in weeks, not months — then kept optimizing the ad spend after launch."</p>
+                                <div class="flex items-center gap-3 pt-2">
+                                    <div class="w-9 h-9 rounded-full bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xs font-bold">FA</div>
+                                    <div class="text-left">
+                                        <div class="text-xs font-bold text-kotlis-dark">FIRST AIDE</div>
+                                        <div class="text-[10px] uppercase tracking-wider text-kotlis-subtle">Healthcare Delivery Client</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-kotlis-bg border border-kotlis-border p-6 flex flex-col gap-4">
+                                <i class="fa-solid fa-quote-left text-2xl text-kotlis-gold"></i>
+                                <p class="text-sm font-serif font-bold text-kotlis-dark leading-snug flex-1">"[ADD REAL: quote]"</p>
+                                <div class="flex items-center gap-3 pt-2">
+                                    <div class="w-9 h-9 rounded-full bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xs font-bold">[ADD REAL: photo]</div>
+                                    <div class="text-left">
+                                        <div class="text-xs font-bold text-kotlis-dark">[ADD REAL: name]</div>
+                                        <div class="text-[10px] uppercase tracking-wider text-kotlis-subtle">[ADD REAL: role, company]</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-kotlis-bg border border-kotlis-border p-6 flex flex-col gap-4">
+                                <i class="fa-solid fa-quote-left text-2xl text-kotlis-gold"></i>
+                                <p class="text-sm font-serif font-bold text-kotlis-dark leading-snug flex-1">"[ADD REAL: quote]"</p>
+                                <div class="flex items-center gap-3 pt-2">
+                                    <div class="w-9 h-9 rounded-full bg-kotlis-fill text-kotlis-glow flex items-center justify-center text-xs font-bold">[ADD REAL: photo]</div>
+                                    <div class="text-left">
+                                        <div class="text-xs font-bold text-kotlis-dark">[ADD REAL: name]</div>
+                                        <div class="text-[10px] uppercase tracking-wider text-kotlis-subtle">[ADD REAL: role, company]</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1234,205 +1320,55 @@
                         <div class="max-w-3xl mx-auto divide-y divide-kotlis-border border-t border-b border-kotlis-border">
                             <details class="group py-5">
                                 <summary class="flex items-center justify-between cursor-pointer list-none font-serif font-bold text-kotlis-dark text-sm sm:text-base">
-                                    How long does a typical project take?
+                                    How much does an app/website cost?
                                     <i class="fa-solid fa-plus text-kotlis-gold group-open:rotate-45 transition-transform"></i>
                                 </summary>
-                                <p class="text-xs text-kotlis-subtle mt-3 leading-relaxed">Most mobile or web builds ship in 4–8 weeks depending on scope. We send a firm timeline after the discovery call, before any contract is signed.</p>
+                                <p class="text-xs text-kotlis-subtle mt-3 leading-relaxed">It depends on scope. As a rough starting point, projects begin from ₹[ADD REAL: starting price] — we give you a firm, fixed quote after a free scoping call, before any contract is signed.</p>
                             </details>
                             <details class="group py-5">
                                 <summary class="flex items-center justify-between cursor-pointer list-none font-serif font-bold text-kotlis-dark text-sm sm:text-base">
-                                    Do you work with early-stage startups or only established businesses?
+                                    How long does it take?
                                     <i class="fa-solid fa-plus text-kotlis-gold group-open:rotate-45 transition-transform"></i>
                                 </summary>
-                                <p class="text-xs text-kotlis-subtle mt-3 leading-relaxed">Both. We scope engagements from a single MVP build to full product + growth retainers for scaling teams.</p>
+                                <p class="text-xs text-kotlis-subtle mt-3 leading-relaxed">Most mobile or web builds ship in [ADD REAL: X–Y weeks] depending on scope. We send a firm timeline after the discovery call.</p>
                             </details>
                             <details class="group py-5">
                                 <summary class="flex items-center justify-between cursor-pointer list-none font-serif font-bold text-kotlis-dark text-sm sm:text-base">
-                                    What happens after launch — do you offer support?
+                                    Do you sign an NDA?
                                     <i class="fa-solid fa-plus text-kotlis-gold group-open:rotate-45 transition-transform"></i>
                                 </summary>
-                                <p class="text-xs text-kotlis-subtle mt-3 leading-relaxed">Yes — every build includes a post-launch support window, with ongoing maintenance and growth retainers available after.</p>
+                                <p class="text-xs text-kotlis-subtle mt-3 leading-relaxed">[ADD REAL: NDA policy — e.g. "Yes, we sign an NDA before any discovery call if you ask."]</p>
                             </details>
                             <details class="group py-5">
                                 <summary class="flex items-center justify-between cursor-pointer list-none font-serif font-bold text-kotlis-dark text-sm sm:text-base">
-                                    Can you take over an existing app or website from another team?
+                                    Who owns the code?
                                     <i class="fa-solid fa-plus text-kotlis-gold group-open:rotate-45 transition-transform"></i>
                                 </summary>
-                                <p class="text-xs text-kotlis-subtle mt-3 leading-relaxed">Yes — we regularly audit and take over existing codebases, including zero-downtime migrations to new infrastructure.</p>
+                                <p class="text-xs text-kotlis-subtle mt-3 leading-relaxed">[ADD REAL: code ownership policy — e.g. "You own 100% of the source code once the project is paid in full."]</p>
                             </details>
-                        </div>
-                    </div>
-
-                    <!-- ========= IT Support & Technical Services =========
-                         Visually distinct sub-module: emerald (emerald-500) accent
-                         instead of the page's usual gold, so it reads as a
-                         specialized add-on service while still inheriting the
-                         site's typography, cards, and tilt/reveal mechanics. -->
-                    <style>
-                        .it-card:hover { box-shadow: 0 10px 30px -12px rgba(52, 211, 153, 0.35); }
-                    </style>
-                    <div id="it-support" class="mt-20 pt-16 border-t border-kotlis-border scroll-mt-24">
-                        <div class="relative border border-emerald-500/40 bg-gradient-to-b from-[rgba(52,211,153,0.07)] via-transparent to-transparent p-6 sm:p-10 overflow-hidden">
-                            <div class="hidden sm:block absolute -top-24 -right-24 w-72 h-72 rounded-full bg-emerald-500/20 blur-3xl pointer-events-none" aria-hidden="true"></div>
-
-                            <div class="relative z-10 text-center max-w-3xl mx-auto mb-14 space-y-4">
-                                <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/40 text-emerald-500 text-[10px] font-bold uppercase tracking-widest rounded-full">
-                                    <span class="relative flex w-1.5 h-1.5">
-                                        <span class="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75 animate-ping"></span>
-                                        <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                                    </span>
-                                    Global &amp; Local IT Solutions
-                                </span>
-                                <h2 class="text-3xl sm:text-5xl font-extrabold text-kotlis-dark serif-title">IT Support &amp; Technical Services</h2>
-                                <p class="text-kotlis-subtle text-sm sm:text-base">Hands-on hardware, network, and security support — remote or on-site, for clients anywhere in the world.</p>
-                            </div>
-
-                            <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                <!-- IT Service 1 -->
-                                <div class="it-card tilt-card bg-kotlis-bg border border-kotlis-border overflow-hidden flex flex-col hover:border-emerald-500 transition duration-300">
-                                    <div class="relative h-40 overflow-hidden">
-                                        <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=800&amp;h=600&amp;q=80&amp;auto=format&amp;fit=crop" alt="Technician repairing a circuit board under a magnifier lamp" class="w-full h-full object-cover" loading="lazy">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
-                                        <div class="tilt-icon absolute bottom-3 left-3 w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center text-base shadow-md">
-                                            <i class="fa-solid fa-screwdriver-wrench"></i>
-                                        </div>
-                                    </div>
-                                    <div class="p-6 flex flex-col flex-1">
-                                        <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Hardware &amp; OS</span>
-                                        <h3 class="text-lg font-serif font-bold text-kotlis-dark mt-2 mb-3">Remote &amp; On-Site System Installation</h3>
-                                        <p class="text-kotlis-subtle text-xs leading-relaxed mb-4 flex-1">Full hardware troubleshooting, fresh OS installs, and complete system diagnostics — handled remotely or by a technician at your desk.</p>
-                                        <button onclick="openITModal('install')" class="text-left text-[11px] font-semibold text-kotlis-subtle hover:text-emerald-500 underline underline-offset-2 decoration-dotted mb-3 w-fit transition">How it works</button>
-                                        <button onclick="switchPage('contact')" class="mt-auto text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-emerald-500 transition flex items-center">
-                                            <span>Book Service</span> <i class="fa-solid fa-arrow-right ml-2"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- IT Service 2 -->
-                                <div class="it-card tilt-card bg-kotlis-bg border border-kotlis-border overflow-hidden flex flex-col hover:border-emerald-500 transition duration-300">
-                                    <div class="relative h-40 overflow-hidden">
-                                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&amp;h=600&amp;q=80&amp;auto=format&amp;fit=crop" alt="Close-up of a computer motherboard during hardware maintenance" class="w-full h-full object-cover" loading="lazy">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
-                                        <div class="tilt-icon absolute bottom-3 left-3 w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center text-base shadow-md">
-                                            <i class="fa-solid fa-arrows-rotate"></i>
-                                        </div>
-                                    </div>
-                                    <div class="p-6 flex flex-col flex-1">
-                                        <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Performance Tuning</span>
-                                        <h3 class="text-lg font-serif font-bold text-kotlis-dark mt-2 mb-3">Windows Updates &amp; Maintenance</h3>
-                                        <p class="text-kotlis-subtle text-xs leading-relaxed mb-4 flex-1">Security patch updates, driver installations, disk cleanup, and OS performance tuning to keep every machine running at full speed.</p>
-                                        <button onclick="openITModal('windows')" class="text-left text-[11px] font-semibold text-kotlis-subtle hover:text-emerald-500 underline underline-offset-2 decoration-dotted mb-3 w-fit transition">How it works</button>
-                                        <button onclick="switchPage('contact')" class="mt-auto text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-emerald-500 transition flex items-center">
-                                            <span>Get Support</span> <i class="fa-solid fa-arrow-right ml-2"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- IT Service 3 -->
-                                <div class="it-card tilt-card bg-kotlis-bg border border-kotlis-border overflow-hidden flex flex-col hover:border-emerald-500 transition duration-300">
-                                    <div class="relative h-40 overflow-hidden">
-                                        <img src="https://images.unsplash.com/photo-1616763355548-1b606f439f86?w=800&amp;h=600&amp;q=80&amp;auto=format&amp;fit=crop" alt="Office workstation with monitor, keyboard, and peripheral devices set up" class="w-full h-full object-cover" loading="lazy">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
-                                        <div class="tilt-icon absolute bottom-3 left-3 w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center text-base shadow-md">
-                                            <i class="fa-solid fa-print"></i>
-                                        </div>
-                                    </div>
-                                    <div class="p-6 flex flex-col flex-1">
-                                        <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Peripheral Setup</span>
-                                        <h3 class="text-lg font-serif font-bold text-kotlis-dark mt-2 mb-3">Printer &amp; Peripheral Setup</h3>
-                                        <p class="text-kotlis-subtle text-xs leading-relaxed mb-4 flex-1">Wireless network printing, scanner configuration, and seamless device syncing across every workstation in the office.</p>
-                                        <button onclick="openITModal('printer')" class="text-left text-[11px] font-semibold text-kotlis-subtle hover:text-emerald-500 underline underline-offset-2 decoration-dotted mb-3 w-fit transition">How it works</button>
-                                        <button onclick="switchPage('contact')" class="mt-auto text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-emerald-500 transition flex items-center">
-                                            <span>Book Service</span> <i class="fa-solid fa-arrow-right ml-2"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- IT Service 4 -->
-                                <div class="it-card tilt-card bg-kotlis-bg border border-kotlis-border overflow-hidden flex flex-col hover:border-emerald-500 transition duration-300">
-                                    <div class="relative h-40 overflow-hidden">
-                                        <img src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&amp;h=600&amp;q=80&amp;auto=format&amp;fit=crop" alt="Grid of IP CCTV security cameras mounted on a wall" class="w-full h-full object-cover" loading="lazy">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
-                                        <div class="tilt-icon absolute bottom-3 left-3 w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center text-base shadow-md">
-                                            <i class="fa-solid fa-video"></i>
-                                        </div>
-                                    </div>
-                                    <div class="p-6 flex flex-col flex-1">
-                                        <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Physical Security</span>
-                                        <h3 class="text-lg font-serif font-bold text-kotlis-dark mt-2 mb-3">CCTV &amp; Physical Security</h3>
-                                        <p class="text-kotlis-subtle text-xs leading-relaxed mb-4 flex-1">IP camera installations, DVR/NVR configuration, and local or remote surveillance setup for homes and offices.</p>
-                                        <button onclick="openITModal('cctv')" class="text-left text-[11px] font-semibold text-kotlis-subtle hover:text-emerald-500 underline underline-offset-2 decoration-dotted mb-3 w-fit transition">How it works</button>
-                                        <button onclick="switchPage('contact')" class="mt-auto text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-emerald-500 transition flex items-center">
-                                            <span>Get Support</span> <i class="fa-solid fa-arrow-right ml-2"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- IT Service 5 -->
-                                <div class="it-card tilt-card bg-kotlis-bg border border-kotlis-border overflow-hidden flex flex-col hover:border-emerald-500 transition duration-300">
-                                    <div class="relative h-40 overflow-hidden">
-                                        <img src="https://images.unsplash.com/photo-1550439062-609e1531270e?w=800&amp;h=600&amp;q=80&amp;auto=format&amp;fit=crop" alt="Remote IT support desk with multiple monitors, viewed from above" class="w-full h-full object-cover" loading="lazy">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
-                                        <div class="tilt-icon absolute bottom-3 left-3 w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center text-base shadow-md">
-                                            <i class="fa-solid fa-headset"></i>
-                                        </div>
-                                    </div>
-                                    <div class="p-6 flex flex-col flex-1">
-                                        <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">24/7 Support Desk</span>
-                                        <h3 class="text-lg font-serif font-bold text-kotlis-dark mt-2 mb-3">Global &amp; Local IT Support Desk</h3>
-                                        <p class="text-kotlis-subtle text-xs leading-relaxed mb-4 flex-1">Dedicated remote desktop support for international clients, plus on-demand local technicians for same-day assistance.</p>
-                                        <button onclick="openITModal('supportdesk')" class="text-left text-[11px] font-semibold text-kotlis-subtle hover:text-emerald-500 underline underline-offset-2 decoration-dotted mb-3 w-fit transition">How it works</button>
-                                        <button onclick="switchPage('contact')" class="mt-auto text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-emerald-500 transition flex items-center">
-                                            <span>Book Service</span> <i class="fa-solid fa-arrow-right ml-2"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- IT Service 6 -->
-                                <div class="it-card tilt-card bg-kotlis-bg border border-kotlis-border overflow-hidden flex flex-col hover:border-emerald-500 transition duration-300">
-                                    <div class="relative h-40 overflow-hidden">
-                                        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&amp;h=600&amp;q=80&amp;auto=format&amp;fit=crop" alt="Server rack with structured network cabling" class="w-full h-full object-cover" loading="lazy">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
-                                        <div class="tilt-icon absolute bottom-3 left-3 w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center text-base shadow-md">
-                                            <i class="fa-solid fa-wifi"></i>
-                                        </div>
-                                    </div>
-                                    <div class="p-6 flex flex-col flex-1">
-                                        <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-500">Connectivity</span>
-                                        <h3 class="text-lg font-serif font-bold text-kotlis-dark mt-2 mb-3">Network &amp; Wi-Fi Infrastructure</h3>
-                                        <p class="text-kotlis-subtle text-xs leading-relaxed mb-4 flex-1">Router and access-point placement, structured cabling, and Wi-Fi coverage tuning for reliable office-wide connectivity.</p>
-                                        <button onclick="openITModal('network')" class="text-left text-[11px] font-semibold text-kotlis-subtle hover:text-emerald-500 underline underline-offset-2 decoration-dotted mb-3 w-fit transition">How it works</button>
-                                        <button onclick="switchPage('contact')" class="mt-auto text-left text-xs font-bold uppercase tracking-widest text-kotlis-dark hover:text-emerald-500 transition flex items-center">
-                                            <span>Get Support</span> <i class="fa-solid fa-arrow-right ml-2"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Quick-inquiry CTA block -->
-                            <div class="relative z-10 mt-14 bg-kotlis-card border border-emerald-500/40 p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-                                <div class="text-center sm:text-left">
-                                    <h4 class="font-serif font-bold text-xl text-kotlis-dark">Need a Technician Right Now?</h4>
-                                    <p class="text-xs text-kotlis-subtle mt-1 max-w-md">Tell us the issue — remote diagnosis starts within minutes, on-site dispatch scheduled same day where available.</p>
-                                </div>
-                                <div class="flex flex-col sm:flex-row gap-3 shrink-0 w-full sm:w-auto">
-                                    <a href="https://wa.me/918126666331?text=IT%20SUPPORT%20REQUEST" target="_blank" onclick="trackWhatsAppClick()" class="px-6 py-3 bg-emerald-500 text-white text-xs font-bold uppercase tracking-widest hover:opacity-90 transition text-center">
-                                        <i class="fa-brands fa-whatsapp mr-1"></i> Get Support Now
-                                    </a>
-                                    <button onclick="switchPage('contact')" class="px-6 py-3 border border-emerald-500 text-emerald-500 text-xs font-bold uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition">
-                                        Book a Service
-                                    </button>
-                                </div>
-                            </div>
+                            <details class="group py-5">
+                                <summary class="flex items-center justify-between cursor-pointer list-none font-serif font-bold text-kotlis-dark text-sm sm:text-base">
+                                    Do you give support after launch?
+                                    <i class="fa-solid fa-plus text-kotlis-gold group-open:rotate-45 transition-transform"></i>
+                                </summary>
+                                <p class="text-xs text-kotlis-subtle mt-3 leading-relaxed">Yes — every build includes a post-launch support window of [ADD REAL: duration], with ongoing maintenance and growth retainers available after.</p>
+                            </details>
+                            <details class="group py-5">
+                                <summary class="flex items-center justify-between cursor-pointer list-none font-serif font-bold text-kotlis-dark text-sm sm:text-base">
+                                    Do you work with clients outside India?
+                                    <i class="fa-solid fa-plus text-kotlis-gold group-open:rotate-45 transition-transform"></i>
+                                </summary>
+                                <p class="text-xs text-kotlis-subtle mt-3 leading-relaxed">Yes — we currently work with clients in India and the UAE, and take on remote projects elsewhere on a case-by-case basis.</p>
+                            </details>
                         </div>
                     </div>
 
                     <!-- Closing conversion CTA -->
                     <div class="mt-20 bg-[var(--kotlis-bg-alt)] border border-kotlis-border p-8 text-center space-y-4 max-w-4xl mx-auto">
                         <h4 class="font-serif font-bold text-2xl text-kotlis-dark">Not Sure Which Service Fits Your Product?</h4>
-                        <p class="text-xs text-kotlis-subtle max-w-xl mx-auto">Tell us what you're building — we'll scope the right mix of mobile, web, growth, or migration work and send a free audit back within 24 hours.</p>
+                        <p class="text-xs text-kotlis-subtle max-w-xl mx-auto">Tell us what you're building — we'll scope the right mix of mobile, web, or growth work and get back to you within 24 hours.</p>
                         <button onclick="switchPage('contact')" class="px-8 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">
-                            Get Free Audit
+                            Get Free Blueprint
                         </button>
                     </div>
                 </div>
@@ -1461,13 +1397,13 @@
                              border toggle, and icons add quick visual scanning. -->
                         <div class="inline-flex flex-wrap gap-1 p-1 bg-kotlis-card border border-kotlis-border rounded-full text-xs uppercase font-bold tracking-wider shadow-sm w-fit">
                             <button onclick="filterPortfolio('all', this)" class="port-filter-btn flex items-center gap-1.5 px-4 py-2 rounded-full bg-kotlis-fill text-white transition">
-                                <i class="fa-solid fa-grip"></i> All <span class="opacity-70 font-normal normal-case">(44)</span>
+                                <i class="fa-solid fa-grip"></i> All <span class="opacity-70 font-normal normal-case">(40)</span>
                             </button>
                             <button onclick="filterPortfolio('flutter', this)" class="port-filter-btn flex items-center gap-1.5 px-4 py-2 rounded-full text-kotlis-dark hover:bg-kotlis-bg transition">
-                                <i class="fa-solid fa-mobile-screen-button"></i> Mobile Apps <span class="opacity-70 font-normal normal-case">(12)</span>
+                                <i class="fa-solid fa-mobile-screen-button"></i> Mobile Apps <span class="opacity-70 font-normal normal-case">(11)</span>
                             </button>
                             <button onclick="filterPortfolio('websites', this)" class="port-filter-btn flex items-center gap-1.5 px-4 py-2 rounded-full text-kotlis-dark hover:bg-kotlis-bg transition">
-                                <i class="fa-solid fa-globe"></i> Websites <span class="opacity-70 font-normal normal-case">(28)</span>
+                                <i class="fa-solid fa-globe"></i> Websites <span class="opacity-70 font-normal normal-case">(24)</span>
                             </button>
                             <button onclick="filterPortfolio('qa', this)" class="port-filter-btn flex items-center gap-1.5 px-4 py-2 rounded-full text-kotlis-dark hover:bg-kotlis-bg transition">
                                 <i class="fa-solid fa-vial"></i> QA & Testing <span class="opacity-70 font-normal normal-case">(5)</span>
@@ -1475,15 +1411,15 @@
                         </div>
                     </div>
 
-                    <!-- Filterable Projects Gallery - Complete 43 Projects -->
+                    <!-- Filterable Projects Gallery - Complete 40 Projects -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                        <!-- SECTION 1: MOBILE APPLICATIONS (12) -->
+                        <!-- SECTION 1: MOBILE APPLICATIONS (11) -->
                         <div class="portfolio-item flutter websites bg-kotlis-card border-2 border-kotlis-gold p-5 shadow-md hover:border-kotlis-dark transition relative flex flex-col justify-between">
                             <div>
                                 <span class="absolute -top-3 right-4 bg-kotlis-gold text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1">Verified Live Client</span>
                                 <img src="images/portfolio/first-aide.webp" alt="FIRST AIDE Healthcare App" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 01/12</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">FIRST AIDE Healthcare App</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Flutter medical application with digital prescriptions, tele-consultation, and online pharmacy ordering, paired with a synchronized web storefront.</p>
                             </div>
@@ -1492,8 +1428,8 @@
                                     <span><i class="fa-brands fa-google-play text-kotlis-gold mr-2"></i> Open App (Google Play)</span>
                                     <i class="fa-solid fa-arrow-up-right-from-square text-kotlis-subtle"></i>
                                 </a>
-                                <a href="https://first.templateforwebsites.com" target="_blank" class="inline-flex items-center justify-between p-2 bg-kotlis-bg border border-kotlis-border hover:border-kotlis-gold transition">
-                                    <span><i class="fa-solid fa-store text-kotlis-gold mr-2"></i> Live Storefront</span>
+                                <a href="#" class="inline-flex items-center justify-between p-2 bg-kotlis-bg border border-kotlis-border hover:border-kotlis-gold transition">
+                                    <span><i class="fa-solid fa-store text-kotlis-gold mr-2"></i> Live Storefront — [ADD REAL: live URL]</span>
                                     <i class="fa-solid fa-arrow-up-right-from-square text-kotlis-subtle"></i>
                                 </a>
                             </div>
@@ -1502,7 +1438,7 @@
                         <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/fos-ecommerce.webp" alt="FOS Production" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 02/12</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">FOS Production</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">High-performance e-commerce mobile app with instant product searching and payment gateway checkout.</p>
                             </div>
@@ -1512,7 +1448,7 @@
                         <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/adk.jpg" alt="ADK / MedOnGo Smart Clinics" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 03/12</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">ADK / MedOnGo Smart Clinics</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Smart clinic management and patient health monitoring mobile app interface.</p>
                             </div>
@@ -1522,7 +1458,7 @@
                         <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/pharma-invoice-extractor.jpg" alt="Pharma Invoice Extractor" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 04/12</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Pharma Invoice Extractor</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">OCR-powered mobile scanning app converting physical invoices into structured database entries.</p>
                             </div>
@@ -1532,7 +1468,7 @@
                         <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/earneasy.jpg" alt="EarnEasy — Refer & Earn" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 05/12</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">EarnEasy — Refer & Earn</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Gamified referral rewards system mobile app with automated payout ledger integration.</p>
                             </div>
@@ -1542,7 +1478,7 @@
                         <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/finpay.jpg" alt="FinPay — UPI Wallet" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 06/12</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">FinPay — UPI Wallet</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Secure biometric payment wallet supporting instant UPI transfers, bills, and card management.</p>
                             </div>
@@ -1552,7 +1488,7 @@
                         <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/fos-messenger.webp" alt="FOS Messenger" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 07/12</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">FOS Messenger</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">End-to-end encrypted real-time messaging mobile platform with media sharing capabilities.</p>
                             </div>
@@ -1571,9 +1507,9 @@
                         <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/oro-os-logo.jpg" alt="ORO OS — Hotel Management" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 08/12</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">ORO OS — Hotel Management</h3>
-                                <p class="text-xs text-kotlis-subtle mt-2">Mobile operating suite for hotel staff managing room service, check-ins, and house-keeping.</p>
+                                <p class="text-xs text-kotlis-subtle mt-2">Mobile operating suite for hotel staff managing room service, check-ins, and housekeeping.</p>
                             </div>
                             <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
                         </div>
@@ -1581,7 +1517,7 @@
                         <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/jiffy-fuels.jpg" alt="Jiffy Fuels" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 09/12</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Jiffy Fuels</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">On-demand fuel delivery booking application with live GPS fleet dispatch tracking.</p>
                             </div>
@@ -1590,18 +1526,8 @@
 
                         <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
-                                <img src="images/portfolio/dating-app.jpg" alt="Dating App" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 10/12</span>
-                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Dating App</h3>
-                                <p class="text-xs text-kotlis-subtle mt-2">Location-based social discovery app with real-time chat and profile verification filters.</p>
-                            </div>
-                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
-                        </div>
-
-                        <div class="portfolio-item flutter bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
-                            <div>
                                 <img src="images/portfolio/ai-store-builder.jpg" alt="AI Store Builder" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 11/12</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">AI Store Builder</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Generative AI mobile application enabling users to publish online stores directly from smartphones.</p>
                             </div>
@@ -1612,7 +1538,7 @@
                             <div>
                                 <span class="absolute -top-3 right-4 bg-kotlis-gold text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1">Live Client</span>
                                 <img src="images/portfolio/bookmytask-logo.svg" alt="BookMyTask" class="w-full h-40 object-contain bg-kotlis-bg p-6 mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App • 12/12</span>
+                                <span class="text-[10px] bg-kotlis-fill text-kotlis-glow px-2 py-1 font-bold uppercase tracking-widest">Mobile App</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">BookMyTask</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">On-demand home services marketplace connecting users with verified professionals for cleaning, electrical, plumbing, pest control, carpentry, gardening and more.</p>
                             </div>
@@ -1632,21 +1558,21 @@
                             </div>
                         </div>
 
-                        <!-- SECTION 2: WEBSITES & WEB APPLICATIONS (27) -->
+                        <!-- SECTION 2: WEBSITES & WEB APPLICATIONS (24) -->
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/first-aide-web.png" alt="First-Aid Pharmacy Website" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 01/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">First-Aid Pharmacy Website</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Online pharmaceutical web store with prescription uploads and fast localized dispatch.</p>
                             </div>
-                            <a href="https://first.templateforwebsites.com" target="_blank" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            <a href="#" class="mt-4 text-center py-2 bg-kotlis-fill text-white hover:bg-kotlis-gold text-xs font-bold uppercase tracking-wider transition">View Project Page — [ADD REAL: live URL] <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                         </div>
 
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/amaysing-shop.jpg" alt="Amaysing Shop" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 02/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Amaysing Shop</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Custom retail web store focused on luxury goods and smooth checkout experience.</p>
                             </div>
@@ -1655,48 +1581,8 @@
 
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
-                                <img src="images/portfolio/shopify-commerce-brand.jpg" alt="Shopify Storefront Sample" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 03/27</span>
-                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Shopify Storefront Sample</h3>
-                                <p class="text-xs text-kotlis-subtle mt-2">Custom liquid theme e-commerce setup optimized for high conversion rates.</p>
-                            </div>
-                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
-                        </div>
-
-                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
-                            <div>
-                                <img src="images/portfolio/webflow-marketing-site.jpg" alt="Webflow Marketing Site Sample" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 04/27</span>
-                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Webflow Marketing Site Sample</h3>
-                                <p class="text-xs text-kotlis-subtle mt-2">Responsive landing page with rich interactions and seamless form capture.</p>
-                            </div>
-                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
-                        </div>
-
-                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
-                            <div>
-                                <img src="images/portfolio/react-product-site.jpg" alt="React / Next.js Product Site" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 05/27</span>
-                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">React / Next.js Product Site</h3>
-                                <p class="text-xs text-kotlis-subtle mt-2">Ultra-fast server-side rendered application with automated SEO indexing.</p>
-                            </div>
-                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
-                        </div>
-
-                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
-                            <div>
-                                <img src="images/portfolio/wordpress-elementor-site.jpg" alt="WordPress + Elementor Site" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 06/27</span>
-                                <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">WordPress + Elementor Site</h3>
-                                <p class="text-xs text-kotlis-subtle mt-2">Content-driven corporate web portal with custom post types and dynamic blocks.</p>
-                            </div>
-                            <span class="mt-4 text-center py-2 bg-kotlis-bg border border-kotlis-border text-kotlis-subtle text-xs font-bold uppercase tracking-wider block">Private / Confidential Build</span>
-                        </div>
-
-                        <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
-                            <div>
                                 <img src="images/portfolio/mugafi.jpg" alt="Mugafi" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 07/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Mugafi</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Media & creative learning platform with streaming courses and mentor connect.</p>
                             </div>
@@ -1706,7 +1592,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/slideit.jpg" alt="Slideit" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 08/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Slideit</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Interactive web presentation builder tool for modern sales teams.</p>
                             </div>
@@ -1716,7 +1602,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/mawahib.jpg" alt="Mawahib AI" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 09/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Mawahib AI</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">AI-driven talent matchmaking portal connecting developers with global opportunities.</p>
                             </div>
@@ -1726,7 +1612,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/crossbridge.jpg" alt="Crossbridge Estate" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 10/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Crossbridge Estate</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">High-end real estate listings web portal with interactive filter modules.</p>
                             </div>
@@ -1736,7 +1622,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/tophills-travels.jpg" alt="Tophills Travels" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 11/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Tophills Travels</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Travel and tour package booking platform with integrated lead routing.</p>
                             </div>
@@ -1746,7 +1632,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/crafted-vacays.jpg" alt="Crafted Vacays" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 12/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Crafted Vacays</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Bespoke luxury holiday itinerary booking portal with interactive trip customizer.</p>
                             </div>
@@ -1756,7 +1642,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/ontario-glass.jpg" alt="Ontario Glass Supplies" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 13/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Ontario Glass Supplies</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">B2B industrial catalog website for architectural and commercial glass supplies.</p>
                             </div>
@@ -1766,7 +1652,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/yogkulam.jpg" alt="Yogkulam" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 14/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Yogkulam</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Yoga teacher training certification website with online module registration.</p>
                             </div>
@@ -1776,7 +1662,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/drishti-yogshala.jpg" alt="Drishti Yogshala" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 15/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Drishti Yogshala</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Holistic wellness retreats and yoga course booking web platform.</p>
                             </div>
@@ -1786,7 +1672,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/ayurveda-heritage.jpg" alt="Ayurveda Heritage" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 16/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Ayurveda Heritage</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Traditional wellness healthcare platform featuring consult scheduling and store.</p>
                             </div>
@@ -1796,7 +1682,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/shivalik-classes.jpg" alt="Shivalik Classes" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 17/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Shivalik Classes</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Educational coaching institute portal with student test portals and study downloads.</p>
                             </div>
@@ -1806,7 +1692,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/sangyaan.jpg" alt="Sangyaan" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 18/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Sangyaan</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Competitive exam prep digital platform with online mock tests and analytics.</p>
                             </div>
@@ -1816,7 +1702,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/cpctwale.jpg" alt="CPCTwale" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 19/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">CPCTwale</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Online typing assessment and certification portal for professional exam preparation.</p>
                             </div>
@@ -1826,7 +1712,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/cccwale.jpg" alt="CCCWale" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 20/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">CCCWale</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Digital literacy exam prep web application with live timed quiz series.</p>
                             </div>
@@ -1836,7 +1722,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/toolweb.jpg" alt="Toolweb" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 21/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Toolweb</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">SaaS web utilities platform featuring free online converters and developer tools.</p>
                             </div>
@@ -1846,7 +1732,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/polat-global.jpg" alt="Polat Global" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 22/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Polat Global</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">International trade and global supply chain logistics web portal.</p>
                             </div>
@@ -1856,7 +1742,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/polat-global-ru.jpg" alt="Polat Global — Russian Version" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 23/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Polat Global — Russian Version</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Localized Russian language edition of the Polat Global enterprise platform.</p>
                             </div>
@@ -1866,7 +1752,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/polat-global-cafe.jpg" alt="Polat Global Cafe" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 24/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Polat Global Cafe</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Hospitality storefront and digital ordering menu website.</p>
                             </div>
@@ -1876,7 +1762,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/jaambu.jpg" alt="Jaambu" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 25/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Jaambu</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">E-commerce brand store built with streamlined mobile checkout.</p>
                             </div>
@@ -1886,7 +1772,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/the-thekedaar.jpg" alt="The Thekedaar" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 26/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">The Thekedaar</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">Construction and contracting service platform with cost estimation tools.</p>
                             </div>
@@ -1896,7 +1782,7 @@
                         <div class="portfolio-item websites bg-kotlis-card border border-kotlis-border p-5 shadow-sm hover:border-kotlis-gold transition flex flex-col justify-between">
                             <div>
                                 <img src="images/portfolio/oroos.jpg" alt="Oroos" class="w-full h-40 object-cover mb-3" loading="lazy">
-                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website • 27/27</span>
+                                <span class="text-[10px] bg-kotlis-gold text-white px-2 py-1 font-bold uppercase tracking-widest">Website</span>
                                 <h3 class="font-serif font-bold text-lg text-kotlis-dark mt-2">Oroos</h3>
                                 <p class="text-xs text-kotlis-subtle mt-2">SaaS web management platform with real-time property management dashboards.</p>
                             </div>
@@ -1961,48 +1847,7 @@
                         <h4 class="font-serif font-bold text-2xl text-kotlis-dark">Want a Build Like These, Shipped for Your Business?</h4>
                         <p class="text-xs text-kotlis-subtle max-w-xl mx-auto">44 shipped products and counting. Let's talk about what you're trying to launch next.</p>
                         <button onclick="switchPage('contact')" class="px-8 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">
-                            Get Free Audit
-                        </button>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- ================= PAGE 4: MIGRATION & PROTOCOL INNER PAGE ================= -->
-        <div id="page-migration" class="page-content hidden">
-            <section class="bg-wash py-16 bg-kotlis-card border-b border-kotlis-border relative overflow-hidden">
-                <div id="migrationBlob" class="hidden sm:block absolute -z-0 pointer-events-none" aria-hidden="true"></div>
-                <canvas id="migrationShapeCanvas" class="hidden lg:block absolute top-0 right-0 w-[420px] h-[420px] pointer-events-none z-0" aria-hidden="true"></canvas>
-                <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-                    <div class="text-center max-w-3xl mx-auto space-y-3">
-                        <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Systematic Migration Protocol</span>
-                        <h2 class="text-3xl sm:text-5xl font-extrabold text-kotlis-dark serif-title">Zero Downtime Guarantee</h2>
-                        <p class="text-kotlis-subtle text-sm">How Ativak Works ensures risk-free server, app, and domain transitions without losing customers or search positions.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <div class="bg-kotlis-bg border border-kotlis-border p-8 relative">
-                            <div class="text-4xl font-serif font-bold text-kotlis-gold mb-4">01</div>
-                            <h3 class="text-xl font-bold font-serif text-kotlis-dark mb-2">Audit & Mirror Staging</h3>
-                            <p class="text-xs text-kotlis-subtle leading-relaxed">We extract full database dumps, media assets, and API routes into an isolated sandboxed staging server to verify complete fidelity.</p>
-                        </div>
-                        <div class="bg-kotlis-bg border border-kotlis-border p-8 relative">
-                            <div class="text-4xl font-serif font-bold text-kotlis-gold mb-4">02</div>
-                            <h3 class="text-xl font-bold font-serif text-kotlis-dark mb-2">Dual Sync & SSL Prep</h3>
-                            <p class="text-xs text-kotlis-subtle leading-relaxed">Real-time database sync keeps incoming web traffic active while modernizing hosting infrastructure and SSL certificates.</p>
-                        </div>
-                        <div class="bg-kotlis-bg border border-kotlis-border p-8 relative">
-                            <div class="text-4xl font-serif font-bold text-kotlis-gold mb-4">03</div>
-                            <h3 class="text-xl font-bold font-serif text-kotlis-dark mb-2">Instant DNS Cutover</h3>
-                            <p class="text-xs text-kotlis-subtle leading-relaxed">Low-TTL DNS TTL propagation switches live domain routing seamlessly. 100% continuous uptime guaranteed.</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-[var(--kotlis-bg-alt)] border border-kotlis-border p-8 text-center space-y-4 max-w-4xl mx-auto">
-                        <h4 class="font-serif font-bold text-2xl text-kotlis-dark">Planning a Complex Server or App Migration?</h4>
-                        <p class="text-xs text-kotlis-subtle max-w-xl mx-auto">Speak directly with our technical infrastructure team for a free migration risk review.</p>
-                        <button onclick="switchPage('contact')" class="px-8 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">
-                            Get Free Audit
+                            Get Free Blueprint
                         </button>
                     </div>
                 </div>
@@ -2047,8 +1892,8 @@
                                         <span>SEO & AI Search Optimization</span>
                                     </label>
                                     <label class="flex items-center space-x-2 bg-kotlis-card p-3 border border-kotlis-border cursor-pointer hover:border-kotlis-gold transition">
-                                        <input type="checkbox" value="Zero-Downtime Cloud Migration" class="quote-service-check accent-kotlis-gold">
-                                        <span>Zero-Downtime Cloud Migration</span>
+                                        <input type="checkbox" value="Cloud Migration" class="quote-service-check accent-kotlis-gold">
+                                        <span>Cloud Migration</span>
                                     </label>
                                     <label class="flex items-center space-x-2 bg-kotlis-card p-3 border border-kotlis-border cursor-pointer hover:border-kotlis-gold transition">
                                         <input type="checkbox" value="IT Support & Technical Services" class="quote-service-check accent-kotlis-gold">
@@ -2078,6 +1923,7 @@
                                 <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">One-Time Build</span>
                                 <h4 class="font-serif font-bold text-xl text-kotlis-dark mt-2 mb-3">Project-Based</h4>
                                 <p class="text-xs text-kotlis-subtle leading-relaxed">For a single Flutter app, website, or migration. Scoped once, priced once, delivered to a fixed timeline.</p>
+                                <p class="text-xs font-bold text-kotlis-dark mt-3">Starting from ₹[ADD REAL: price]</p>
                             </div>
                             <button onclick="getCustomQuote()" class="mt-8 py-3 border border-kotlis-dark text-xs font-bold uppercase tracking-widest hover:bg-kotlis-fill hover:text-white transition">Discuss This Option</button>
                         </div>
@@ -2091,6 +1937,7 @@
                                 <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Ongoing Work</span>
                                 <h4 class="font-serif font-bold text-xl text-kotlis-dark mt-2 mb-3">Monthly Retainer</h4>
                                 <p class="text-xs text-kotlis-subtle leading-relaxed">For running ads, SEO, or IT support month-to-month. Billed monthly, scoped to the hours and channels you actually need.</p>
+                                <p class="text-xs font-bold text-kotlis-dark mt-3">Starting from ₹[ADD REAL: price]/month</p>
                             </div>
                             <button onclick="getCustomQuote()" class="mt-8 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">Discuss This Option</button>
                         </div>
@@ -2103,6 +1950,7 @@
                                 <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Larger Scope</span>
                                 <h4 class="font-serif font-bold text-xl text-kotlis-dark mt-2 mb-3">Enterprise & Custom</h4>
                                 <p class="text-xs text-kotlis-subtle leading-relaxed">Multiple services bundled together — app + ads + migration — with a dedicated point of contact and SLA.</p>
+                                <p class="text-xs font-bold text-kotlis-dark mt-3">Starting from ₹[ADD REAL: price]</p>
                             </div>
                             <button onclick="getCustomQuote()" class="mt-8 py-3 border border-kotlis-dark text-xs font-bold uppercase tracking-widest hover:bg-kotlis-fill hover:text-white transition">Discuss This Option</button>
                         </div>
@@ -2113,7 +1961,7 @@
                         <h4 class="font-serif font-bold text-2xl text-kotlis-dark">Not Sure What You Need Yet?</h4>
                         <p class="text-xs text-kotlis-subtle max-w-xl mx-auto">That's fine — most projects start as a conversation. Tell us roughly what you're building and we'll help scope it, free of charge.</p>
                         <button onclick="switchPage('contact')" class="px-8 py-3 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition">
-                            Get Free Audit
+                            Get Free Blueprint
                         </button>
                     </div>
                 </div>
@@ -2128,9 +1976,9 @@
                 <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="bg-kotlis-card border border-kotlis-border p-8 sm:p-14 kotlis-shadow">
                         <div class="text-center mb-10">
-                            <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Ativak Contact Portal</span>
-                            <h2 class="text-3xl sm:text-4xl font-extrabold text-kotlis-dark serif-title mt-2">Request Free Technical Audit</h2>
-                            <p class="text-xs text-kotlis-subtle mt-2">Submit your requirements directly to our core engineering team.</p>
+                            <span class="text-xs font-bold uppercase tracking-widest text-kotlis-gold">Get Started</span>
+                            <h2 class="text-3xl sm:text-4xl font-extrabold text-kotlis-dark serif-title mt-2">Get Your Free Project Blueprint</h2>
+                            <p class="text-xs text-kotlis-subtle mt-2">Tell us what you're building — we'll scope it and get back to you. Or email us at [ADD REAL: email].</p>
                             <a href="https://wa.me/918126666331" target="_blank" onclick="trackWhatsAppClick()" class="inline-flex items-center gap-2 mt-4 px-5 py-2 bg-[#25D366] text-white text-xs font-bold uppercase tracking-wider hover:opacity-90 transition">
                                 <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
                             </a>
@@ -2152,46 +2000,108 @@
                             </div>
                         </div>
 
-                        <!-- Only 2 required fields: Name + WhatsApp number. Service is optional.
-                             Every submission logs to Google Sheets (LEAD_SHEET_URL below) — the
-                             single source of truth for leads, so there's nowhere else to check. -->
-                        <form id="ativakContactForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                        <!-- Qualifying lead form: every submission POSTs to
+                             window.ATIVAK_CONFIG.LEAD_WEBHOOK_URL (config.js) as JSON,
+                             plus opens WhatsApp with the qualifying details prefilled.
+                             See shared.js for getUtmParams/submitLeadToWebhook/budget logic. -->
+                        <form id="ativakContactForm" novalidate class="space-y-6">
+                            <!-- Honeypot: left blank by humans, auto-filled by bots. -->
+                            <div class="hp-field-wrap" aria-hidden="true">
+                                <label for="contactWebsite">Website</label>
+                                <input id="contactWebsite" name="website" type="text" tabindex="-1" autocomplete="off">
+                            </div>
+
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="contactName" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Your Name</label>
+                                    <label for="contactName" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Your Name *</label>
                                     <input id="contactName" name="name" type="text" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="John Doe">
+                                    <p class="field-error" data-error-for="name">Please enter your name.</p>
                                 </div>
                                 <div>
-                                    <label for="contactWhatsapp" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">WhatsApp Number</label>
-                                    <input id="contactWhatsapp" name="whatsapp" type="tel" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="+91 98765 43210">
+                                    <label for="contactWhatsapp" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">WhatsApp Number *</label>
+                                    <div class="flex gap-2">
+                                        <select id="contactCountryCode" name="countryCode" class="w-24 px-2 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition">
+                                            <option value="+91" selected>🇮🇳 +91</option>
+                                            <option value="+1">🇺🇸 +1</option>
+                                            <option value="+44">🇬🇧 +44</option>
+                                            <option value="+971">🇦🇪 +971</option>
+                                            <option value="+61">🇦🇺 +61</option>
+                                            <option value="+65">🇸🇬 +65</option>
+                                        </select>
+                                        <input id="contactWhatsapp" name="whatsapp" type="tel" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="98765 43210">
+                                    </div>
+                                    <p class="field-error" data-error-for="whatsapp">Please enter your WhatsApp number.</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="contactEmail" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Email *</label>
+                                    <input id="contactEmail" name="email" type="email" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="you@company.com">
+                                    <p class="field-error" data-error-for="email">Please enter a valid email.</p>
+                                </div>
+                                <div>
+                                    <label for="contactCompany" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Company / Business Name</label>
+                                    <input id="contactCompany" name="company" type="text" class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="Optional">
                                 </div>
                             </div>
 
                             <div>
-                                <label for="contactService" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Service Needed (optional)</label>
-                                <select id="contactService" name="service" class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition">
-                                    <option value="">Not sure yet</option>
-                                    <option>Flutter Mobile App Development</option>
-                                    <option>Meta & Google Ads Strategy</option>
-                                    <option>SEO & AI Search Indexing</option>
-                                    <option>Zero-Downtime Migration</option>
-                                    <option>Custom Web Application</option>
+                                <label for="contactNeed" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">What do you need? *</label>
+                                <select id="contactNeed" name="need" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition">
+                                    <option value="">Select one</option>
+                                    <option value="mobile_app">Mobile App</option>
+                                    <option value="website">Website</option>
+                                    <option value="ecommerce">E-commerce Store</option>
+                                    <option value="ads_growth">Ads & Growth</option>
+                                    <option value="not_sure">Not sure yet</option>
                                 </select>
+                                <p class="field-error" data-error-for="need">Please tell us what you need.</p>
                             </div>
 
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="contactBudget" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Budget Range? *</label>
+                                    <select id="contactBudget" name="budget" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition">
+                                        <option value="">Select a range</option>
+                                    </select>
+                                    <p class="field-error" data-error-for="budget">Please select a budget range.</p>
+                                </div>
+                                <div>
+                                    <label for="contactTimeline" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">When do you want to start? *</label>
+                                    <select id="contactTimeline" name="timeline" required class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition">
+                                        <option value="">Select one</option>
+                                        <option value="immediately">Immediately</option>
+                                        <option value="1_3_months">In 1–3 months</option>
+                                        <option value="just_exploring">Just exploring</option>
+                                    </select>
+                                    <p class="field-error" data-error-for="timeline">Please let us know your timeline.</p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="contactDescription" class="block text-xs font-bold uppercase tracking-wider text-kotlis-dark mb-2">Short Project Description</label>
+                                <textarea id="contactDescription" name="description" rows="3" class="w-full px-4 py-3 bg-kotlis-bg border border-kotlis-border text-sm text-kotlis-dark focus:outline-none focus:border-kotlis-dark transition" placeholder="Optional — a sentence or two is enough"></textarea>
+                            </div>
+
+                            <!-- UTM capture: filled from the URL query string on load/submit. -->
+                            <input type="hidden" name="utm_source" value="">
+                            <input type="hidden" name="utm_campaign" value="">
+                            <input type="hidden" name="utm_content" value="">
+
                             <button id="contactSubmitBtn" type="submit" class="w-full py-4 bg-kotlis-fill text-white text-xs font-bold uppercase tracking-widest hover:bg-kotlis-gold transition duration-300">
-                                Get Free Audit
+                                Get Free Blueprint
                             </button>
                         </form>
 
-                        <div id="contactSuccess" class="hidden mt-6 p-4 border border-kotlis-gold bg-kotlis-gold/10 text-kotlis-dark text-center text-xs font-bold uppercase tracking-wider">
-                            <i class="fa-solid fa-check mr-2 text-kotlis-gold"></i> Opening WhatsApp…
-                        </div>
-                        <div id="contactFallback" class="hidden mt-6 p-4 border border-kotlis-gold bg-kotlis-gold/10 text-kotlis-dark text-center text-xs font-bold uppercase tracking-wider">
-                            Popup blocked — <a id="contactFallbackLink" href="#" target="_blank" class="underline">tap here to open WhatsApp</a>.
+                        <div id="contactThankYou" class="hidden mt-6 p-6 border border-kotlis-gold bg-kotlis-gold/10 text-kotlis-dark text-center space-y-4">
+                            <p class="text-sm font-bold"><i class="fa-solid fa-check mr-2 text-kotlis-gold"></i><span id="contactThankYouMsg"></span></p>
+                            <a id="contactWhatsappNowLink" href="#" target="_blank" onclick="trackWhatsAppClick()" class="inline-flex items-center gap-2 px-5 py-3 bg-[#25D366] text-white text-xs font-bold uppercase tracking-wider hover:opacity-90 transition">
+                                <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp Now
+                            </a>
                         </div>
                         <div id="contactError" class="hidden mt-6 p-4 border border-red-400 bg-red-50 text-red-700 text-center text-xs font-bold uppercase tracking-wider">
-                            <i class="fa-solid fa-triangle-exclamation mr-2"></i> Something went wrong. Please email us directly or try again.
+                            <i class="fa-solid fa-triangle-exclamation mr-2"></i> Something went wrong. Please email us directly at <a href="mailto:[ADD REAL: email]" class="underline">[ADD REAL: email]</a> or <a id="contactErrorWhatsappLink" href="#" target="_blank" class="underline">chat on WhatsApp</a>.
                         </div>
                     </div>
                 </div>
@@ -2201,26 +2111,31 @@
 
     <!-- Footer -->
     <footer class="bg-kotlis-fill text-white py-12 border-t border-kotlis-border">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 bg-kotlis-gold text-white font-serif font-bold text-sm flex items-center justify-center">
-                    A
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-start justify-between gap-10">
+            <div class="flex flex-col items-start gap-3 max-w-xs">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-kotlis-gold text-white font-serif font-bold text-sm flex items-center justify-center">A</div>
+                    <span class="font-serif text-lg tracking-widest uppercase">Ativak<span class="text-kotlis-gold">.works</span></span>
                 </div>
-                <span class="font-serif text-lg tracking-widest uppercase">Ativak<span class="text-kotlis-gold">.works</span></span>
+                <p class="text-xs text-kotlis-border">Apps & Websites That Grow</p>
+                <div class="text-xs text-kotlis-border space-y-1 mt-2">
+                    <p><i class="fa-solid fa-envelope mr-2 text-kotlis-gold"></i>[ADD REAL: email]</p>
+                    <p><i class="fa-brands fa-whatsapp mr-2 text-kotlis-gold"></i>[ADD REAL: WhatsApp number/link]</p>
+                    <p><i class="fa-solid fa-location-dot mr-2 text-kotlis-gold"></i>Chandigarh, India</p>
+                </div>
             </div>
 
             <div class="flex flex-wrap gap-6 text-xs font-semibold uppercase tracking-widest text-kotlis-border">
-                <button onclick="switchPage('home')" class="hover:text-kotlis-gold transition">Home</button>
                 <button onclick="switchPage('services')" class="hover:text-kotlis-gold transition">Services</button>
-                <button onclick="switchPage('portfolio')" class="hover:text-kotlis-gold transition">Case Studies</button>
-                <button onclick="switchPage('migration')" class="hover:text-kotlis-gold transition">Migration Protocol</button>
+                <button onclick="switchPage('portfolio')" class="hover:text-kotlis-gold transition">Work</button>
                 <button onclick="switchPage('pricing')" class="hover:text-kotlis-gold transition">Pricing</button>
-                <button onclick="switchPage('contact')" class="hover:text-kotlis-gold transition">Contact</button>
+                <button onclick="switchPage('services')" class="hover:text-kotlis-gold transition">FAQ</button>
+                <a href="it-support.html" class="hover:text-kotlis-gold transition">IT Support</a>
+                <a href="privacy-policy.html" class="hover:text-kotlis-gold transition">Privacy Policy</a>
             </div>
 
-            <div class="text-[11px] text-kotlis-subtle flex flex-col items-center md:items-end gap-1">
-                <span>&copy; 2026 Ativak Works Studio. All rights reserved.</span>
-                <a href="privacy-policy.html" class="hover:text-kotlis-gold transition underline">Privacy Policy</a>
+            <div class="text-[11px] text-kotlis-subtle flex flex-col items-start md:items-end gap-1">
+                <span>&copy; 2026 Ativak Works. All rights reserved.</span>
             </div>
         </div>
     </footer>
@@ -2277,21 +2192,13 @@
         </button>
     </div>
 
+    <!-- config.js already loaded in <head> (Meta Pixel/GA4 init there needs
+         it). shared.js (UTM/webhook/tracking helpers) loads here, right
+         before the main script that calls it. -->
+    <script src="shared.js"></script>
+
     <!-- Interactive Logic Script -->
     <script>
-        // Google Apps Script web app that appends each lead to a Google Sheet.
-        const LEAD_SHEET_URL = 'https://script.google.com/macros/s/AKfycbw4lc2MA6dCsZkg6C6LxxPIifEM9dBfe1Bry-7Ee6vBouVKFY0glUvoUF3HAjziRywVFw/exec';
-
-        // Shared UTM reader — used both to tag this Clarity session with its
-        // traffic source and to log it alongside each lead in the Sheet.
-        function getUtmParams() {
-            const params = new URLSearchParams(window.location.search);
-            return {
-                utm_source: params.get('utm_source') || '',
-                utm_campaign: params.get('utm_campaign') || ''
-            };
-        }
-
         // Tags this Clarity session with its traffic source (utm_source, e.g.
         // "facebook"/"instagram" from a Meta Ads link) so recordings can be
         // filtered down to just ad traffic instead of all visitors.
@@ -2528,80 +2435,6 @@
         // Short "how it works" walk-throughs for the IT Support "How it works"
         // modal — one image + a few numbered steps per card, not a full page.
         const IT_SERVICE_DETAILS = {
-            install: {
-                title: 'Remote & On-Site System Installation',
-                category: 'Hardware & OS',
-                icon: 'fa-screwdriver-wrench',
-                image: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=800&h=600&q=80&auto=format&fit=crop',
-                summary: 'Full hardware troubleshooting, fresh OS installs, and complete system diagnostics — handled remotely or by a technician at your desk.',
-                steps: [
-                    { t: 'Diagnose', d: 'A remote session or on-site visit pinpoints the exact hardware or OS fault.' },
-                    { t: 'Fix or Reinstall', d: 'Faulty parts replaced, or the OS reinstalled clean with drivers and essential software set up.' },
-                    { t: 'Test & Handover', d: 'Full system check before handover, with a short written summary of what was done.' }
-                ]
-            },
-            windows: {
-                title: 'Windows Updates & Maintenance',
-                category: 'Performance Tuning',
-                icon: 'fa-arrows-rotate',
-                image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&q=80&auto=format&fit=crop',
-                summary: 'Security patch updates, driver installations, disk cleanup, and OS performance tuning to keep every machine running at full speed.',
-                steps: [
-                    { t: 'Health Check', d: 'We scan for pending security patches, outdated drivers, and startup bloat slowing the machine down.' },
-                    { t: 'Update & Clean', d: 'Windows and drivers updated, junk files cleared, startup programs trimmed.' },
-                    { t: 'Verify Speed', d: 'Boot time and responsiveness re-checked before confirming the machine is done.' }
-                ]
-            },
-            printer: {
-                title: 'Printer & Peripheral Setup',
-                category: 'Peripheral Setup',
-                icon: 'fa-print',
-                image: 'https://images.unsplash.com/photo-1616763355548-1b606f439f86?w=800&h=600&q=80&auto=format&fit=crop',
-                summary: 'Wireless network printing, scanner configuration, and seamless device syncing across every workstation in the office.',
-                steps: [
-                    { t: 'Connect', d: 'Printer, scanner, or peripheral joined to your Wi-Fi or office network.' },
-                    { t: 'Configure', d: 'Drivers installed on every workstation that needs to print or scan to it.' },
-                    { t: 'Test Print', d: 'A real test job confirms every connected device can use it reliably.' }
-                ]
-            },
-            cctv: {
-                title: 'CCTV & Physical Security',
-                category: 'Physical Security',
-                icon: 'fa-video',
-                image: 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&h=600&q=80&auto=format&fit=crop',
-                summary: 'IP camera installations, DVR/NVR configuration, and local or remote surveillance setup for homes and offices.',
-                steps: [
-                    { t: 'Site Survey', d: 'We map the best camera positions for full coverage of entry points and blind spots.' },
-                    { t: 'Install & Wire', d: 'Cameras mounted, cabled, and connected to a DVR/NVR recorder.' },
-                    { t: 'Remote Access Setup', d: 'Live feed configured on your phone or PC, from anywhere.' }
-                ]
-            },
-            supportdesk: {
-                title: 'Global & Local IT Support Desk',
-                category: '24/7 Support Desk',
-                icon: 'fa-headset',
-                image: 'https://images.unsplash.com/photo-1550439062-609e1531270e?w=800&h=600&q=80&auto=format&fit=crop',
-                summary: 'Dedicated remote desktop support for international clients, plus on-demand local technicians for same-day assistance.',
-                steps: [
-                    { t: 'Raise a Ticket', d: 'Message us on WhatsApp or the contact form with what\'s wrong.' },
-                    { t: 'Remote or On-Site', d: 'Most issues fixed over a remote session; local dispatch for anything hands-on.' },
-                    { t: 'Confirm Fixed', d: 'We confirm the issue is resolved before closing the ticket.' }
-                ]
-            },
-            network: {
-                title: 'Network & Wi-Fi Infrastructure',
-                category: 'Connectivity',
-                icon: 'fa-wifi',
-                image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=600&q=80&auto=format&fit=crop',
-                summary: 'Router and access-point placement, structured cabling, and Wi-Fi coverage tuning for reliable office-wide connectivity.',
-                steps: [
-                    { t: 'Survey Coverage', d: 'We check signal strength across the space to find dead zones.' },
-                    { t: 'Place & Cable', d: 'Routers and access points positioned and cabled for even coverage.' },
-                    { t: 'Tune & Test', d: 'Channels and bands tuned, then speed-tested from every corner.' }
-                ]
-            },
-            // Main "Engineering & Growth Solutions" cards — gold accent, no
-            // photo, so the modal falls back to an icon-on-gradient banner.
             mobile: {
                 title: 'Flutter iOS & Android Apps',
                 category: 'Cross-Platform Mobile',
@@ -2631,23 +2464,11 @@
                 category: 'Search Engine Indexing',
                 icon: 'fa-magnifying-glass',
                 accent: 'gold',
-                summary: 'Rank on Page 1 of Google and index your platform directly into AI models like ChatGPT, Gemini, and Perplexity using semantic schema structured data.',
+                summary: 'Improve your search ranking and help your platform get indexed by AI models like ChatGPT, Gemini, and Perplexity using semantic schema structured data.',
                 steps: [
                     { t: 'Technical Audit', d: 'Site speed, schema, and crawlability issues found and fixed.' },
                     { t: 'Content & Schema', d: 'Pages restructured with JSON-LD so Google and AI engines index them correctly.' },
                     { t: 'Track Rankings', d: 'Keyword positions monitored monthly, with fixes pushed as needed.' }
-                ]
-            },
-            migrationService: {
-                title: 'Zero Downtime Cloud Migration',
-                category: 'Cloud Infrastructure',
-                icon: 'fa-server',
-                accent: 'gold',
-                summary: 'Migrate databases, full-stack web applications, and DNS infrastructure seamlessly without interrupting client traffic or SEO domain authority.',
-                steps: [
-                    { t: 'Mirror Staging', d: 'A full backup and staging copy built in isolation first.' },
-                    { t: 'Sync & Cutover', d: 'Live data kept in sync, then DNS switched with near-zero downtime.' },
-                    { t: 'Verify & Monitor', d: 'Traffic and rankings watched post-migration to confirm nothing broke.' }
                 ]
             },
             webapp: {
@@ -2737,16 +2558,6 @@
             if (e.key === 'Escape') closeITModal();
         });
 
-        // Jumps to Services, then smooth-scrolls to the IT Support module once
-        // the page-switch fade + scroll-reset (inside switchPage) has settled.
-        function goToITSupport() {
-            switchPage('services');
-            setTimeout(() => {
-                const el = document.getElementById('it-support');
-                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 700);
-        }
-
         // Mobile menu toggle: animated slide/fade panel + backdrop + icon swap.
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
@@ -2801,14 +2612,8 @@
             }
         }
 
-        // Fires on every WhatsApp CTA across the site (hero, services, IT
-        // support modal, contact page) — tags the click in both Meta (for ad
-        // optimization) and Clarity (so a session recording can be filtered
-        // to "did they actually click WhatsApp").
-        function trackWhatsAppClick() {
-            if (typeof fbq === 'function') fbq('track', 'Contact');
-            if (typeof clarity === 'function') clarity('event', 'whatsapp_click');
-        }
+        // trackWhatsAppClick() is now defined once in shared.js (loaded
+        // above) and reused by every page instead of being redefined here.
 
         // No-pricing quote flow: reads the checked services + optional brief
         // and opens WhatsApp with them pre-filled — final pricing is always a
@@ -2820,76 +2625,108 @@
             window.open('https://wa.me/918126666331?text=' + encodeURIComponent(text), '_blank');
         }
 
-        // Contact form submit: fires the Lead pixel event right here (not on
-        // /thank-you's load) so it's tied to an actual successful submit, not
-        // just a page view. A unique eventID is attached so Meta de-dupes it
-        // against any browser + Conversions API copy of the same event,
-        // and firing it before window.open (rather than after, or relying on
-        // a post-redirect page load) means it isn't racing a navigation that
-        // could tear the page down before the beacon goes out.
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const form = document.getElementById('ativakContactForm');
-            const submitBtn = document.getElementById('contactSubmitBtn');
-            const successMsg = document.getElementById('contactSuccess');
-            const fallbackMsg = document.getElementById('contactFallback');
-            const fallbackLink = document.getElementById('contactFallbackLink');
-            const errorMsg = document.getElementById('contactError');
+        // Qualifying lead form: country-code -> budget options, inline
+        // validation, honeypot check, JSON POST to the configured webhook,
+        // then an inline thank-you state (no page navigation required).
+        (function initAtivakLeadForm(formId) {
+            const form = document.getElementById(formId);
+            if (!form) return;
+            fillUtmHiddenFields(form);
 
-            if (submitBtn.disabled) return;
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return;
+            const countryCodeSelect = form.querySelector('[name="countryCode"]');
+            const budgetSelect = form.querySelector('[name="budget"]');
+            if (countryCodeSelect && budgetSelect) {
+                populateBudgetOptions(budgetSelect, countryCodeSelect.value);
+                countryCodeSelect.addEventListener('change', () => {
+                    populateBudgetOptions(budgetSelect, countryCodeSelect.value);
+                });
             }
 
-            successMsg.classList.add('hidden');
-            fallbackMsg.classList.add('hidden');
-            errorMsg.classList.add('hidden');
-            submitBtn.disabled = true;
-            submitBtn.innerText = 'Opening WhatsApp…';
+            const NEED_LABELS = {
+                mobile_app: 'a Mobile App', website: 'a Website', ecommerce: 'an E-commerce Store',
+                ads_growth: 'Ads & Growth help', not_sure: 'help scoping a project'
+            };
+            const BUDGET_LABELS = {};
+            Object.values(ATIVAK_BUDGET_RANGES).flat().forEach(r => { BUDGET_LABELS[r.value] = r.label; });
 
-            const data = new FormData(form);
-            const name = (data.get('name') || '').trim();
-            const whatsapp = (data.get('whatsapp') || '').trim();
-            const service = (data.get('service') || '').trim();
-
-            const eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-            if (typeof fbq === 'function') {
-                fbq('track', 'Lead', {
-                    content_name: 'Free Audit - Meta Ads, SEO & More',
-                    content_category: 'Digital Marketing'
-                }, { eventID: eventId });
+            function showError(fieldName, show) {
+                const el = form.querySelector(`[data-error-for="${fieldName}"]`);
+                if (el) el.classList.toggle('visible', !!show);
             }
-            if (typeof clarity === 'function') clarity('event', 'lead_submit');
 
-            // Every submission is logged to a Google Sheet (via Apps Script
-            // web app) so no lead is ever missed even if nobody's watching
-            // WhatsApp right that second — fire-and-forget, never blocks the
-            // WhatsApp handoff below.
-            const utm = getUtmParams();
-            fetch(LEAD_SHEET_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify({ name, whatsapp, service, utm_source: utm.utm_source, utm_campaign: utm.utm_campaign })
-            }).catch(() => {});
-
-            let waText = `Hi! I'd like a free audit.\n*Name:* ${name}\n*WhatsApp:* ${whatsapp}`;
-            if (service) waText += `\n*Service:* ${service}`;
-            const waUrl = 'https://wa.me/918126666331?text=' + encodeURIComponent(waText);
-
-            const waWindow = window.open(waUrl, '_blank');
-            form.reset();
-
-            if (!waWindow || waWindow.closed) {
-                fallbackLink.href = waUrl;
-                fallbackMsg.classList.remove('hidden');
-                submitBtn.disabled = false;
-                submitBtn.innerText = 'Get Free Audit';
-            } else {
-                successMsg.classList.remove('hidden');
-                setTimeout(() => { window.location.href = '/thank-you'; }, 600);
+            function validate(data) {
+                let valid = true;
+                [['name', data.name], ['whatsapp', data.whatsapp], ['need', data.need],
+                 ['budget', data.budget], ['timeline', data.timeline]].forEach(([field, val]) => {
+                    const ok = !!(val && val.trim());
+                    showError(field, !ok);
+                    if (!ok) valid = false;
+                });
+                const emailOk = !!(data.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email));
+                showError('email', !emailOk);
+                if (!emailOk) valid = false;
+                return valid;
             }
-        }
+
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const submitBtn = document.getElementById('contactSubmitBtn');
+                const thankYou = document.getElementById('contactThankYou');
+                const errorMsg = document.getElementById('contactError');
+                if (submitBtn.disabled) return;
+
+                // Honeypot: bots that auto-fill every field get silently
+                // dropped here — no error shown, no submission sent.
+                if (isHoneypotTripped(form, 'website')) return;
+
+                const data = Object.fromEntries(new FormData(form).entries());
+                thankYou.classList.add('hidden');
+                errorMsg.classList.add('hidden');
+
+                if (!validate(data)) return;
+
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Submitting…';
+
+                const name = data.name.trim();
+                const fullWhatsapp = (data.countryCode || '+91') + ' ' + data.whatsapp.trim();
+                const needLabel = NEED_LABELS[data.need] || data.need;
+                const budgetLabel = BUDGET_LABELS[data.budget] || data.budget;
+
+                const eventId = generateLeadEventId();
+
+                const utm = getUtmParams();
+                const payload = {
+                    name, whatsapp: fullWhatsapp, email: data.email.trim(),
+                    company: (data.company || '').trim(), need: data.need, budget: data.budget,
+                    timeline: data.timeline, description: (data.description || '').trim(),
+                    utm_source: utm.utm_source, utm_campaign: utm.utm_campaign, utm_content: utm.utm_content
+                };
+
+                trackLeadConversion(eventId, {
+                    name, email: data.email.trim(), whatsapp: fullWhatsapp,
+                    service: data.need, budget: data.budget, startTime: data.timeline
+                });
+
+                const result = await submitLeadToWebhook(payload);
+                const waText = `Hi, I'm ${name}. I need ${needLabel}, budget ${budgetLabel}.`;
+                const waUrl = 'https://wa.me/[ADD REAL: number]?text=' + encodeURIComponent(waText);
+                document.getElementById('contactWhatsappNowLink').href = waUrl;
+
+                if (result.ok) {
+                    document.getElementById('contactThankYouMsg').textContent =
+                        `Thanks ${name}! We'll WhatsApp you within 24 hours.`;
+                    thankYou.classList.remove('hidden');
+                    form.classList.add('hidden');
+                    setTimeout(() => { try { window.location.href = '/thank-you'; } catch (err) {} }, 1200);
+                } else {
+                    document.getElementById('contactErrorWhatsappLink').href = waUrl;
+                    errorMsg.classList.remove('hidden');
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'Get Free Blueprint';
+                }
+            });
+        })('ativakContactForm');
 
         // ============== GSAP Scroll Animations & Interactive Motion ==============
         gsap.registerPlugin(ScrollTrigger);
@@ -3505,6 +3342,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             applyTheme(108); // Vangard — bold yellow + magenta
+            if (window.location.hash === '#contact-form') switchPage('contact');
             initHeroEntrance();
             initCountUp();
             initTiltCards(document.getElementById('page-home'));
